@@ -17,7 +17,7 @@ file(
     ./sim/*.cxx
     ./digi/*.cxx
     ./pars/*.cxx
-    ./online/*.cxx
+    #./online/*.cxx
     ./calibration/*.cxx
     ./ana/*.cxx)
 
@@ -36,7 +36,7 @@ add_library_with_dictionary(
     sim
     digi
     pars
-    online
+    #online
     calibration
     ana
     DEPENDENCIES

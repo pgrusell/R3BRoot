@@ -16,7 +16,8 @@ file(
     SRCS
     ./pars/*.cxx
     ./calibration/*.cxx
-    ./online/*.cxx)
+    #./online/*.cxx
+)
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
 
 add_library_with_dictionary(
@@ -31,6 +32,6 @@ add_library_with_dictionary(
     INCLUDEDIRS
     pars
     calibration
-    online
+    #online
     DEPENDENCIES
     R3BTracking)

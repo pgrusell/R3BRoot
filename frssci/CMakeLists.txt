@@ -22,9 +22,10 @@ set(SRCS
     calibration/R3BFrsSciMapped2Tcal.cxx
     calibration/R3BFrsSciMapped2TcalPar.cxx
     calibration/R3BFrsSciTcal2Cal.cxx
-    online/R3BOnlineSpectraFrsSci.cxx
-    online/R3BOnlineSpectraFrsSciVsMusli.cxx
-    online/R3BOnlineSpectraFrsSciVsLos.cxx)
+    #online/R3BOnlineSpectraFrsSci.cxx
+    #online/R3BOnlineSpectraFrsSciVsMusli.cxx
+    #online/R3BOnlineSpectraFrsSciVsLos.cxx
+)
 
 set(HEADERS
     parameters/R3BFrsSciContFact.h
@@ -33,9 +34,10 @@ set(HEADERS
     calibration/R3BFrsSciMapped2Tcal.h
     calibration/R3BFrsSciMapped2TcalPar.h
     calibration/R3BFrsSciTcal2Cal.h
-    online/R3BOnlineSpectraFrsSci.h
-    online/R3BOnlineSpectraFrsSciVsMusli.h
-    online/R3BOnlineSpectraFrsSciVsLos.h)
+    #online/R3BOnlineSpectraFrsSci.h
+    #online/R3BOnlineSpectraFrsSciVsMusli.h
+    #online/R3BOnlineSpectraFrsSciVsLos.h
+)
 
 add_library_with_dictionary(
     LIBNAME
@@ -49,7 +51,7 @@ add_library_with_dictionary(
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
     calibration
-    online
+    #online
     parameters
     DEPENDENCIES
     R3BData

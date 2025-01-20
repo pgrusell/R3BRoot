@@ -12,20 +12,12 @@
 ##############################################################################
 
 set(SRCS
-    R3BEventManager.cxx
-    R3BEventManagerEditor.cxx
-    R3BCalifaEventDisplay.cxx
-    R3BCalifaClusterEventDisplay.cxx
-    R3BMCTracks.cxx
-    R3BIonName.cxx)
+
+    R3BCalifaClusterEventDisplay.cxx)
 
 set(HEADERS
-    R3BEventManager.h
-    R3BEventManagerEditor.h
-    R3BCalifaEventDisplay.h
-    R3BCalifaClusterEventDisplay.h
-    R3BMCTracks.h
-    R3BIonName.h)
+
+    R3BCalifaClusterEventDisplay.h)
 
 add_library_with_dictionary(
     LIBNAME
@@ -40,17 +32,3 @@ add_library_with_dictionary(
     ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDENCIES
     R3BCalifa)
-
-# set(DEPENDENCIES
-#     Field
-#     R3BData
-#     R3BCalifa
-#     Geane
-#     EventDisplay
-#     Eve
-#     Gui
-#     Ged
-#     RGL
-#     Graf3d
-#     Geom
-#     GeomPainter)

@@ -19,7 +19,8 @@ file(
     geo/*.cxx
     pars/*.cxx
     calibration/*.cxx
-    online/*.cxx)
+    #online/*.cxx
+)
 
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
 
@@ -39,7 +40,7 @@ add_library_with_dictionary(
     geo
     pars
     calibration
-    online
+    #online
     DEPENDENCIES
     R3BPassive)
 

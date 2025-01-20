@@ -14,7 +14,7 @@
 add_subdirectory(calibration)
 add_subdirectory(clustering)
 add_subdirectory(digitizing)
-add_subdirectory(online)
+#add_subdirectory(online)
 if(WITH_EPICS)
     add_subdirectory(preexp)
 endif(WITH_EPICS)

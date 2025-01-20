@@ -18,7 +18,8 @@ file(
     mwpc1/*.cxx
     mwpc2/*.cxx
     digi/*.cxx
-    online/*.cxx)
+    #online/*.cxx
+)
 
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
 
@@ -36,7 +37,7 @@ add_library_with_dictionary(
     mwpc0
     mwpc1
     mwpc2
-    online
+    #online
     DEPENDENCIES
     R3BTracking)
 

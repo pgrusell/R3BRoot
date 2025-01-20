@@ -14,7 +14,7 @@
 file(
     GLOB
     SRCS
-    ./online/*.cxx
+    #./online/*.cxx
     ./offline/*.cxx
     ./pars/*.cxx)
 
@@ -32,7 +32,7 @@ add_library_with_dictionary(
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
     offline
-    online
+    #online
     pars
     DEPENDENCIES
     R3BTraRene

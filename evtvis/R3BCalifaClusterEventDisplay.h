@@ -20,14 +20,6 @@
 
 #include <FairTask.h>
 
-#include "TEveCalo.h"
-#include "TEveCaloData.h"
-#include "TEveProjectionManager.h"
-#include "TEveProjections.h"
-#include "TEveScene.h"
-#include "TEveViewer.h"
-#include "TEveWindow.h"
-
 class TClonesArray;
 class FairEventManager;
 class FairRootManager;
@@ -68,30 +60,6 @@ class R3BCalifaClusterEventDisplay : public FairTask
 
     FairEventManager* fEventManager;
     FairRootManager* fManager;
-
-    TEveCaloDataHist* fDataHist;
-    TEveCalo3D* fCalo3d;
-    TEveCalo2D* fCalo2d;
-    TEveCaloLego* fLego;
-
-    TEveWindowSlot* slotLeftTop;
-    TEveWindowSlot* slotLeftBottom;
-    TEveWindowSlot* slotRightTop;
-    TEveWindowSlot* slotRightBottom;
-    TEveViewer* viewerLeftTop;
-    TEveScene* sceneLeftTop;
-    TEveViewer* viewerRightTop;
-    TEveScene* sceneRightTop;
-    TEveViewer* viewerLeftBottom;
-    TEveScene* sceneLeftBottom;
-    TEveViewer* viewerRightBottom;
-    TEveScene* sceneRightBottom;
-    TEveWindowSlot* legoSlot;
-    TEveScene* legoScene;
-    TEveViewer* legoViewer;
-
-    TEveProjectionManager* fProjManager1;
-    TEveProjectionManager* fProjManager2;
 
   private:
     /** Data members **/

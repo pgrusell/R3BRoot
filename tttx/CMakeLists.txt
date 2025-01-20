@@ -20,7 +20,8 @@ set(SRCS
     #calibration/R3BTttxMapped2CalPar.cxx
     calibration/R3BTttxMapped2Cal.cxx
     calibration/R3BTttxCal2Hit.cxx
-    online/R3BTttxOnlineSpectra.cxx)
+    #online/R3BTttxOnlineSpectra.cxx
+)
 
 set(HEADERS
     #Put here your sourcefiles
@@ -31,7 +32,8 @@ set(HEADERS
     #calibration/R3BTttxMapped2CalPar.h
     calibration/R3BTttxMapped2Cal.h
     calibration/R3BTttxCal2Hit.h
-    online/R3BTttxOnlineSpectra.h)
+    #online/R3BTttxOnlineSpectra.h
+)
 
 add_library_with_dictionary(
     LIBNAME
@@ -45,7 +47,7 @@ add_library_with_dictionary(
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
     calibration
-    online
+    #online
     pars
     DEPENDENCIES
     R3BTracking)

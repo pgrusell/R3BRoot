@@ -22,7 +22,8 @@ set(SRCS
     calib/R3BSci2Tcal2Hit.cxx
     params/R3BSci2HitPar.cxx
     params/R3BSci2ContFact.cxx
-    online/R3BOnlineSpectraSci2.cxx)
+    #online/R3BOnlineSpectraSci2.cxx
+)
 
 set(HEADERS
     calib/R3BSci2Mapped2Tcal.h
@@ -31,7 +32,8 @@ set(HEADERS
     calib/R3BSci2Tcal2Hit.h
     params/R3BSci2HitPar.h
     params/R3BSci2ContFact.h
-    online/R3BOnlineSpectraSci2.h)
+    #online/R3BOnlineSpectraSci2.h
+)
 
 add_library_with_dictionary(
     LIBNAME
@@ -45,7 +47,7 @@ add_library_with_dictionary(
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
     calib
-    online
+    #online
     params
     DEPENDENCIES
     R3BData
