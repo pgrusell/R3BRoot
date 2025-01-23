@@ -168,6 +168,8 @@ find_package2(
     1.6.0
     REQUIRED)
 
+find_package2(GENFIT2 REQUIRED)
+
 foreach(dep IN LISTS FairLogger_PACKAGE_DEPENDENCIES)
     if(NOT dep STREQUAL "Boost")
         find_package2(
