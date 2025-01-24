@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include <R3BUcesbMappingFlag.h>
+#include "R3BUcesbMappingFlag.h"
 #include <TNamed.h>
 #include <TString.h>
 
@@ -47,7 +47,7 @@ class R3BReader : public TNamed
     /* Return actual name of the reader */
 
     // actions when closed
-    virtual void Close(){};
+    virtual void Close() {};
 
   private:
     R3B::UcesbMap extra_conditions_ = R3B::UcesbMap::zero;

@@ -12,13 +12,14 @@
  ******************************************************************************/
 
 // -------------------------------------------------------------------------
-// -----             R3BCalifaClusterEventDisplay header file          -----
-// -----              Created 26/10/2012 by P.Cabanelas                -----
+// -----            R3BCalifaEventDisplay header file                  -----
+// -----            Created 01/10/2012  by P.Cabanelas                 -----
 // -------------------------------------------------------------------------
 
-#pragma once
+#ifndef R3BCALIFAEVENTDISPLAY_H
+#define R3BCALIFAEVENTDISPLAY_H
 
-#include <FairTask.h>
+#include "FairTask.h"
 
 #include "TEveCalo.h"
 #include "TEveCaloData.h"
@@ -34,17 +35,17 @@ class FairRootManager;
 
 class TH2F;
 
-class R3BCalifaClusterEventDisplay : public FairTask
+class R3BCalifaEventDisplay : public FairTask
 {
   public:
     /** Default constructor **/
-    R3BCalifaClusterEventDisplay();
+    R3BCalifaEventDisplay();
 
     /** Standard Constructor **/
-    R3BCalifaClusterEventDisplay(const char* name, Int_t iVerbose = 1);
+    R3BCalifaEventDisplay(const char* name, Int_t iVerbose = 1);
 
     /** Destructor **/
-    ~R3BCalifaClusterEventDisplay();
+    ~R3BCalifaEventDisplay();
 
     /** Virtual method Exec **/
     virtual void Exec(Option_t* opt);
@@ -58,16 +59,27 @@ class R3BCalifaClusterEventDisplay : public FairTask
     /** Virtual method Finish **/
     virtual void Finish();
 
+    /** Public method SelectGeometryVersion
+     **
+     ** Defines the geometry
+     *@param version  Integer parameter used to select the geometry:
+     ** (see documentation /r3broot/cal/perlScripts/README))
+     **/
+    void SelectGeometryVersion(Int_t version);
+
     /** Accessors **/
 
   protected:
     /** Virtual method ReInit **/
     virtual InitStatus ReInit();
 
-    TClonesArray* fCaloHitCA;
+    TClonesArray* fCrystalHitCA;
 
     FairEventManager* fEventManager;
     FairRootManager* fManager;
+
+    // Selecting the geometry of the CALIFA calorimeter
+    Int_t fGeometryVersion;
 
     TEveCaloDataHist* fDataHist;
     TEveCalo3D* fCalo3d;
@@ -96,7 +108,7 @@ class R3BCalifaClusterEventDisplay : public FairTask
   private:
     /** Data members **/
 
-    TH2F* hcalohit;
+    TH2F* hcalo;
 
     /** Private Methods **/
 
@@ -104,5 +116,9 @@ class R3BCalifaClusterEventDisplay : public FairTask
     void MakeSlots();
     void MakeViewerScene();
 
-    ClassDef(R3BCalifaClusterEventDisplay, 2);
+    void GetAngles(Int_t geoVersion, Int_t iD, Double_t* polar, Double_t* azimuthal, Double_t* rho);
+
+    ClassDef(R3BCalifaEventDisplay, 2);
 };
+
+#endif

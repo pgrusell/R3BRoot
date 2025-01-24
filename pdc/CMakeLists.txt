@@ -12,20 +12,18 @@
 ##############################################################################
 
 set(SRCS
-    #R3BGeoPdcPar.cxx
+    R3BGeoPdcPar.cxx
     R3BPdcContFact.cxx
     R3BPdcMapped2CalPar.cxx
-    #R3BPdcMapped2Cal.cxx
-    #R3BPdcCal2Hit.cxx
-)
+    R3BPdcMapped2Cal.cxx
+    R3BPdcCal2Hit.cxx)
 
 set(HEADERS
-    #R3BGeoPdcPar.h
+    R3BGeoPdcPar.h
     R3BPdcContFact.h
     R3BPdcMapped2CalPar.h
-    #R3BPdcMapped2Cal.h
-    #R3BPdcCal2Hit.h
-)
+    R3BPdcMapped2Cal.h
+    R3BPdcCal2Hit.h)
 
 add_library_with_dictionary(
     LIBNAME
@@ -40,4 +38,5 @@ add_library_with_dictionary(
     ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDENCIES
     R3BTracking
-    R3BTCal)
+    R3BTCal
+    R3BSource)

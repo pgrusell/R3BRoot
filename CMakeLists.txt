@@ -59,6 +59,8 @@ endif()
 set(SIMPATH $ENV{SIMPATH})
 set(FAIRROOTPATH $ENV{FAIRROOTPATH})
 
+include_directories(${FAIRROOTPATH}/include ${SIMPATH}/include)
+
 include(cmake/utils/create_library_with_dictionary.cmake)
 include(cmake/scripts/set_ld_library_dir.cmake)
 set(GRAPHVIZ_EXTERNAL_LIBS FALSE)
@@ -168,7 +170,7 @@ find_package2(
     1.6.0
     REQUIRED)
 
-find_package2(GENFIT2 REQUIRED)
+find_package(GENFIT2 REQUIRED)
 
 foreach(dep IN LISTS FairLogger_PACKAGE_DEPENDENCIES)
     if(NOT dep STREQUAL "Boost")
@@ -539,7 +541,7 @@ endif(EXISTS "${R3BROOT_SOURCE_DIR}/asyeos/")
 configure_file(${CMAKE_SOURCE_DIR}/cmake/scripts/R3BRootConfigVersion.cmake.in
                "${CMAKE_BINARY_DIR}/R3BRootConfigVersion.cmake" @ONLY)
 
-#r3b_generate_version_info()
+# r3b_generate_version_info()
 
 # Recurse into the given subdirectories.  This does not actually cause another cmake executable to
 # run.  The same process will walk through the project's entire directory structure.
@@ -598,10 +600,14 @@ if(NOT MODULE)
     add_subdirectory(r3bgen)
     add_subdirectory(califa)
     add_subdirectory(evtvis)
-    add_subdirectory(psp)
+    if(WITH_UCESB)
+    	add_subdirectory(psp)
+    endif()
     add_subdirectory(compilehelper)
     add_subdirectory(tracker_rene)
-    add_subdirectory(pdc)
+    if(WITH_UCESB)
+    	add_subdirectory(pdc)
+    endif()
     add_subdirectory(rpc)
     add_subdirectory(alpide)
     add_subdirectory(mwpc)

@@ -16,9 +16,10 @@ file(
     SRCS
     ./pars/*.cxx
     ./calibration/*.cxx
-    #./online/*.cxx
-)
+    ./online/*.cxx)
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
+
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -32,6 +33,6 @@ add_library_with_dictionary(
     INCLUDEDIRS
     pars
     calibration
-    #online
+    online
     DEPENDENCIES
-    R3BTracking)
+    R3BTracking ${FAIRSOFT_LIBRARIES})

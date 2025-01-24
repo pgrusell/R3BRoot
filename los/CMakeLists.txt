@@ -24,8 +24,7 @@ set(SRCS
     R3BLosProvideTStart.cxx
     params/R3BLosHitPar.cxx
     params/R3BLosContFact.cxx
-    #online/R3BLosOnlineSpectra.cxx
-)
+    online/R3BLosOnlineSpectra.cxx)
 
 set(HEADERS
     calib/R3BLosMapped2Cal.h
@@ -36,8 +35,7 @@ set(HEADERS
     R3BLosProvideTStart.h
     params/R3BLosHitPar.h
     params/R3BLosContFact.h
-    #online/R3BLosOnlineSpectra.h
-)
+    online/R3BLosOnlineSpectra.h)
 
 add_library_with_dictionary(
     LIBNAME
@@ -51,10 +49,10 @@ add_library_with_dictionary(
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
     calib
-    #online
+    online
     params
     DEPENDENCIES
     R3BTracking
     R3BTCal
-    # TODO: only due to TCAConnector.
-    R3BNeulandShared)
+    R3BNeulandShared
+    ${SIMPATH}/lib/libRHTTP.so)

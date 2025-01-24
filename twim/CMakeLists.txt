@@ -17,11 +17,13 @@ file(
     ./sim/*.cxx
     ./digi/*.cxx
     ./pars/*.cxx
-    #./online/*.cxx
+    ./online/*.cxx
     ./calibration/*.cxx
     ./ana/*.cxx)
 
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
+
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -36,11 +38,12 @@ add_library_with_dictionary(
     sim
     digi
     pars
-    #online
+    online
     calibration
     ana
     DEPENDENCIES
-    R3BTracking)
+    R3BTracking
+    ${FAIRSOFT_LIBRARIES})
 
 if(WITH_SOFIA)
     target_link_libraries(R3BTwim PRIVATE R3BSofData)

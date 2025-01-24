@@ -20,10 +20,10 @@ set(SRCS
     pars/R3BTofDHitModulePar.cxx
     pars/R3BTofDMappingPar.cxx
     pars/R3BTofDMapped2CalPar.cxx
-    #pars/R3BTofDCal2HitPar.cxx
+    pars/R3BTofDCal2HitPar.cxx
     calibration/R3BTofDMapped2Cal.cxx
     calibration/R3BTofDCal2Hit.cxx
-    #online/R3BTofDOnlineSpectra.cxx
+    online/R3BTofDOnlineSpectra.cxx
     #R3BTofDCal2Histo.cxx
     #R3BTofDCal2HistoPar.cxx
     #R3BTofDChangePar.cxx
@@ -43,10 +43,10 @@ set(HEADERS
     pars/R3BTofDHitModulePar.h
     pars/R3BTofDMappingPar.h
     pars/R3BTofDMapped2CalPar.h
-    #pars/R3BTofDCal2HitPar.h
+    pars/R3BTofDCal2HitPar.h
     calibration/R3BTofDMapped2Cal.h
     calibration/R3BTofDCal2Hit.h
-    #online/R3BTofDOnlineSpectra.h
+    online/R3BTofDOnlineSpectra.h
     #R3BTofDCal2Histo.h
     #R3BTofDCal2HistoPar.h
     #R3BTofDChangePar.h
@@ -56,6 +56,8 @@ set(HEADERS
     #R3BTofDContFact.h
     #R3BTofDDigiPar.h
 )
+
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -70,9 +72,10 @@ add_library_with_dictionary(
     ${CMAKE_CURRENT_SOURCE_DIR}
     calibration
     digi
-    #online
+    online
     pars
     sim
     DEPENDENCIES
     R3BTracking
-    R3BTCal)
+    R3BTCal
+    ${FAIRSOFT_LIBRARIES})

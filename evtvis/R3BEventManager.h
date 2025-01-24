@@ -1,5 +1,3 @@
-// clang-format off
-
 /******************************************************************************
  *   Copyright (C) 2019 GSI Helmholtzzentrum für Schwerionenforschung GmbH    *
  *   Copyright (C) 2019-2025 Members of R3B Collaboration                     *
@@ -13,18 +11,28 @@
  * or submit itself to any jurisdiction.                                      *
  ******************************************************************************/
 
-#ifdef __CINT__
+#pragma once
 
-#pragma link off all globals;
-#pragma link off all classes;
-#pragma link off all functions;
+#include <FairEventManager.h>
 
-#pragma link C++ class  R3BEventManager+;
-#pragma link C++ class  R3BEventManagerEditor+;
-#pragma link C++ class  R3BMCTracks+;
-#pragma link C++ class  R3BCalifaEventDisplay+;
-#pragma link C++ class  R3BCalifaClusterEventDisplay+;
-#pragma link C++ class  R3BIonName+;
+class R3BIonName;
 
-#endif
+class R3BEventManager : public FairEventManager
+{
+  public:
+    static R3BEventManager* Instance();
+    R3BEventManager();
+    virtual ~R3BEventManager() { ; }
+    virtual void AddParticlesToPdgDataBase(Int_t pdgCode);
+    virtual void SetScaleByEnergy(Bool_t scale) { fScaleByEnergy = scale; }
+    virtual Bool_t IsScaleByEnergy() { return fScaleByEnergy; }
 
+  protected:
+    Bool_t fScaleByEnergy; //!
+
+    R3BIonName* fIonName;
+
+  private:
+    static R3BEventManager* fgRinstance; //!
+    ClassDef(R3BEventManager, 1);
+};

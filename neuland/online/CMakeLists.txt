@@ -15,6 +15,7 @@ set(HEADERS R3BNeulandOnlineReconstruction.h R3BNeulandOnlineSpectra.h)
 
 add_library(R3BNeulandOnline SHARED ${SRCS})
 target_include_directories(R3BNeulandOnline PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(R3BNeulandOnline PUBLIC R3BTCal R3BNeulandShared)
+target_link_libraries(R3BNeulandOnline PUBLIC R3BTCal R3BNeulandShared 
+    ${SIMPATH}/lib/libRHTTP.so)
 root_generate_dictionary(R3BNeulandOnline_dict ${HEADERS} MODULE R3BNeulandOnline LINKDEF
                          NeulandOnlineLinkDef.h)

@@ -22,8 +22,8 @@ set(SRCS
     R3BPspxMapped2Precal.cxx
     R3BPspxPrecal2Cal.cxx
     R3BPspxCal2Hit.cxx
-    #R3BPspxReader.cxx
-    #R3BPspxOnlineSpectra.cxx
+    R3BPspxReader.cxx
+    R3BPspxOnlineSpectra.cxx
     par/R3BPspxMappedPar.cxx
     par/R3BPspxPrecalPar.cxx
     par/R3BPspxCalPar.cxx
@@ -41,8 +41,8 @@ set(HEADERS
     R3BPspxMapped2Precal.h
     R3BPspxPrecal2Cal.h
     R3BPspxCal2Hit.h
-    #R3BPspxReader.h
-    #R3BPspxOnlineSpectra.h
+    R3BPspxReader.h
+    R3BPspxOnlineSpectra.h
     par/R3BPspxMappedPar.h
     par/R3BPspxPrecalPar.h
     par/R3BPspxCalPar.h
@@ -62,4 +62,4 @@ add_library_with_dictionary(
     ${CMAKE_CURRENT_SOURCE_DIR}
     par
     DEPENDENCIES
-    R3BTracking)
+    R3BTracking R3BSource)

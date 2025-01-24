@@ -32,10 +32,10 @@ set(SRCS
     digi/R3BTarget2pDigitizer.cxx
     calibration/R3BAmsMapped2StripCalPar.cxx
     calibration/R3BAmsMapped2StripCal.cxx
-    #calibration/R3BAmsStripCal2Hit.cxx
-    #online/R3BAmsOnlineSpectra.cxx
-    #online/R3BAmsCalifaCorrelatedOnlineSpectra.cxx
-    #online/R3BFootOnlineSpectra.cxx
+    calibration/R3BAmsStripCal2Hit.cxx
+    online/R3BAmsOnlineSpectra.cxx
+    online/R3BAmsCalifaCorrelatedOnlineSpectra.cxx
+    online/R3BFootOnlineSpectra.cxx
     pars/R3BFootMappingPar.cxx
     pars/R3BFootCalPar.cxx
     calibration/R3BFootMapped2StripCal.cxx
@@ -62,14 +62,16 @@ set(HEADERS
     digi/R3BTarget2pDigitizer.h
     calibration/R3BAmsMapped2StripCalPar.h
     calibration/R3BAmsMapped2StripCal.h
-    #calibration/R3BAmsStripCal2Hit.h
-    #online/R3BAmsOnlineSpectra.h
-    #online/R3BAmsCalifaCorrelatedOnlineSpectra.h
-    #online/R3BFootOnlineSpectra.h
+    calibration/R3BAmsStripCal2Hit.h
+    online/R3BAmsOnlineSpectra.h
+    online/R3BAmsCalifaCorrelatedOnlineSpectra.h
+    online/R3BFootOnlineSpectra.h
     pars/R3BFootMappingPar.h
     pars/R3BFootCalPar.h
     calibration/R3BFootMapped2StripCal.h
     calibration/R3BFootStripCal2Hit.h)
+
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -82,12 +84,13 @@ add_library_with_dictionary(
     ${SRCS}
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${FAIRROOTPATH}/include  
     calibration
     digi
-    #online
+    online
     pars
     sim
     DEPENDENCIES
-    R3BTracking R3BTCal)
+    R3BTracking R3BTCal ${FAIRSOFT_LIBRARIES})
 
 add_subdirectory(test)

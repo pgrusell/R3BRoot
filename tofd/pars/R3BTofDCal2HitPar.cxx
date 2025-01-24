@@ -36,6 +36,7 @@
 #include "TLine.h"
 #include "TMath.h"
 #include "TProfile.h"
+#include "TSpectrum.h"
 #include "TVirtualFitter.h"
 
 #include <iostream>
@@ -701,10 +702,23 @@ void R3BTofDCal2HitPar::zcorr(TH2F* histo, Int_t min, Int_t max, Double_t* pars,
     c1->cd(2);
     h1->Draw();
     // Use TSpectrum to find the peak candidates
+    TSpectrum* s = new TSpectrum(nPeaks);
+    Int_t nfound = s->Search(h1, 10, "", 0.001);
+    std::cout << "Found " << nfound << " candidate peaks to fit\n";
+
+    if (nfound == 0)
+    {
+        delete s;
+        delete c1;
+        delete h;
+        delete h1;
+        return;
+    }
 
     c1->Update();
     // Eliminate background peaks
     nPeaks = 0;
+    Double_t* xpeaks = s->GetPositionX();
     for (Int_t p = 0; p <= nfound; p++)
     {
         Float_t xp = xpeaks[p];

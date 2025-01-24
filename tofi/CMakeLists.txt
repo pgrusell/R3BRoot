@@ -20,14 +20,37 @@ set(SRCS
     sim/R3BTofi.cxx
     sim/R3BGeoTofi.cxx
     pars/R3BGeoTofiPar.cxx
-    pars/R3BTofiDigiPar.cxx)
+    pars/R3BTofiDigiPar.cxx
+    digi/R3BTofiDigitizerCal.cxx
+    pars/R3BTofiHisto2HitPar.cxx
+    pars/R3BTofiHitPar.cxx
+    pars/R3BTofiHitModulePar.cxx
+    pars/R3BTofiChangePar.cxx
+    pars/R3BTofiContFact.cxx
+    calibration/R3BTofiCal2Histo.cxx
+    calibration/R3BTofiMapped2Cal.cxx
+    calibration/R3BTofiMapped2CalPar.cxx
+    calibration/R3BTofiCal2HitS494.cxx)
 
 set(HEADERS
     #Put here your sourcefiles
     sim/R3BTofi.h
     sim/R3BGeoTofi.h
     pars/R3BGeoTofiPar.h
-    pars/R3BTofiDigiPar.h)
+    pars/R3BTofiDigiPar.h
+    digi/R3BTofiDigitizerCal.h
+    pars/R3BTofiHisto2HitPar.h
+    pars/R3BTofiHitPar.h
+    pars/R3BTofiHitModulePar.h
+    pars/R3BTofiChangePar.h
+    pars/R3BTofiContFact.h
+    calibration/R3BTofiCal2Histo.h
+    calibration/R3BTofiMapped2Cal.h
+    calibration/R3BTofiMapped2CalPar.h
+    calibration/R3BTofiCal2HitS494.h)
+
+# Glob all shared libraries (*.so) from the specified directory
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -40,8 +63,11 @@ add_library_with_dictionary(
     ${SRCS}
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
+    calibration
+    digi
     pars
     sim
     DEPENDENCIES
     R3BTCal
-    R3BTracking)
+    R3BTracking
+    ${FAIRSOFT_LIBRARIES})

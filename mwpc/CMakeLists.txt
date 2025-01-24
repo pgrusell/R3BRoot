@@ -18,10 +18,11 @@ file(
     mwpc1/*.cxx
     mwpc2/*.cxx
     digi/*.cxx
-    #online/*.cxx
-)
+    online/*.cxx)
 
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
+
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -37,9 +38,9 @@ add_library_with_dictionary(
     mwpc0
     mwpc1
     mwpc2
-    #online
+    online
     DEPENDENCIES
-    R3BTracking)
+    R3BTracking ${FAIRSOFT_LIBRARIES})
 
 if(WITH_SOFIA)
     add_subdirectory(mwpc3)

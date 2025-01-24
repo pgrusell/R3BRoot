@@ -16,11 +16,13 @@ file(
     SRCS
     ./sim/*.cxx
     ./pars/*.cxx
-    #./online/*.cxx
+    ./online/*.cxx
     ./calibration/*.cxx
     ./ana/*.cxx)
 
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
+
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -35,11 +37,11 @@ add_library_with_dictionary(
     ${CMAKE_CURRENT_SOURCE_DIR}
     sim
     pars
-    #online
+    online
     calibration
     ana
     DEPENDENCIES
-    R3BPassive)
+    R3BPassive ${FAIRSOFT_LIBRARIES})
 
 if(BUILD_GEOMETRY)
     add_subdirectory(geobase)

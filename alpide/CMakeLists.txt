@@ -19,10 +19,11 @@ file(
     geo/*.cxx
     pars/*.cxx
     calibration/*.cxx
-    #online/*.cxx
-)
+    online/*.cxx)
 
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
+
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -40,9 +41,9 @@ add_library_with_dictionary(
     geo
     pars
     calibration
-    #online
+    online
     DEPENDENCIES
-    R3BPassive)
+    R3BPassive ${FAIRSOFT_LIBRARIES})
 
 if(BUILD_GEOMETRY)
     add_subdirectory(geobase)

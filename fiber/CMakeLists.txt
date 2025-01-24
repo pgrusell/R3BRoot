@@ -33,9 +33,8 @@ set(SRCS
     pars/R3BFiberMAPMTHitPar.cxx
     pars/R3BFiberMAPMTHitModulePar.cxx
     pars/R3BFiberMappingPar.cxx
-    #online/R3BFiberMAPMTOnlineSpectra.cxx
-    #online/R3BFiberMAPMTCorrelationOnlineSpectra.cxx
-)
+    online/R3BFiberMAPMTOnlineSpectra.cxx
+    online/R3BFiberMAPMTCorrelationOnlineSpectra.cxx)
 
 set(HEADERS
     sim/R3BFiber.h
@@ -55,9 +54,8 @@ set(HEADERS
     pars/R3BFiberMAPMTHitPar.h
     pars/R3BFiberMAPMTHitModulePar.h
     pars/R3BFiberMappingPar.h
-    #online/R3BFiberMAPMTOnlineSpectra.h
-    #online/R3BFiberMAPMTCorrelationOnlineSpectra.h
-)
+    online/R3BFiberMAPMTOnlineSpectra.h
+    online/R3BFiberMAPMTCorrelationOnlineSpectra.h)
 
 add_library_with_dictionary(
     LIBNAME
@@ -73,9 +71,10 @@ add_library_with_dictionary(
     bunched
     digi
     mapmt
-    #online
+    online
     pars
     sim
     DEPENDENCIES
     R3BTCal
-    R3BTracking)
+    R3BTracking
+    ${SIMPATH}/lib/libRHTTP.so)

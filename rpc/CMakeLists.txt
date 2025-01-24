@@ -24,8 +24,7 @@ set(SRCS
     calibration/R3BRpcCal2HitPar.cxx
     pars/R3BRpcHitPar.cxx
     pars/R3BRpcPars4Sim.cxx
-    #online/R3BRpcOnlineSpectra.cxx
-)
+    online/R3BRpcOnlineSpectra.cxx)
 
 set(HEADERS
     sim/R3BRpc.h
@@ -40,8 +39,9 @@ set(HEADERS
     calibration/R3BRpcCal2HitPar.h
     pars/R3BRpcHitPar.h
     pars/R3BRpcPars4Sim.h
-    #online/R3BRpcOnlineSpectra.h
-)
+    online/R3BRpcOnlineSpectra.h)
+
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
 
 add_library_with_dictionary(
     LIBNAME
@@ -56,12 +56,12 @@ add_library_with_dictionary(
     ${CMAKE_CURRENT_SOURCE_DIR}
     calibration
     digi
-    #online
+    online
     pars
     sim
     DEPENDENCIES
     R3BTracking
-    R3BTCal)
+    R3BTCal ${FAIRSOFT_LIBRARIES})
 
 if(BUILD_GEOMETRY)
     add_subdirectory(geobase)

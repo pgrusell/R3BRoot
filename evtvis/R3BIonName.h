@@ -1,5 +1,3 @@
-// clang-format off
-
 /******************************************************************************
  *   Copyright (C) 2019 GSI Helmholtzzentrum für Schwerionenforschung GmbH    *
  *   Copyright (C) 2019-2025 Members of R3B Collaboration                     *
@@ -13,18 +11,32 @@
  * or submit itself to any jurisdiction.                                      *
  ******************************************************************************/
 
-#ifdef __CINT__
+// -------------------------------------------------------------------------
+// -----                   R3BIonName header file                      -----
+// -----              Created 04/10/2011  by P.Cabanelas               -----
+// -------------------------------------------------------------------------
 
-#pragma link off all globals;
-#pragma link off all classes;
-#pragma link off all functions;
+#pragma once
 
-#pragma link C++ class  R3BEventManager+;
-#pragma link C++ class  R3BEventManagerEditor+;
-#pragma link C++ class  R3BMCTracks+;
-#pragma link C++ class  R3BCalifaEventDisplay+;
-#pragma link C++ class  R3BCalifaClusterEventDisplay+;
-#pragma link C++ class  R3BIonName+;
+#include <TNamed.h>
 
-#endif
+class R3BIonName : public TNamed
+{
+  public:
+    /** Default constructor **/
+    R3BIonName();
 
+    /** Destructor **/
+    virtual ~R3BIonName();
+
+    /** Accessors **/
+    /**
+     * Return the ion name if exists
+     */
+    Bool_t GetIonName(Int_t element, Char_t* name);
+
+  private:
+    /** Data members **/
+
+    ClassDef(R3BIonName, 1);
+};

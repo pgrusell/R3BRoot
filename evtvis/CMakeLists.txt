@@ -12,12 +12,23 @@
 ##############################################################################
 
 set(SRCS
-
-    R3BCalifaClusterEventDisplay.cxx)
+    R3BEventManager.cxx
+    R3BEventManagerEditor.cxx
+    R3BCalifaEventDisplay.cxx
+    R3BCalifaClusterEventDisplay.cxx
+    R3BMCTracks.cxx
+    R3BIonName.cxx)
 
 set(HEADERS
+    R3BEventManager.h
+    R3BEventManagerEditor.h
+    R3BCalifaEventDisplay.h
+    R3BCalifaClusterEventDisplay.h
+    R3BMCTracks.h
+    R3BIonName.h)
 
-    R3BCalifaClusterEventDisplay.h)
+file(GLOB FAIRSOFT_LIBRARIES "${SIMPATH}/lib/*.so")
+file(GLOB FAIRROOT_LIBRARIES "${FAIRROOTPATH}/lib/*.dylib")
 
 add_library_with_dictionary(
     LIBNAME
@@ -30,5 +41,21 @@ add_library_with_dictionary(
     ${SRCS}
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${FAIRROOTPATH}/include  
     DEPENDENCIES
-    R3BCalifa)
+    R3BCalifa ${FAIRSOFT_LIBRARIES} ${FAIROOT_LIBRARIES}
+    ${FAIRROOTPATH}/lib/libEventDisplay.dylib)
+
+# set(DEPENDENCIES
+#     Field
+#     R3BData
+#     R3BCalifa
+#     Geane
+#     EventDisplay
+#     Eve
+#     Gui
+#     Ged
+#     RGL
+#     Graf3d
+#     Geom
+#     GeomPainter)

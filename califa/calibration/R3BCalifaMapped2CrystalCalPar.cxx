@@ -18,7 +18,7 @@
 #include "TMath.h"
 #include "TObjArray.h"
 #include "TRandom.h"
-
+#include "TSpectrum.h"
 #include "TVector3.h"
 
 #include "FairLogger.h"
@@ -216,6 +216,119 @@ void R3BCalifaMapped2CrystalCalPar::FinishTask()
                 fh_Map_energy_crystal[i]->Write();
 }
 
-void R3BCalifaMapped2CrystalCalPar::SearchPeaks() {}
+void R3BCalifaMapped2CrystalCalPar::SearchPeaks()
+{
+    Int_t nfound = 0;
+    Int_t numPars = 2; // Number of parameters=2 by default
+    if (fNumParam)
+    {
+        numPars = fNumParam;
+    }
+
+    fCal_Par->SetNumCrystals(fNumCrystals);
+    fCal_Par->SetNumParametersFit(fNumParam);
+    fCal_Par->GetCryCalParams()->Set(numPars * fNumCrystals);
+
+    TSpectrum* ss = new TSpectrum(fNumPeaks);
+
+    Int_t fright, fleft;
+
+    for (Int_t i = 0; i < fNumCrystals; i++)
+        if (fMap_Par->GetInUse(i + 1) == 1)
+        {
+
+            if (fh_Map_energy_crystal[i]->GetEntries() > fMinStadistics)
+            {
+
+                if (fDebugMode)
+                    nfound = ss->Search(fh_Map_energy_crystal[i], fSigma, "", fThreshold); // number of peaks
+                else
+                    nfound = ss->Search(fh_Map_energy_crystal[i], fSigma, "goff", fThreshold);
+                LOG(debug) << "CrystalId=" << i + 1 << " " << nfound << " " << fThreshold;
+                fChannelPeaks = (Double_t*)ss->GetPositionX();
+
+                Int_t idx[nfound];
+                TMath::Sort(nfound, fChannelPeaks, idx, kTRUE);
+
+                // Calibrated Spectrum
+                Double_t X[nfound + 1];
+                Double_t Y[nfound + 1];
+
+                for (Int_t j = 0; j < nfound; j++)
+                {
+                    X[j] = fChannelPeaks[idx[nfound - j - 1]];
+                    Y[j] = fEnergyPeaks->GetAt(nfound - j - 1);
+                    LOG(debug) << "CrystalId=" << i + 1 << " " << j + 1 << " " << X[j + 1];
+                }
+                X[nfound] = 0.;
+                Y[nfound] = 0.;
+
+                if (i < fMap_Par->GetNumCrystals() / 2)
+                {
+                    fright = fMapHistos_right;
+                    fleft = fMapHistos_left;
+                }
+                else
+                {
+                    fright = fMapHistos_rightp;
+                    fleft = fMapHistos_leftp;
+                }
+
+                TF1* f1 = nullptr;
+                if (fNumParam)
+                {
+
+                    if (fNumParam == 1)
+                    {
+                        f1 = new TF1("f1", "[0]*x", fleft, fright);
+                    }
+                    if (fNumParam == 2)
+                    {
+                        f1 = new TF1("f1", "[0]+[1]*x", fleft, fright);
+                    }
+                    if (fNumParam == 3)
+                    {
+                        f1 = new TF1("f1", "[0]+[1]*x+[2]*pow(x,2)", fleft, fright);
+                    }
+                    if (fNumParam == 4)
+                    {
+                        f1 = new TF1("f1", "[0]+[1]*x+[2]*pow(x,2)+[3]*pow(x,3)", fleft, fright);
+                    }
+                    if (fNumParam == 5)
+                    {
+                        f1 = new TF1("f1", "[0]+[1]*x+[2]*pow(x,2)+[3]*pow(x,3)+[4]*pow(x,4)", fleft, fright);
+                    }
+                    if (fNumParam > 5)
+                    {
+                        LOG(warn)
+                            << "R3BCalifaMapped2CrystalCalPar:: The number of fit parameters can not be higher than 5";
+                    }
+                }
+                else
+                {
+                    LOG(warn)
+                        << "R3BCalifaMapped2CrystalCalPar:: No imput number of fit parameters, therefore, by default "
+                           "NumberParameters=2";
+                    f1 = new TF1("f1", "[0]+[1]*x", fleft, fright);
+                }
+
+                TGraph* graph = new TGraph(fNumPeaks + 1, X, Y);
+                graph->Fit("f1", "Q"); // Quiet mode (minimum printing)
+
+                for (Int_t h = 0; h < numPars; h++)
+                {
+                    fCal_Par->SetCryCalParams(f1->GetParameter(h), numPars * i + h + 1); // 1-base
+                }
+            }
+            else
+            {
+                LOG(warn) << "R3BCalifaMapped2CrystalCalPar::Histogram number " << i + 1 << "not Fitted";
+            }
+        }
+
+    delete ss;
+    fCal_Par->setChanged();
+    return;
+}
 
 ClassImp(R3BCalifaMapped2CrystalCalPar)
