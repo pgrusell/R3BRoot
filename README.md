@@ -77,3 +77,8 @@ source util/clang-format-all.sh
 
 * [Static analyzer using Clang-tidy](config/clang_tidy/README.md)
 * [CMake build system for R3BRoot](doc/cmake_usage.md)
+* 
+
+https://docs.google.com/spreadsheets/d/1-TruBhwcXZuEPEyMUWlTzMypEVCsVjCh68rEyLtLmto/edit?gid=0#gid=0
+
+https://docs.google.com/spreadsheets/d/1mDr53tx8J3NUVi8kTGgDurkAutBqkvBsHsd7Ju6weBY/edit?gid=0#gid=0
