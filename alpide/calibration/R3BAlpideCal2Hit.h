@@ -37,7 +37,7 @@ class R3BAlpideCal2Hit : public FairTask
     R3BAlpideCal2Hit();
 
     /** Standard constructor **/
-    explicit R3BAlpideCal2Hit(const TString& name, int iVerbose = 1);
+    R3BAlpideCal2Hit(const TString& name, Int_t iVerbose = 1);
 
     /** Destructor **/
     ~R3BAlpideCal2Hit() override;
@@ -78,7 +78,7 @@ class R3BAlpideCal2Hit : public FairTask
 
     R3BTGeoPar* fTargetGeoPar = nullptr;
     R3BTGeoPar* fAlpideGeoPar = nullptr;
-    int fGeoversion = 202505;
+    int fGeoversion = 202402;
     R3BAlpideGeometry* fAlpideGeo = nullptr;
     R3BAlpideMappingPar* fMap_Par = nullptr;
     TClonesArray* fAlpideCalData = nullptr; // Array with Alpide Cal input data

@@ -71,17 +71,17 @@ void R3BFootStripCal2Hit::SetParContainers()
     {
         R3BLOG(info, "footMappingPar found");
     }
-
-    R3BLOG(info, "Calling SetParContainers()");
+    
     fHit_Par = dynamic_cast<R3BFootHitPar*>(rtdb->getContainer("footHitPar"));
     if (!fHit_Par)
     {
-        R3BLOG(error, "SetParContainers(): footHitPar not found");
+        R3BLOG(error, "Couldn't get handle on footHitPar container");
     }
     else
     {
-        R3BLOG(info, "SetParContainers(): footHitPar loaded correctly");
+        R3BLOG(info, "footHitPar found");
     }
+	
 }
 
 void R3BFootStripCal2Hit::SetParameter()
@@ -93,7 +93,6 @@ void R3BFootStripCal2Hit::SetParameter()
     }
     //--- Parameter Container ---
     fMaxNumDet = fMap_Par->GetNumDets(); // Number of foot detectors
-
     R3BLOG(info, "NumDet from mapping " << fMaxNumDet);
     for (int i = 0; i < fMaxNumDet; i++)
     {
@@ -104,20 +103,17 @@ void R3BFootStripCal2Hit::SetParameter()
         fOffsetY.push_back(fMap_Par->GetOffsetY(i + 1));
     }
     fMap_Par->printParams();
-
+    
     if (!fHit_Par)
     {
-        R3BLOG(error, "SetParameter(): fHit_Par is NULL");
+        R3BLOG(warn, "Container footHitPar not found");
+        return;
     }
-    else
-    {
-        R3BLOG(info, TString::Format("SetParameter(): fHit_Par is VALID, NumParsFit = %d", fHit_Par->GetNumParsFit()));
-    }
-
     fNumParsFit = fHit_Par->GetNumParsFit();
     HitCalParams = fHit_Par->GetCharCalParams();
     Int_t array_size = fMaxNumDet * fNumParsFit;
     HitCalParams->Set(array_size);
+     
 
     for (int d = 0; d < fMaxNumDet; d++)
     {
@@ -151,7 +147,7 @@ InitStatus R3BFootStripCal2Hit::Init()
     fFootHitData = new TClonesArray("R3BFootHitData");
     rootManager->Register("FootHitData", "FOOT Hit", fFootHitData, !fOnline);
     fFootHitData->Clear();
-
+    
     return kSUCCESS;
 }
 
@@ -166,6 +162,7 @@ InitStatus R3BFootStripCal2Hit::ReInit()
 // -----   Public method Execution   --------------------------------------------
 void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
 {
+
     // Reset entries in output arrays, local arrays
     Reset();
 
@@ -173,7 +170,6 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
     int nHits = fFootCalData->GetEntriesFast();
     if (nHits == 0)
         return;
-
     // Data from cal level
     int detId;
     int stripId;
@@ -183,7 +179,6 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
     std::vector<std::vector<int>> StripI;
     std::vector<std::vector<double>> StripE;
     std::vector<std::vector<double>> StripS;
-
     // Clustering algorithm - A. Revel
     StripI.resize(fMaxNumDet);
     StripE.resize(fMaxNumDet);
@@ -205,11 +200,14 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
         stripId = calData->GetStripId() - 1;
         energy = calData->GetEnergy();
         sigma = calData->GetSigma();
-
+        
         StripI[detId].push_back(stripId);
         StripE[detId].push_back(energy);
         StripS[detId].push_back(sigma);
     }
+   
+
+
 
     // Sort elements
     for (int i = 0; i < fMaxNumDet; ++i)
@@ -228,6 +226,7 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
             StripS[i][j] = std::get<2>(hits[j]);
         }
     }
+    
 
     // Clustering
     for (int i = 0; i < fMaxNumDet; i++)
@@ -274,7 +273,7 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
 
         ClusterMult[i] = ClusterCount;
     }
-
+    
     // Compute Sum Energy, Position and Eta
     for (int i = 0; i < fMaxNumDet; i++)
     {
@@ -295,7 +294,7 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
             Eta[i][j] = ClusterPos[i][j] - (int)ClusterPos[i][j];
         }
     }
-
+     
     // Sort Cluster from Higher to Lower Energy
     for (int i = 0; i < fMaxNumDet; i++)
     {
@@ -324,7 +323,6 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
             }
         }
     }
-
     // Filling HitData
     for (uint8_t i = 0; i < fMaxNumDet; i++)
     {
@@ -365,19 +363,15 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
             // TODO: Eta correction not used at the moment
 
             // Charge calibration (charge = m * energy + n)
-            double m = 1;
-            double n = 0;
+			double m = 1;
+			double n = 0;
 
-            if (fCharCalPar.size() > 0)
-            {
-                if (fCharCalPar[i * fNumParsFit] != 0)
-                {
-                    m = fCharCalPar[i * fNumParsFit];
-                    n = fCharCalPar[i * fNumParsFit + 1];
-                }
+			if (fCharCalPar.size() > 0)
+            { 
+			    m = fCharCalPar[i * fNumParsFit];
+                n = fCharCalPar[i * fNumParsFit + 1];
             }
-
-            double charge = m * ClusterESum[i][j] + n;
+			double charge = m * ClusterESum[i][j] + n;
 
             if (ClusterESum[i][j] > fThSum && j < fMaxNumClusters)
             {
@@ -388,11 +382,11 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
             {
                 // If this cluster is not above threshold then shouldn't be taken into account for
                 // cluster multiplicity!!
-                ClusterMult[i]--;
+                //ClusterMult[i]--;
             }
         }
     }
-
+    
     StripI.clear();
     StripE.clear();
     ClusterMult.clear();
@@ -403,7 +397,7 @@ void R3BFootStripCal2Hit::Exec(Option_t* /*option*/)
     ClusterI.clear();
     ClusterE.clear();
     StripS.clear();
-
+    
     return;
 }
 

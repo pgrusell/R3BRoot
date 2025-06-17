@@ -14,9 +14,7 @@
 file(
     GLOB
     SRCS
-    ./online/*.cxx
-    ./offline/*.cxx
-    ./pars/*.cxx)
+    ./online/*.cxx)
 
 change_file_extension(*.cxx *.h HEADERS "${SRCS}")
 
@@ -31,17 +29,7 @@ add_library_with_dictionary(
     ${SRCS}
     INCLUDEDIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
-    offline
     online
-    pars
     DEPENDENCIES
-    R3BTraRene
-    R3BLos
-    R3BCalifa
-    R3BMwpc
     R3BSsd
-    R3BTofD
-    R3BTofi
-    R3BTwim
-    R3BMusic
-    R3BBunchedFiber)
+	)

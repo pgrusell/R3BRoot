@@ -18,19 +18,8 @@
 // ------------------------------------------------------------
 
 #include "R3BGeneralOnlineSpectra.h"
-#include "R3BAmsOnlineSpectra.h"
-#include "R3BCalifaOnlineSpectra.h"
 #include "R3BEventHeader.h"
-#include "R3BFootOnlineSpectra.h"
-#include "R3BIncomingTrackingOnlineSpectra.h"
 #include "R3BLogger.h"
-#include "R3BLosOnlineSpectra.h"
-#include "R3BMusicOnlineSpectra.h"
-#include "R3BMwpcCorrelationOnlineSpectra.h"
-#include "R3BMwpcOnlineSpectra.h"
-#include "R3BTofDOnlineSpectra.h"
-#include "R3BTwimOnlineSpectra.h"
-#include "R3BTwimvsFootOnlineSpectra.h"
 #include "R3BWRData.h"
 
 #include "FairLogger.h"
@@ -59,21 +48,6 @@ R3BGeneralOnlineSpectra::R3BGeneralOnlineSpectra()
 R3BGeneralOnlineSpectra::R3BGeneralOnlineSpectra(const TString& name, Int_t iVerbose)
     : FairTask(name, iVerbose)
     , fEventHeader(nullptr)
-    , fMwpc0Online(NULL)
-    , fMwpc01Online(NULL)
-    , fMwpc02Online(NULL)
-    , fMwpc12Online(NULL)
-    , fMwpc1Online(NULL)
-    , fMwpc2Online(NULL)
-    , fTwimOnline(NULL)
-    , fMusicOnline(NULL)
-    , fAmsOnline(NULL)
-    , fLosOnline(NULL)
-    , fFootOnline(NULL)
-    , fCalifaOnline(NULL)
-    , fTofdOnlineSpectra(NULL)
-    , fIncomingTrackingOnline(NULL)
-    , fTwimvsFootOnlineSpectra(NULL)
     , fWRItemsMaster(NULL)
     , fWRItemsSofia(NULL)
     , fWRItemsCalifa(NULL)
@@ -138,71 +112,7 @@ InitStatus R3BGeneralOnlineSpectra::Init()
     fWRItemsS8 = dynamic_cast<TClonesArray*>(mgr->GetObject("WRS8Data"));
     R3BLOG_IF(warn, !fWRItemsS8, "WRS8Data not found");
 
-    // Looking for Mwpc0 online
-    fMwpc0Online = dynamic_cast<R3BMwpcOnlineSpectra*>(FairRunOnline::Instance()->GetTask("Mwpc0OnlineSpectra"));
-    R3BLOG_IF(warn, !fMwpc0Online, "Mwpc0OnlineSpectra not found");
 
-    // Looking for Mwpc0_1 online
-    fMwpc01Online = dynamic_cast<R3BMwpcCorrelationOnlineSpectra*>(
-        FairRunOnline::Instance()->GetTask("Mwpc0_1CorrelationOnlineSpectra"));
-    R3BLOG_IF(warn, !fMwpc01Online, "Mwpc0_1CorrelationOnlineSpectra not found");
-
-    // Looking for Mwpc0_2 online
-    fMwpc02Online = dynamic_cast<R3BMwpcCorrelationOnlineSpectra*>(
-        FairRunOnline::Instance()->GetTask("Mwpc0_2CorrelationOnlineSpectra"));
-    R3BLOG_IF(warn, !fMwpc02Online, "Mwpc0_2CorrelationOnlineSpectra not found");
-
-    // Looking for Mwpc1_2 online
-    fMwpc12Online = dynamic_cast<R3BMwpcCorrelationOnlineSpectra*>(
-        FairRunOnline::Instance()->GetTask("Mwpc1_2CorrelationOnlineSpectra"));
-    R3BLOG_IF(warn, !fMwpc12Online, "Mwpc1_2CorrelationOnlineSpectra not found");
-
-    // Looking for Mwpc1 online
-    fMwpc1Online = dynamic_cast<R3BMwpcOnlineSpectra*>(FairRunOnline::Instance()->GetTask("Mwpc1OnlineSpectra"));
-    R3BLOG_IF(warn, !fMwpc1Online, "Mwpc1OnlineSpectra not found");
-
-    // Looking for Mwpc2 online
-    fMwpc2Online = dynamic_cast<R3BMwpcOnlineSpectra*>(FairRunOnline::Instance()->GetTask("Mwpc2OnlineSpectra"));
-    if (!fMwpc2Online)
-        LOG(warn) << "R3BGeneralOnlineSpectra::Mwpc2OnlineSpectra not found";
-
-    // Looking for Twim online
-    fTwimOnline = dynamic_cast<R3BTwimOnlineSpectra*>(FairRunOnline::Instance()->GetTask("TwimOnlineSpectra"));
-    R3BLOG_IF(warn, !fTwimOnline, "TwimOnlineSpectra not found");
-
-    // Looking for Music online
-    fMusicOnline = dynamic_cast<R3BMusicOnlineSpectra*>(FairRunOnline::Instance()->GetTask("MusicOnlineSpectra"));
-    R3BLOG_IF(warn, !fMusicOnline, "MusicOnlineSpectra not found");
-
-    // Looking for AMS online
-    fAmsOnline = dynamic_cast<R3BAmsOnlineSpectra*>(FairRunOnline::Instance()->GetTask("AmsOnlineSpectra"));
-    R3BLOG_IF(warn, !fAmsOnline, "AmsOnlineSpectra not found");
-
-    // Looking for LOS online
-    fLosOnline = dynamic_cast<R3BLosOnlineSpectra*>(FairRunOnline::Instance()->GetTask("LosOnlineSpectra"));
-    R3BLOG_IF(warn, !fLosOnline, "LosOnlineSpectra not found");
-
-    // Looking for FOOT online
-    fFootOnline = dynamic_cast<R3BFootOnlineSpectra*>(FairRunOnline::Instance()->GetTask("FootOnlineSpectra"));
-    R3BLOG_IF(warn, !fFootOnline, "FootOnlineSpectra not found");
-
-    // Looking for CALIFA online
-    fCalifaOnline = dynamic_cast<R3BCalifaOnlineSpectra*>(FairRunOnline::Instance()->GetTask("CALIFAOnlineSpectra"));
-    R3BLOG_IF(warn, !fCalifaOnline, "CALIFAOnlineSpectra not found");
-
-    // Looking for TOFD online
-    fTofdOnlineSpectra = dynamic_cast<R3BTofDOnlineSpectra*>(FairRunOnline::Instance()->GetTask("TofdOnlineSpectra"));
-    R3BLOG_IF(warn, !fTofdOnlineSpectra, "TofdOnlineSpectra not found");
-
-    // Looking for Incoming Tracking online
-    fIncomingTrackingOnline = dynamic_cast<R3BIncomingTrackingOnlineSpectra*>(
-        FairRunOnline::Instance()->GetTask("IncomingTrackingOnlineSpectra"));
-    R3BLOG_IF(warn, !fIncomingTrackingOnline, "IncomingTrackingOnlineSpectra not found");
-
-    // Looking for Incoming Tracking online
-    fTwimvsFootOnlineSpectra =
-        dynamic_cast<R3BTwimvsFootOnlineSpectra*>(FairRunOnline::Instance()->GetTask("TwimvsFootOnlineSpectra"));
-    R3BLOG_IF(warn, !fTwimvsFootOnlineSpectra, "TwimvsFootOnlineSpectra not found");
 
     // Create histograms for detectors
     char Name1[255];
@@ -399,51 +309,6 @@ void R3BGeneralOnlineSpectra::Reset_GENERAL_Histo()
         if (fWRItemsS8)
             fh1_wrs[4]->Reset();
     }
-    // Reset Mwpc0 histograms if they exist somewhere
-    if (fMwpc0Online)
-        fMwpc0Online->Reset_Histo();
-    // Reset Mwpc0_1 histograms if they exist somewhere
-    if (fMwpc01Online)
-        fMwpc01Online->Reset_Histo();
-    // Reset Mwpc0_2 histograms if they exist somewhere
-    if (fMwpc02Online)
-        fMwpc02Online->Reset_Histo();
-    // Reset Mwpc1_2 histograms if they exist somewhere
-    if (fMwpc12Online)
-        fMwpc12Online->Reset_Histo();
-    // Reset Mwpc1 histograms if they exist somewhere
-    if (fMwpc1Online)
-        fMwpc1Online->Reset_Histo();
-    // Reset Mwpc2 histograms if they exist somewhere
-    if (fMwpc2Online)
-        fMwpc2Online->Reset_Histo();
-    // Reset Twim histograms if they exist somewhere
-    if (fTwimOnline)
-        fTwimOnline->Reset_Histo();
-    // Reset Music histograms if they exist somewhere
-    if (fMusicOnline)
-        fMusicOnline->Reset_Histo();
-    // Reset AMS histograms if they exist somewhere
-    if (fAmsOnline)
-        fAmsOnline->Reset_AMS_Histo();
-    // Reset Califa histograms if they exist somewhere
-    if (fCalifaOnline)
-        fCalifaOnline->Reset_CALIFA_Histo();
-    // Reset FOOT histograms if they exist somewhere
-    if (fFootOnline)
-        fFootOnline->Reset_FOOT_Histo();
-    // Reset LOS histograms if they exist somewhere
-    if (fLosOnline)
-        fLosOnline->Reset_LOS_Histo();
-    // Reset Incoming Tracking histograms if they exist somewhere
-    if (fIncomingTrackingOnline)
-        fIncomingTrackingOnline->Reset_Histo();
-    // Reset Twim vs Foot histograms if they exist somewhere
-    if (fTwimvsFootOnlineSpectra)
-        fTwimvsFootOnlineSpectra->Reset_Histo();
-    // Reset TofD histograms if they exist somewhere
-    if (fTofdOnlineSpectra)
-        fTofdOnlineSpectra->Reset_Histo();
 }
 
 void R3BGeneralOnlineSpectra::Exec(Option_t* option)

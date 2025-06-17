@@ -20,10 +20,10 @@
 #pragma once
 
 #include "FairTask.h"
-#include "R3BEventHeader.h"
 #include "TCanvas.h"
 #include "TH2F.h"
 #include "TMath.h"
+#include "R3BEventHeader.h"
 #include <array>
 #include <cstdlib>
 #include <fstream>
@@ -93,12 +93,12 @@ class R3BFootVsAlpideOnlineSpectra : public FairTask
      * Method for setting the number of FOOT detectors
      */
     void SetNumDet(Int_t NbDet) { fNbDet = NbDet; }
-    void SetTPat(Int_t tpat1, Int_t tpat2)
-    {
-        fTpat1 = tpat1;
-        fTpat2 = tpat2;
-    }
-    void SetTrigger(Int_t trig) { fTrigger = trig; }
+	void SetTPat(Int_t tpat1, Int_t tpat2)
+	{
+		fTpat1 = tpat1;
+		fTpat2 = tpat2;
+	}
+	void SetTrigger(Int_t trig) {fTrigger = trig;}
 
     void Reset_FOOT_ALPIDE_Histo();
 
@@ -110,10 +110,10 @@ class R3BFootVsAlpideOnlineSpectra : public FairTask
 
     // check for trigger should be done globablly (somewhere else)
     R3BEventHeader* header; /**< Event header. */
-    Int_t fTrigger = -1;    /**< Trigger value. */
+    Int_t fTrigger = -1;         /**< Trigger value. */
     Int_t fNEvents;         /**< Event counter. */
     Int_t fTpat1 = -1;
-    Int_t fTpat2 = -1;
+	Int_t fTpat2 = -1;
 
     TCanvas *cPosCorr, *cCharCorr;
 

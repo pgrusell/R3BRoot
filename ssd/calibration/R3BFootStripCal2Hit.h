@@ -23,7 +23,6 @@
 #include <FairTask.h>
 
 #include <Rtypes.h>
-#include <TArrayF.h>
 #include <TVector3.h>
 #include <vector>
 

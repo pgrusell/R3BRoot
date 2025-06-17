@@ -11,9 +11,10 @@
  * or submit itself to any jurisdiction.                                      *
  ******************************************************************************/
 
-#pragma once
+#ifndef R3BROLUMAPPEDITEM_H
+#define R3BROLUMAPPEDITEM_H
 
-#include <TObject.h>
+#include "TObject.h"
 
 // for the data analysis of ROLU following LOS
 
@@ -24,7 +25,7 @@ class R3BRoluMappedData : public TObject
     R3BRoluMappedData();
 
     // Standard Constructor
-    explicit R3BRoluMappedData(UInt_t, UInt_t, Int_t, UInt_t, UInt_t);
+    R3BRoluMappedData(UInt_t, UInt_t, Int_t, UInt_t, UInt_t);
 
     UInt_t GetDetector() const;
     UInt_t GetChannel() const;
@@ -40,6 +41,7 @@ class R3BRoluMappedData : public TObject
     UInt_t fTimeFine;
 
   public:
-    // Class definition
-    ClassDef(R3BRoluMappedData, 1); // NOLINT
+    ClassDef(R3BRoluMappedData, 1)
 };
+
+#endif // R3BROLUMAPPEDITEM_H

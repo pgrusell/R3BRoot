@@ -11,26 +11,25 @@
  * or submit itself to any jurisdiction.                                      *
  ******************************************************************************/
 
-#pragma once
+#ifndef R3BPASSIVECONTFACT_H
+#define R3BPASSIVECONTFACT_H
 
-#include <FairContFact.h>
-#include <FairRuntimeDb.h>
+#include "FairContFact.h"
+#include "FairLogger.h"
+#include "FairRuntimeDb.h"
 
 class FairContainer;
 
 class R3BPassiveContFact : public FairContFact
 {
-  public:
-    R3BPassiveContFact();
-
-    virtual ~R3BPassiveContFact() = default;
-
-    FairParSet* createContainer(FairContainer*) override;
-
   private:
     void setAllContainers();
 
   public:
-    // Class definition
-    ClassDefOverride(R3BPassiveContFact, 0); // NOLINT
+    R3BPassiveContFact();
+    ~R3BPassiveContFact() {}
+    FairParSet* createContainer(FairContainer*);
+    ClassDef(R3BPassiveContFact, 0) // Factory for all Passive parameter containers
 };
+
+#endif /* !R3BPASSIVECONTFACT_H */

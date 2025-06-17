@@ -1,6 +1,6 @@
 /******************************************************************************
  *   Copyright (C) 2022 GSI Helmholtzzentrum für Schwerionenforschung GmbH    *
- *   Copyright (C) 2022-2025 Members of R3B Collaboration                     *
+ *   Copyright (C) 2022-2024 Members of R3B Collaboration                     *
  *                                                                            *
  *             This software is distributed under the terms of the            *
  *                 GNU General Public Licence (GPL) version 3,                *
@@ -74,8 +74,7 @@ class R3BAlpideHitData : public TObject
     double fPhi = std::nan("");   // Reconstructed Phi
 
   public:
-    // Class definition
-    ClassDefOverride(R3BAlpideHitData, 1); // NOLINT
+    ClassDefOverride(R3BAlpideHitData, 1)
 };
 
 // Operator overloading for printing R3BAlpideHitData

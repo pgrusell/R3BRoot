@@ -17,17 +17,17 @@
 // -----           Fill R3B online histograms             -----
 // ------------------------------------------------------------
 
-#pragma once
+#ifndef R3BGeneralOnlineSpectra_H
+#define R3BGeneralOnlineSpectra_H 1
 
-#include <FairTask.h>
-#include <TCanvas.h>
-#include <TMath.h>
+#include "FairTask.h"
+#include "TCanvas.h"
+#include "TMath.h"
 
 class TH1F;
 class TH2F;
 class TClonesArray;
 class R3BEventHeader;
-class R3BSofAtOnlineSpectra;
 class R3BMwpcOnlineSpectra;
 class R3BMwpcCorrelationOnlineSpectra;
 class R3BSofTrimOnlineSpectra;
@@ -119,21 +119,7 @@ class R3BGeneralOnlineSpectra : public FairTask
     Int_t fTrigger;               /**< Trigger value.     */
     Int_t fNEvents;               /**< Event counter.     */
 
-    R3BMwpcOnlineSpectra* fMwpc0Online;
-    R3BMwpcCorrelationOnlineSpectra* fMwpc01Online;
-    R3BMwpcCorrelationOnlineSpectra* fMwpc02Online;
-    R3BMwpcCorrelationOnlineSpectra* fMwpc12Online;
-    R3BMwpcOnlineSpectra* fMwpc1Online;
-    R3BMwpcOnlineSpectra* fMwpc2Online;
-    R3BTwimOnlineSpectra* fTwimOnline;
-    R3BMusicOnlineSpectra* fMusicOnline;
-    R3BAmsOnlineSpectra* fAmsOnline;
-    R3BCalifaOnlineSpectra* fCalifaOnline;
     R3BFootOnlineSpectra* fFootOnline;
-    R3BLosOnlineSpectra* fLosOnline;
-    R3BIncomingTrackingOnlineSpectra* fIncomingTrackingOnline;
-    R3BTwimvsFootOnlineSpectra* fTwimvsFootOnlineSpectra;
-    R3BTofDOnlineSpectra* fTofdOnlineSpectra;
 
     // Canvas
     TCanvas *cTpat, *cTrigger, *cWr, *cWrs;
@@ -145,5 +131,7 @@ class R3BGeneralOnlineSpectra : public FairTask
     std::vector<int> tpatbin;
 
   public:
-    ClassDef(R3BGeneralOnlineSpectra, 0);
+    ClassDef(R3BGeneralOnlineSpectra, 0)
 };
+
+#endif

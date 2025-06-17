@@ -102,13 +102,6 @@ class R3BFootOnlineSpectra : public FairTask
 
     void SetSigmaRefreshRate(int rate) { fSigmaRefreshRate = rate; }
 
-    void SetBinParams(double minE, double maxE, double binsE)
-    {
-        fMinE = minE;
-        fMaxE = maxE;
-        fBinsE = binsE;
-    }
-
     /**
      * Method to set the number of detectors
      */
@@ -134,10 +127,6 @@ class R3BFootOnlineSpectra : public FairTask
     int eventNumber = 0;
     int fSigmaRefreshRate = 5000;
 
-    double fMinE = -100.;
-    double fMaxE = 5000.;
-    double fBinsE = 1000;
-
     // Histograms for map data
     std::vector<TH2F*> fh2_EnergyVsStrip;
     // Histograms for cal data
@@ -153,7 +142,7 @@ class R3BFootOnlineSpectra : public FairTask
     std::vector<TH1F*> fh1_size;
     std::vector<TH1F*> fh1_charge;
     std::vector<TH2F*> fh2_energy_corr;
-    std::vector<TH2F*> fh2_pos_charge;
+    std::vector<TH2F*> fh2_pos_charge; 
     std::vector<TH2F*> fh2_energy_corr_max;
 
   public:

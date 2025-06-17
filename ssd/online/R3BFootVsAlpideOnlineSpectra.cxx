@@ -26,12 +26,12 @@
 #include "R3BAlpideHitData.h"
 #include "R3BEventHeader.h"
 #include "R3BFootHitData.h"
-#include "R3BLogger.h"
-#include "R3BShared.h"
 #include "THttpServer.h"
 #include "TRandom.h"
-#include "TStyle.h"
 #include "TVector3.h"
+#include "R3BLogger.h"
+#include "R3BShared.h"
+#include "TStyle.h"
 
 #include "R3BTCalEngine.h"
 
@@ -139,11 +139,11 @@ InitStatus R3BFootVsAlpideOnlineSpectra::Init()
         fh2_foot_alpide_pos_corr[i]->GetYaxis()->SetTitle("ALPIDE [mm]");
         fh2_foot_alpide_pos_corr[i]->GetYaxis()->SetTitleOffset(1.4);
         fh2_foot_alpide_pos_corr[i]->GetXaxis()->CenterTitle(true);
-        int foot_num = i + 1;
+		int foot_num = i + 1;
         if (foot_num < 9)
         {
             cPosCorr->cd(i_pad);
-            gPad->SetLogz(true);
+			gPad->SetLogz(true);
             fh2_foot_alpide_pos_corr[i]->Draw("col");
             i_pad++;
         }
@@ -167,7 +167,7 @@ InitStatus R3BFootVsAlpideOnlineSpectra::Init()
         fh2_foot_alpide_char_corr[i]->GetYaxis()->SetTitle("ALPIDE Cluster Size");
         fh2_foot_alpide_char_corr[i]->GetYaxis()->SetTitleOffset(1.4);
         fh2_foot_alpide_char_corr[i]->GetXaxis()->CenterTitle(true);
-        int foot_num = i + 1;
+		int foot_num = i + 1;
         if (foot_num < 9)
         {
             cCharCorr->cd(i_pad);
@@ -204,28 +204,28 @@ void R3BFootVsAlpideOnlineSpectra::Exec(Option_t* option)
         LOG(fatal) << "R3BFootVsAlpideOnlineSpectra::Exec FairRootManager not found";
 
     // if(header->GetTrigger()!=1){cout << header->GetTrigger()<<endl;}
-    // if ((fTrigger >= 0) && (header) && (header->GetTrigger() != 1))
-    // return;
+    //if ((fTrigger >= 0) && (header) && (header->GetTrigger() != 1))
+        //return;
 
-    // Check for requested trigger (Todo: should be done globablly / somewhere else)
-    if ((fTrigger >= 0) && (header != nullptr) && (header->GetTrigger() != fTrigger))
-        return;
-
-    if (fTpat1 >= 0 && fTpat2 >= 0 && (header))
-    {
-        // fTpat = 1-16; fTpat_bit = 0-15
-        Int_t fTpat_bit1 = fTpat1 - 1;
-        Int_t fTpat_bit2 = fTpat2 - 1;
-        Int_t tpatbin = 0;
-        for (int i = 0; i < 16; i++)
-        {
-            tpatbin = (header->GetTpat() & (1 << i));
-            if (tpatbin != 0 && (i < fTpat_bit1 || i > fTpat_bit2))
-            {
-                return;
-            }
-        }
-    }
+	// Check for requested trigger (Todo: should be done globablly / somewhere else)
+	if ((fTrigger >= 0) && (header != nullptr) && (header->GetTrigger() != fTrigger))
+		return;
+	
+	if (fTpat1 >= 0 && fTpat2 >= 0 && (header))
+	{
+		// fTpat = 1-16; fTpat_bit = 0-15
+		Int_t fTpat_bit1 = fTpat1 - 1;
+		Int_t fTpat_bit2 = fTpat2 - 1;
+	    Int_t tpatbin = 0;
+	    for (int i = 0; i < 16; i++)
+	    {
+			tpatbin = (header->GetTpat() & (1 << i));
+	        if (tpatbin != 0 && (i < fTpat_bit1 || i > fTpat_bit2))
+	        {
+				return;
+	        }
+	    }
+	 }
 
     //  ============= FOOT Hit data ==============
 
@@ -233,19 +233,21 @@ void R3BFootVsAlpideOnlineSpectra::Exec(Option_t* option)
     std::vector<std::vector<double>> footEnergies(fNbDet);
     std::vector<std::vector<double>> footPositions(fNbDet);
 
+
+
     if (fHitItemsFoot && fHitItemsFoot->GetEntriesFast() > 0)
-    {
+	{
         auto nHits = fHitItemsFoot->GetEntriesFast();
         for (Int_t ihit = 0; ihit < nHits; ihit++)
         {
             R3BFootHitData* hit = dynamic_cast<R3BFootHitData*>(fHitItemsFoot->At(ihit));
             if (!hit)
                 continue;
-            if ((hit->GetEta() < 0.3) || (hit->GetEta() > 0.7))
-                continue;
+			if ((hit->GetEta() < 0.3) || (hit->GetEta() > 0.7))
+				continue;
             footEnergies[hit->GetDetId() - 1].push_back(hit->GetEnergy());
             footPositions[hit->GetDetId() - 1].push_back(hit->GetPos());
-        }
+		}
     }
 
     //  ============= ALPIDE Hit data ==============
@@ -268,36 +270,56 @@ void R3BFootVsAlpideOnlineSpectra::Exec(Option_t* option)
             alpidePositionsY.push_back(hit->GetY());
         }
     }
-
     // =============== Calculate the correlations =======
     if (alpideEnergies.size() == 0)
     {
-        // R3BLOG("info", "Different number of hits in FOOT and ALPIDE");
-        std::cout << "No ALPIDE hits";
+        //R3BLOG("info", "Different number of hits in FOOT and ALPIDE");
+		//std::cout << "No ALPIDE hits";
     }
-    else
-    {
-        for (int i = 0; i < alpidePositionsX.size(); i++)
-        {
-            for (int j = 0; j < fNbDet; j++)
-            {
-                for (int k = 0; k < footPositions[j].size(); k++)
-                {
-                    fh2_foot_alpide_char_corr[j]->Fill(footEnergies[j][k], alpideEnergies[i]);
+	else
+	{
+        /*
+        // Iterate over foots
+		for (int i = 0; i < fNbDet; i++)
+		{
+			// Iterate over hits
+			for (int j = 0; j < footPositions[i].size(); j++)
+			{
+				if (i % 2 == 0) // Y
+				{
+					fh2_foot_alpide_pos_corr[i]->Fill(footPositions[i][j], alpidePositionsY[j]);
+				}
 
-                    if ((j % 2) == 0) // Y
-                    {
-                        fh2_foot_alpide_pos_corr[j]->Fill(footPositions[j][k], alpidePositionsY[i]);
-                    }
+				else // X
+				{
+					fh2_foot_alpide_pos_corr[i]->Fill(footPositions[i][j], alpidePositionsX[j]);
+				}
 
-                    else
-                    {
-                        fh2_foot_alpide_pos_corr[j]->Fill(footPositions[j][k], alpidePositionsX[i]);
-                    }
-                }
-            }
-        }
-    }
+				fh2_foot_alpide_char_corr[i]->Fill(footEnergies[i][j], alpideEnergies[j]);
+			}
+		}*/
+		for (int i = 0; i < alpidePositionsX.size(); i++)
+		{
+			for (int j = 0; j < fNbDet; j++)
+			{
+				for (int k = 0; k < footPositions[j].size(); k++)
+				{
+					fh2_foot_alpide_char_corr[j]->Fill(footEnergies[j][k], alpideEnergies.at(i));
+					if ((j % 2) == 0) // Y
+					{
+					   fh2_foot_alpide_pos_corr[j]->Fill(footPositions[j][k], alpidePositionsY[i]);
+					}
+
+					else
+					{
+						fh2_foot_alpide_pos_corr[j]->Fill(footPositions[j][k], alpidePositionsX[i]);
+					}
+				}
+			}
+		}
+
+
+	}
     fNEvents += 1;
 }
 

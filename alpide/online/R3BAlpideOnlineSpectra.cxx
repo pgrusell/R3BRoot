@@ -1,6 +1,6 @@
 /******************************************************************************
  *   Copyright (C) 2019 GSI Helmholtzzentrum für Schwerionenforschung GmbH    *
- *   Copyright (C) 2022-2025 Members of R3B Collaboration                     *
+ *   Copyright (C) 2022-2024 Members of R3B Collaboration                     *
  *                                                                            *
  *             This software is distributed under the terms of the            *
  *                 GNU General Public Licence (GPL) version 3,                *
@@ -26,7 +26,6 @@
 #include <TH2F.h>
 #include <THttpServer.h>
 #include <TMath.h>
-#include <cmath>
 
 // FAIR headers
 #include <FairLogger.h>
@@ -179,8 +178,7 @@ InitStatus R3BAlpideOnlineSpectra::Init()
         }
         mainfol->Add(calfol);
 
-        fh1_Calmult_total =
-            R3B::root_owned<TH1F>("fh1_mulcal_sensor_total", "Cal_mult for all sensors", 70, -0.5, 69.5);
+        fh1_Calmult_total = R3B::root_owned<TH1F>("fh1_mulcal_sensor_total", "Cal_mult for all sensors", 70, -0.5, 69.5);
         fh1_Calmult_total->GetXaxis()->SetTitle("Pixel multiplicity");
         fh1_Calmult_total->GetYaxis()->SetTitle("Counts");
         fh1_Calmult_total->GetYaxis()->SetTitleOffset(1.1);
@@ -232,7 +230,8 @@ InitStatus R3BAlpideOnlineSpectra::Init()
             cHit->Divide(2, 1);
             sprintf(Name1, "fh2_pos_hit_sensor_%d", s + 1);
             sprintf(Name2, "Hit-position for sensor: %d", s + 1);
-            fh2_PosHit[s] = R3B::root_owned<TH2F>(Name1, Name2, 200, 0, 30., 100, 0, 15.);
+            //fh2_PosHit[s] = R3B::root_owned<TH2F>(Name1, Name2, 200, -15.0, 15.0, 100, -7.5, 7.5);
+            fh2_PosHit[s] = R3B::root_owned<TH2F>(Name1, Name2, 200, 0, 15.0, 100, 0, 7.5);
             fh2_PosHit[s]->GetXaxis()->SetTitle("Posl [mm]");
             fh2_PosHit[s]->GetYaxis()->SetTitle("Post [mm]");
             fh2_PosHit[s]->GetYaxis()->SetTitleOffset(1.1);
@@ -272,32 +271,32 @@ InitStatus R3BAlpideOnlineSpectra::Init()
             hitfol->Add(cHitm);
         }
 
-        auto cHitmTot = new TCanvas("Cluster_multiplicity_total", "mult hit info", 10, 10, 500, 500);
-        fh1_Clustermult_total =
-            R3B::root_owned<TH1F>("Cluster_multiplicity_total", "Total cluster multiplicity", 60, 0, 60);
-        fh1_Clustermult_total->GetXaxis()->SetTitle("Cluster multiplicity");
-        fh1_Clustermult_total->GetYaxis()->SetTitle("Counts");
-        fh1_Clustermult_total->GetYaxis()->SetTitleOffset(1.1);
-        fh1_Clustermult_total->GetXaxis()->CenterTitle(true);
-        fh1_Clustermult_total->GetYaxis()->CenterTitle(true);
-        fh1_Clustermult_total->SetLineColor(1);
-        fh1_Clustermult_total->SetFillColor(31);
-        cHitmTot->cd();
-        fh1_Clustermult_total->Draw();
-        hitfol->Add(cHitmTot);
+		auto cHitmTot = new TCanvas("Cluster_multiplicity_total", "mult hit info", 10, 10, 500, 500);
+		fh1_Clustermult_total = R3B::root_owned<TH1F>("Cluster_multiplicity_total", "Total cluster multiplicity", 60, 0, 60);
+		fh1_Clustermult_total->GetXaxis()->SetTitle("Cluster multiplicity");
+		fh1_Clustermult_total->GetYaxis()->SetTitle("Counts");
+		fh1_Clustermult_total->GetYaxis()->SetTitleOffset(1.1);
+		fh1_Clustermult_total->GetXaxis()->CenterTitle(true);
+		fh1_Clustermult_total->GetYaxis()->CenterTitle(true);
+		fh1_Clustermult_total->SetLineColor(1);
+		fh1_Clustermult_total->SetFillColor(31);
+		cHitmTot->cd();
+		fh1_Clustermult_total->Draw();
+		hitfol->Add(cHitmTot);
 
         auto cSizemTot = new TCanvas("Size_multiplicity_total", "size hit info", 10, 10, 500, 500);
-        fh1_Clustersize_total = R3B::root_owned<TH1F>("Size_multiplicity_total", "Total size multiplicity", 60, 0, 60);
-        fh1_Clustersize_total->GetXaxis()->SetTitle("Size multiplicity");
-        fh1_Clustersize_total->GetYaxis()->SetTitle("Counts");
-        fh1_Clustersize_total->GetYaxis()->SetTitleOffset(1.1);
-        fh1_Clustersize_total->GetXaxis()->CenterTitle(true);
-        fh1_Clustersize_total->GetYaxis()->CenterTitle(true);
-        fh1_Clustersize_total->SetLineColor(1);
-        fh1_Clustersize_total->SetFillColor(31);
-        cSizemTot->cd();
-        fh1_Clustersize_total->Draw();
-        hitfol->Add(cSizemTot);
+		fh1_Clustersize_total = R3B::root_owned<TH1F>("Size_multiplicity_total", "Total size multiplicity",     60, 0, 60);
+		fh1_Clustersize_total->GetXaxis()->SetTitle("Size multiplicity");
+		fh1_Clustersize_total->GetYaxis()->SetTitle("Counts");
+		fh1_Clustersize_total->GetYaxis()->SetTitleOffset(1.1);
+		fh1_Clustersize_total->GetXaxis()->CenterTitle(true);
+		fh1_Clustersize_total->GetYaxis()->CenterTitle(true);
+		fh1_Clustersize_total->SetLineColor(1);
+		fh1_Clustersize_total->SetFillColor(31);
+		cSizemTot->cd();
+		fh1_Clustersize_total->Draw();
+		hitfol->Add(cSizemTot);
+
 
         mainfol->Add(hitfol);
 
@@ -315,114 +314,19 @@ InitStatus R3BAlpideOnlineSpectra::Init()
         // mainfol->Add(cHit_angcor);
 
         auto cHit_xy = new TCanvas("Y_vs_X", "Correlation Y vs X in mm", 10, 10, 500, 500);
+        fh2_y_x = R3B::root_owned<TH2F>("fh2_y_x", "Correlation Y vs X in mm", 400, -50, 50, 380, -70, 70);
+        fh2_y_x->GetXaxis()->SetTitle("Wix <--   X [mm]   --> Messel");
+        fh2_y_x->GetYaxis()->SetTitle("Y [mm]");
+        fh2_y_x->GetYaxis()->SetTitleOffset(1.1);
+        fh2_y_x->GetXaxis()->CenterTitle(true);
+        fh2_y_x->GetYaxis()->CenterTitle(true);
+        gPad->SetLogz();
+        fh2_y_x->Draw("colz");
+        fh2_y_x->SetStats(0);
 
-        if (fMap_Par->GetGeoVersion() == 202505)
-        {
-            fh2_y_x.push_back(R3B::root_owned<TH2F>("fh2_y_x", "Correlation Y vs X in mm", 400, -50, 50, 380, -70, 70));
-            fh2_y_x[0]->GetXaxis()->SetTitle("Wix <--   X [mm]   --> Messel");
-            fh2_y_x[0]->GetYaxis()->SetTitle("Y [mm]");
-            fh2_y_x[0]->GetYaxis()->SetTitleOffset(1.1);
-            fh2_y_x[0]->GetXaxis()->CenterTitle(true);
-            fh2_y_x[0]->GetYaxis()->CenterTitle(true);
-            gPad->SetLogz();
-            fh2_y_x[0]->Draw("colz");
-            fh2_y_x[0]->SetStats(0);
-            mainfol->Add(cHit_xy);
-        }
-        else
-        {
-            cHit_xy->Divide(1, 2);
-            cHit_xy->cd(1);
-            fh2_y_x.push_back(R3B::root_owned<TH2F>(
-                "fh2_y_x_flex1", "Correlation Y vs X in mm for flex-1", 500, -50, 50, 200, -20, 20));
-            fh2_y_x[0]->GetXaxis()->SetTitle("Wix <--   X [mm]   --> Messel");
-            fh2_y_x[0]->GetYaxis()->SetTitle("Y [mm]");
-            fh2_y_x[0]->GetYaxis()->SetTitleOffset(1.1);
-            fh2_y_x[0]->GetXaxis()->CenterTitle(true);
-            fh2_y_x[0]->GetYaxis()->CenterTitle(true);
-            gPad->SetLogz();
-            fh2_y_x[0]->Draw("colz");
-            fh2_y_x[0]->SetStats(0);
-            cHit_xy->cd(2);
-            fh2_y_x.push_back(R3B::root_owned<TH2F>(
-                "fh2_y_x_flex2", "Correlation Y vs X in mm for flex-2", 500, -50, 50, 200, -20, 20));
-            fh2_y_x[1]->GetXaxis()->SetTitle("Wix <--   X [mm]   --> Messel");
-            fh2_y_x[1]->GetYaxis()->SetTitle("Y [mm]");
-            fh2_y_x[1]->GetYaxis()->SetTitleOffset(1.1);
-            fh2_y_x[1]->GetXaxis()->CenterTitle(true);
-            fh2_y_x[1]->GetYaxis()->CenterTitle(true);
-            gPad->SetLogz();
-            fh2_y_x[1]->Draw("colz");
-            fh2_y_x[1]->SetStats(0);
-            mainfol->Add(cHit_xy);
-
-            auto cHit_xy_cor =
-                new TCanvas("Y_vs_X_flex_cor", "Position correlations between flex-PCBs", 10, 10, 500, 500);
-            cHit_xy_cor->Divide(2, 2);
-            cHit_xy_cor->cd(1);
-            fh2_y_x_cor_det.push_back(
-                R3B::root_owned<TH2F>("fh2_x_x_flexes", "Correlation X2 vs X1 in mm", 500, -50, 50, 500, -50, 50));
-            fh2_y_x_cor_det[0]->GetXaxis()->SetTitle("Wix <--   X1 [mm]   --> Messel");
-            fh2_y_x_cor_det[0]->GetYaxis()->SetTitle("Wix <--   X2 [mm]   --> Messel");
-            fh2_y_x_cor_det[0]->GetYaxis()->SetTitleOffset(1.1);
-            fh2_y_x_cor_det[0]->GetXaxis()->CenterTitle(true);
-            fh2_y_x_cor_det[0]->GetYaxis()->CenterTitle(true);
-            gPad->SetLogz();
-            fh2_y_x_cor_det[0]->Draw("colz");
-            fh2_y_x_cor_det[0]->SetStats(0);
-
-            cHit_xy_cor->cd(2);
-            fh2_y_x_cor_det.push_back(
-                R3B::root_owned<TH2F>("fh2_y_y_flexes", "Correlation Y2 vs Y1 in mm", 200, -20, 20, 200, -20, 20));
-            fh2_y_x_cor_det[1]->GetXaxis()->SetTitle("Y1 [mm]");
-            fh2_y_x_cor_det[1]->GetYaxis()->SetTitle("Y2 [mm]");
-            fh2_y_x_cor_det[1]->GetYaxis()->SetTitleOffset(1.1);
-            fh2_y_x_cor_det[1]->GetXaxis()->CenterTitle(true);
-            fh2_y_x_cor_det[1]->GetYaxis()->CenterTitle(true);
-            gPad->SetLogz();
-            fh2_y_x_cor_det[1]->Draw("colz");
-            fh2_y_x_cor_det[1]->SetStats(0);
-
-            cHit_xy_cor->cd(3);
-            fh2_y_x_cor_det.push_back(
-                R3B::root_owned<TH2F>("fh2_y2_x1_flexes", "Correlation Y2 vs X1 in mm", 500, -50, 50, 200, -20, 20));
-            fh2_y_x_cor_det[2]->GetXaxis()->SetTitle("Wix <--   X1 [mm]   --> Messel");
-            fh2_y_x_cor_det[2]->GetYaxis()->SetTitle("Y2 [mm]");
-            fh2_y_x_cor_det[2]->GetYaxis()->SetTitleOffset(1.1);
-            fh2_y_x_cor_det[2]->GetXaxis()->CenterTitle(true);
-            fh2_y_x_cor_det[2]->GetYaxis()->CenterTitle(true);
-            gPad->SetLogz();
-            fh2_y_x_cor_det[2]->Draw("colz");
-            fh2_y_x_cor_det[2]->SetStats(0);
-
-            cHit_xy_cor->cd(4);
-            fh2_y_x_cor_det.push_back(
-                R3B::root_owned<TH2F>("fh2_y1_x2_flexes", "Correlation Y1 vs X2 in mm", 500, -50, 50, 200, -20, 20));
-            fh2_y_x_cor_det[3]->GetXaxis()->SetTitle("Wix <--   X2 [mm]   --> Messel");
-            fh2_y_x_cor_det[3]->GetYaxis()->SetTitle("Y1 [mm]");
-            fh2_y_x_cor_det[3]->GetYaxis()->SetTitleOffset(1.1);
-            fh2_y_x_cor_det[3]->GetXaxis()->CenterTitle(true);
-            fh2_y_x_cor_det[3]->GetYaxis()->CenterTitle(true);
-            gPad->SetLogz();
-            fh2_y_x_cor_det[3]->Draw("colz");
-            fh2_y_x_cor_det[3]->SetStats(0);
-            mainfol->Add(cHit_xy_cor);
-
-            auto cHit_cluster =
-                new TCanvas("Cluster_correlations", "Cluster size correlations between flex-PCBs", 10, 10, 500, 500);
-            fh2_max_clusters =
-                R3B::root_owned<TH2F>("fh2_max_clusters", "Correlation max. clusters", 70, 0, 70, 70, 0, 70);
-            fh2_max_clusters->GetXaxis()->SetTitle("Max. cluster flex-1");
-            fh2_max_clusters->GetYaxis()->SetTitle("Max. cluster flex-2");
-            fh2_max_clusters->GetYaxis()->SetTitleOffset(1.1);
-            fh2_max_clusters->GetXaxis()->CenterTitle(true);
-            fh2_max_clusters->GetYaxis()->CenterTitle(true);
-            gPad->SetLogz();
-            fh2_max_clusters->Draw("colz");
-            fh2_max_clusters->SetStats(0);
-            mainfol->Add(cHit_cluster);
-        }
+        mainfol->Add(cHit_xy);
     }
+
     run->AddObject(mainfol);
 
     // Register command to reset histograms
@@ -479,24 +383,10 @@ void R3BAlpideOnlineSpectra::Reset_Histo()
         {
             hist->Reset();
         }
-        for (const auto& hist : fh2_y_x)
-        {
-            hist->Reset();
-        }
-        for (const auto& hist : fh2_y_x_cor_det)
-        {
-            hist->Reset();
-        }
-
         fh2_theta_phi->Reset();
-        fh2_max_clusters->Reset();
-
-        for (auto& hist : fh2_y_x)
-        {
-            hist->Reset();
-        }
-        fh1_Clustermult_total->Reset();
-        fh1_Clustersize_total->Reset();
+        fh2_y_x->Reset();
+		fh1_Clustermult_total->Reset();
+		fh1_Clustersize_total->Reset();
     }
 
     return;
@@ -571,12 +461,7 @@ void R3BAlpideOnlineSpectra::Exec(Option_t* /*option*/)
     {
         std::vector<int> mult(fNbSensors, 0);
         auto nHits = fHitItems->GetEntriesFast();
-
-        std::vector<double> x_max(2, NAN);
-        std::vector<double> y_max(2, NAN);
-        std::vector<int> cls_size(2, 0);
-
-        fh1_Clustermult_total->Fill(nHits);
+		fh1_Clustermult_total->Fill(nHits);
         for (size_t ihit = 0; ihit < nHits; ihit++)
         {
             auto hit = dynamic_cast<R3BAlpideHitData*>(fHitItems->At(ihit));
@@ -584,61 +469,17 @@ void R3BAlpideOnlineSpectra::Exec(Option_t* /*option*/)
                 continue;
             auto senid = hit->GetSensorId() - 1;
             fh1_Clustersize[senid]->Fill(hit->GetClusterSize());
-            fh2_PosHit[senid]->Fill(hit->GetPosl(), hit->GetPost());
             fh1_Clustersize_total->Fill(hit->GetClusterSize());
-            if (fMap_Par->GetGeoVersion() == 202505)
-            {
-                fh2_theta_phi->Fill(hit->GetPhi() * TMath::RadToDeg(), hit->GetTheta() * TMath::RadToDeg());
-                fh2_y_x[0]->Fill(hit->GetX(), hit->GetY());
-            }
-            else
-            {
-                if (senid < 6)
-                {
-                    fh2_y_x[0]->Fill(hit->GetX(), hit->GetY());
-                    if (hit->GetClusterSize() > cls_size[0])
-                    {
-                        cls_size[0] = hit->GetClusterSize();
-                        x_max[0] = hit->GetX();
-                        y_max[0] = hit->GetY();
-                    }
-                }
-                else
-                {
-                    fh2_y_x[1]->Fill(hit->GetX(), hit->GetY());
-                    if (hit->GetClusterSize() > cls_size[1])
-                    {
-                        cls_size[1] = hit->GetClusterSize();
-                        x_max[1] = hit->GetX();
-                        y_max[1] = hit->GetY();
-                    }
-                }
-            }
-
+			fh2_PosHit[senid]->Fill(hit->GetPosl(), hit->GetPost());
+            fh2_theta_phi->Fill(hit->GetPhi() * TMath::RadToDeg(), hit->GetTheta() * TMath::RadToDeg());
+            fh2_y_x->Fill(hit->GetX(), hit->GetY());
             mult[senid]++;
         }
         for (size_t s = 0; s < fNbSensors; s++)
             if (mult[s] > 0)
                 fh1_Clustermult[s]->Fill(mult[s]);
-
-        if (fMap_Par->GetGeoVersion() == 202506)
-        {
-            if (std::isfinite(x_max[0]) && std::isfinite(x_max[1]))
-                fh2_y_x_cor_det[0]->Fill(x_max[0], x_max[1]);
-
-            if (std::isfinite(y_max[0]) && std::isfinite(y_max[1]))
-                fh2_y_x_cor_det[1]->Fill(y_max[0], y_max[1]);
-
-            if (std::isfinite(x_max[0]) && std::isfinite(y_max[1]))
-                fh2_y_x_cor_det[2]->Fill(x_max[0], y_max[1]);
-
-            if (std::isfinite(x_max[1]) && std::isfinite(y_max[0]))
-                fh2_y_x_cor_det[3]->Fill(x_max[1], y_max[0]);
-
-            if (cls_size[0] > 0 && cls_size[1] > 0)
-                fh2_max_clusters->Fill(cls_size[0], cls_size[1]);
-        }
     }
+
     fNEvents++;
     return;
 }
@@ -681,21 +522,11 @@ void R3BAlpideOnlineSpectra::FinishTask()
         fh2_sensor_pixelsize->Write();
     }
     if (fHitItems)
-    {
+    {    
         fh2_theta_phi->Write();
-
-        fh2_max_clusters->Write();
-        for (const auto& hist : fh2_y_x)
-        {
-            hist->Write();
-        }
-        for (const auto& hist : fh2_y_x_cor_det)
-        {
-            hist->Write();
-        }
-
-        fh1_Clustermult_total->Write();
-        fh1_Clustersize_total->Write();
+        fh2_y_x->Write();
+		fh1_Clustermult_total->Write();
+		fh1_Clustersize_total->Write();
     }
 }
 ClassImp(R3BAlpideOnlineSpectra)
