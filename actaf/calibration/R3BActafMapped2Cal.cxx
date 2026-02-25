@@ -160,6 +160,7 @@ void R3BActafMapped2Cal::Exec(Option_t*)
             continue;
 
         std::array<double, ACTAF_BINS> waveform = mappedData->GetTrace();
+        int maxPos = R3BActafUtils::FindMaxPosition(waveform);
 
         // Apply the SG filter to the waveform (on baseline-subtracted data)
         if (fApplySGFilter)
@@ -168,8 +169,7 @@ void R3BActafMapped2Cal::Exec(Option_t*)
         auto drift = mappedData->GetLeadingEdgeTime() * fConversionCh2ns; // in ns
         auto zpos = drift * fVelocity;                                    // in cm
         auto syntime = drift - synTagTime * fConversionCh2ns;             // in ns
-
-        auto maxPos = R3BActafUtils::FindMaxPosition(waveform);
+        maxPos = R3BActafUtils::FindMaxPosition(waveform);
         double rms = R3BActafUtils::ComputeBaselineMean(waveform, maxPos, 0);
         double mean = R3BActafUtils::ComputeBaselineMean(waveform, maxPos, 1);
 
