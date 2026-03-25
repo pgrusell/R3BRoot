@@ -756,14 +756,7 @@ InitStatus R3BActafOnlineSpectra::Init()
             p3->cd(iPad + 1);
         else
             p4->cd(iPad - 4 + 1);
-<<<<<<< HEAD
-<<<<<<< HEAD
         g_CorrectedTraces_4pads_highestAmp[iPad]->GetYaxis()->SetRangeUser(-200, 1000);
-=======
->>>>>>> d78008ab (Last modificatio for online)
-=======
-        g_CorrectedTraces_4pads_highestAmp[iPad]->GetYaxis()->SetRangeUser(-200, 1000);
->>>>>>> 43df9eae (Last modificatio for online)
         g_CorrectedTraces_4pads_highestAmp[iPad]->Draw("AL");
         g_CorrectedTraces_4pads_highestAmp[iPad]->GetYaxis()->SetRangeUser(-200, 1000);
     }
