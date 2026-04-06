@@ -166,7 +166,8 @@ void R3BActafMapped2Cal::Exec(Option_t*)
         if (fApplySGFilter)
             R3BActafUtils::ApplySGFilter(waveform, fSgCoeffs);
 
-        auto drift = mappedData->GetLeadingEdgeTime() * fConversionCh2ns; // in ns
+        // auto drift = mappedData->GetLeadingEdgeTime() * fConversionCh2ns; // in ns
+        auto drift = maxPos * fConversionCh2ns;                           // in ns
         auto zpos = drift * fVelocity;                                    // in cm
         auto syntime = drift - synTagTime * fConversionCh2ns;             // in ns
         maxPos = R3BActafUtils::FindMaxPosition(waveform);

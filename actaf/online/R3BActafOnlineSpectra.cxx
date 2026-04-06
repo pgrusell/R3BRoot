@@ -543,7 +543,6 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     for (int iside = 0; iside < 2; iside++)
     {
-
         TString name = iside == 1 ? "fh2_mawVsECal_Down" : "fh2_mawVsECal_Up";
         TString tit =
             iside == 1 ? "Maw Vs Integrated Energy (Downstream side)" : "Maw Vs Integrated Energy (Upstream side)";
