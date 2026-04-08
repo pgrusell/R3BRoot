@@ -136,6 +136,8 @@ InitStatus R3BActafOnlineSpectra::Init()
     auto* hitfol = new TFolder("Hit", "Hit Actaf info");
     // Folder for sync data
     auto* syncfol = new TFolder("Sync", "Sync Actaf info");
+    // Folder for gas quality
+    auto* gasfol = new TFolder("Gas", "Gas quality info");
 
     //
     // Create histograms
@@ -200,6 +202,30 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_RmsMapVsPad->Draw("colz");
 
     mapfol->Add(cSum);
+    
+    // Canvas for gas quality
+    auto* cGas = new TCanvas("Gas_quality", "Gas quality info", 10, 10, 800, 500);
+    cGas->Divide(3, 1);
+    
+    std::vector<TString> alpha_source = {
+    "Pads 115,122",
+    "Pads 112,119",
+    "Pads 46,51,52"
+};
+    
+    for (int index = 0; index < 3; index++)
+    {
+     cGas->cd(i+1);
+     fh2_gasquality.push_back(R3B::root_owned<TH2F>(Form("fh2_gasquality_%d",i+1), alpha_source[i].Data(), 200, 0, 40000, 500, -50000, 250000));
+     fh2_gasquality[index]->GetXaxis()->SetTitle("Event number");
+     fh2_gasquality[index]->GetYaxis()->SetTitle("Integral [ADC chn]");
+     fh2_gasquality[index]->GetYaxis()->SetTitleOffset(1.);
+     fh2_gasquality[index]->GetXaxis()->CenterTitle(true);
+     fh2_gasquality[index]->GetYaxis()->CenterTitle(true);
+     fh2_gasquality[index]->Draw("colz");
+    }
+    
+    gasfol->Add(cGas);
 
     // Canvas for ring and side
     std::vector<std::vector<std::vector<TCanvas*>>> cMap_perRing(2);
@@ -931,6 +957,8 @@ InitStatus R3BActafOnlineSpectra::Init()
     {
         mainfol->Add(syncfol);
     }
+    
+    mainfol->Add(gasfol);
 
     run->AddObject(mainfol);
 

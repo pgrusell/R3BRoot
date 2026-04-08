@@ -263,6 +263,9 @@ class R3BActafOnlineSpectra : public FairTask
     TH2F* fh2_Phi1VsPhi2 = nullptr;
     TH2F* fh2_timetag_signal = nullptr;
     TCanvas* cRates = nullptr;
+    
+    // Gas quality
+    std::vector<TH2F*> fh2_gasquality;
 
     // Params for the event viewer
     int eventViewerNb = 0;
