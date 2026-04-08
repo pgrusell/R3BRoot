@@ -1319,7 +1319,8 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     {
                         if (value == 0)
                             continue;
-                            fh2_timetag_signal->Fill(index++, value);
+                        
+                        fh2_timetag_signal->Fill(index++, value);
                     }
                 }
             }
@@ -1568,6 +1569,9 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             auto y = hit->GetYpos();
             auto energy = hit->GetEnergy();
             auto maxAmp = hit->GetMaxAmpl();
+            
+            if (maxAmp < 30)
+                    continue;
 
             auto track = hit->GetTrack();
             auto phi = track.Phi() * TMath::RadToDeg();
@@ -1577,9 +1581,6 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
             if (eventViewerNb < maxEventViewerBatch)
             {
-                if (maxAmp < 200)
-                    continue;
-
                 goodEventForView = true;
                 eventCountsX[eventViewerNb][pad - 1] = x;
                 eventCountsY[eventViewerNb][pad - 1] = y;
