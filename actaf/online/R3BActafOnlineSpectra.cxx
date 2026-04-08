@@ -162,7 +162,9 @@ InitStatus R3BActafOnlineSpectra::Init()
         R3B::root_owned<TH2F>("fh2_Baseline_vs_pad_map", "Baseline vs Pad", fPads, 0.5, 0.5 + fPads, 300, 7000, 10000);
     fh2_Baseline_map->GetXaxis()->SetTitle("Pad");
     fh2_Baseline_map->GetYaxis()->SetTitle("Baseline [ADC chn]");
-    // fh2_Baseline_map->GetYaxis()->SetTitleOffset(1.1);
+    fh2_Baseline_map->GetYaxis()->SetTitleOffset(1.1);
+    fh2_Baseline_map->GetYaxis()->SetMaxDigits(3);
+    fh2_Baseline_map->GetYaxis()->SetNoExponent(kFALSE);
     fh2_Baseline_map->GetXaxis()->CenterTitle(true);
     fh2_Baseline_map->GetYaxis()->CenterTitle(true);
     fh2_Baseline_map->Draw("colz");
