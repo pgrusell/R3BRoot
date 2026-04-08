@@ -529,7 +529,7 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     cmean->cd(2);
     fh2_meanFiltVsPad = R3B::root_owned<TH2F>(
-        "fh2_meanFiltVsPad", "Baseline mean (filtered) per pad", fPads, 0.5, 0.5 + fPads, 100, -500, 500);
+        "fh2_meanFiltVsPad", "Baseline mean (filtered) per pad", fPads, 0.5, 0.5 + fPads, 200, 0, 9000);
     fh2_meanFiltVsPad->GetXaxis()->SetTitle("Pad");
     fh2_meanFiltVsPad->GetYaxis()->SetTitle("Baseline [ADC Chn]");
     fh2_meanFiltVsPad->GetYaxis()->SetTitleOffset(1.1);
@@ -1182,9 +1182,6 @@ void R3BActafOnlineSpectra::Reset_Histo()
         fh1_sigmaFilt->Reset();
         fh2_sigmaInitVsPad->Reset();
         fh2_RmsMapVsPad->Reset();
-        fh2_sigmaFiltVsPad->Reset();
-        fh2_meanInitVsPad->Reset();
-        fh2_meanFiltVsPad->Reset();
         fh1_DetMask->Reset();
         fh2_timetag_signal->Reset();
         for (const auto& hist : fh2_RawTraces)
@@ -1232,6 +1229,9 @@ void R3BActafOnlineSpectra::Reset_Histo()
         fh2_tLeading_cal->Reset();
         fh2_maxAmp_cal->Reset();
         fh2_tSync_cal->Reset();
+        fh2_sigmaFiltVsPad->Reset();
+        fh2_meanInitVsPad->Reset();
+        fh2_meanFiltVsPad->Reset();
         for (const auto& hist : fh2_FilteredTraces)
         {
             hist->Reset();
@@ -1458,11 +1458,11 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 fh1_sigmaInit->Fill(hit->GetRmsRaw());
                 fh1_sigmaFilt->Fill(hit->GetRms());
 
-                fh2_sigmaFiltVsPad->Fill(pad + 1, hit->GetRms());
-                fh2_sigmaInitVsPad->Fill(pad + 1, hit->GetRmsRaw());
+                fh2_sigmaFiltVsPad->Fill(pad, hit->GetRms());
+                fh2_sigmaInitVsPad->Fill(pad, hit->GetRmsRaw());
 
-                fh2_meanFiltVsPad->Fill(pad + 1, hit->GetMean());
-                fh2_meanInitVsPad->Fill(pad + 1, hit->GetMeanRaw());
+                fh2_meanFiltVsPad->Fill(pad, hit->GetMean());
+                fh2_meanInitVsPad->Fill(pad, hit->GetMeanRaw());
                 
                 std::cout<< hit->GetMean()<<std::endl;
 
