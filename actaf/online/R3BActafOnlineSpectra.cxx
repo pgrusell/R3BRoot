@@ -145,13 +145,13 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     // ********* MAP HISTOGRAMS ********* //
 
-    auto* cSum = new TCanvas("Summary_map", "mapped info", 10, 10, 500, 500);
+    auto* cSum = new TCanvas("Summary_map", "mapped info", 10, 10, 800, 500);
     cSum->Divide(3, 2);
 
     cSum->cd(1);
     fh2_ERaw_map = R3B::root_owned<TH2F>("fh2_ERaw_vs_pad_map", "ERaw vs Pad", fPads, 0.5, 0.5 + fPads, 500, 0, 30000);
     fh2_ERaw_map->GetXaxis()->SetTitle("Pad");
-    fh2_ERaw_map->GetYaxis()->SetTitle("Energy [chn]");
+    fh2_ERaw_map->GetYaxis()->SetTitle("Energy [ADC chn]");
     fh2_ERaw_map->GetYaxis()->SetTitleOffset(1.1);
     fh2_ERaw_map->GetXaxis()->CenterTitle(true);
     fh2_ERaw_map->GetYaxis()->CenterTitle(true);
@@ -161,8 +161,8 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_Baseline_map =
         R3B::root_owned<TH2F>("fh2_Baseline_vs_pad_map", "Baseline vs Pad", fPads, 0.5, 0.5 + fPads, 300, 7000, 10000);
     fh2_Baseline_map->GetXaxis()->SetTitle("Pad");
-    fh2_Baseline_map->GetYaxis()->SetTitle("Baseline [chn]");
-    fh2_Baseline_map->GetYaxis()->SetTitleOffset(1.1);
+    fh2_Baseline_map->GetYaxis()->SetTitle("Baseline [ADC chn]");
+    // fh2_Baseline_map->GetYaxis()->SetTitleOffset(1.1);
     fh2_Baseline_map->GetXaxis()->CenterTitle(true);
     fh2_Baseline_map->GetYaxis()->CenterTitle(true);
     fh2_Baseline_map->Draw("colz");
@@ -171,7 +171,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_MaxPos_map = R3B::root_owned<TH2F>(
         "fh2_Maxpos_vs_pad_map", "Max.-position vs Pad", fPads, 0.5, 0.5 + fPads, 300, 0, nBinsSample);
     fh2_MaxPos_map->GetXaxis()->SetTitle("Pad");
-    fh2_MaxPos_map->GetYaxis()->SetTitle("Max.-position [chn]");
+    fh2_MaxPos_map->GetYaxis()->SetTitle("Max.-position [ADC chn]");
     fh2_MaxPos_map->GetYaxis()->SetTitleOffset(1.1);
     fh2_MaxPos_map->GetXaxis()->CenterTitle(true);
     fh2_MaxPos_map->GetYaxis()->CenterTitle(true);
@@ -179,9 +179,9 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     cSum->cd(4);
     fh2_Risetime_map =
-        R3B::root_owned<TH2F>("fh2_Risetime_vs_pad_map", "Risetime vs Pad", fPads, 0.5, 0.5 + fPads, 100, 0, 100);
+        R3B::root_owned<TH2F>("fh2_Risetime_vs_pad_map", "Risetime vs Pad", fPads, 0.5, 0.5 + fPads, 100, 0, 600);
     fh2_Risetime_map->GetXaxis()->SetTitle("Pad");
-    fh2_Risetime_map->GetYaxis()->SetTitle("Risetime [chn]");
+    fh2_Risetime_map->GetYaxis()->SetTitle("Risetime [ADC chn]");
     fh2_Risetime_map->GetYaxis()->SetTitleOffset(1.1);
     fh2_Risetime_map->GetXaxis()->CenterTitle(true);
     fh2_Risetime_map->GetYaxis()->CenterTitle(true);
@@ -235,7 +235,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     {
         // Canvas per FADC Module
         std::string nameCanvas = "FADC_" + std::to_string(adc + 1) + "_traces_map";
-        auto* cMap = new TCanvas(nameCanvas.c_str(), "mapped info", 10, 10, 500, 500);
+        auto* cMap = new TCanvas(nameCanvas.c_str(), "mapped info", 10, 10, 800, 500);
         cMap->Divide(4, 4);
 
         std::string nameCanvasE = "FADC_" + std::to_string(adc + 1) + "_ERaw";
@@ -247,7 +247,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         cMapB->Divide(4, 4);
 
         std::string canvasFilteredTraces = "FADC_" + std::to_string(adc + 1) + "_Filtered";
-        auto* cCalFilt = new TCanvas(canvasFilteredTraces.c_str(), "Filtered Signals info", 10, 10, 500, 500);
+        auto* cCalFilt = new TCanvas(canvasFilteredTraces.c_str(), "Filtered Signals info", 10, 10, 800, 500);
         cCalFilt->Divide(4, 4);
 
         int chn = 0;
