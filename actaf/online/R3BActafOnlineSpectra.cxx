@@ -193,7 +193,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_RmsMapVsPad =
         R3B::root_owned<TH2F>("fh2_RmsMapVsPad", "Baseline RMS per pad", fPads, 0.5, 0.5 + fPads, 100, 0, 50);
     fh2_RmsMapVsPad->GetXaxis()->SetTitle("Pad");
-    fh2_RmsMapVsPad->GetYaxis()->SetTitle("RMS [Chn]");
+    fh2_RmsMapVsPad->GetYaxis()->SetTitle("RMS [ADC Chn]");
     fh2_RmsMapVsPad->GetYaxis()->SetTitleOffset(1.1);
     fh2_RmsMapVsPad->GetXaxis()->CenterTitle(true);
     fh2_RmsMapVsPad->GetYaxis()->CenterTitle(true);
@@ -529,7 +529,7 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     cmean->cd(2);
     fh2_meanFiltVsPad = R3B::root_owned<TH2F>(
-        "fh2_meanFiltVsPad", "Baseline mean (filtered) per pad", fPads, 0.5, 0.5 + fPads, 200, 5000, 10000);
+        "fh2_meanFiltVsPad", "Baseline mean (filtered) per pad", fPads, 0.5, 0.5 + fPads, 100, -500, 500);
     fh2_meanFiltVsPad->GetXaxis()->SetTitle("Pad");
     fh2_meanFiltVsPad->GetYaxis()->SetTitle("Baseline [ADC Chn]");
     fh2_meanFiltVsPad->GetYaxis()->SetTitleOffset(1.1);
