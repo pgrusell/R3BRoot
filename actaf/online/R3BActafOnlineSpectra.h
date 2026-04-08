@@ -277,6 +277,8 @@ class R3BActafOnlineSpectra : public FairTask
     std::array<std::array<double, fPads>, maxEventViewerBatch> eventCountsE;
     std::array<std::array<std::vector<double>, fPads>, maxEventViewerBatch> eventCountsTrace;
     bool saveHistos = true;
+    
+    int fEventCounter=0;
 
   public:
     ClassDefOverride(R3BActafOnlineSpectra, 1);

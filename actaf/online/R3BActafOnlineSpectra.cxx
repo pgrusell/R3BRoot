@@ -208,9 +208,9 @@ InitStatus R3BActafOnlineSpectra::Init()
     cGas->Divide(3, 1);
     
     std::vector<TString> alpha_source = {
-    "Pads 115,122",
-    "Pads 112,119",
-    "Pads 46,51,52"
+    "Alpha-1, Down, Pads 115,122",
+    "Alpha-2, Down, Pads 112,119",
+    "Alpha-3, Up, Pads 46,51,52"
 };
     
     for (int index = 0; index < 3; index++)
@@ -1297,6 +1297,8 @@ void R3BActafOnlineSpectra::Reset_Histo()
 
 void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 {
+    fEventCounter = (fEventCounter + 1) % 40001;
+
     if ((fTrigger >= 0) && (header) && (header->GetTrigger() != fTrigger))
         return;
 
@@ -1382,6 +1384,47 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 int indexside = pad < 65 ? 0 : 1;
                 fh2_mawVsEMap[indexside]->Fill(hit->GetE(), hit->GetMaw());
             }
+            
+            // pad-1 for alpha-1
+            if (pad == 114 || pad == 121)
+            {
+                auto vec = hit->GetTrace();
+                double integral = 0.;
+                for (const auto& value : vec)
+                {
+                    integral += value;
+                }
+
+                fh2_gasquality[0]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+            }
+            
+            // pad-1 for alpha-2
+            if (pad == 111 || pad == 118)
+            {
+                auto vec = hit->GetTrace();
+                double integral = 0.;
+                for (const auto& value : vec)
+                {
+                    integral += value;
+                }
+
+                fh2_gasquality[1]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+            }
+            
+            // pad-1 for alpha-3
+            if (pad == 45 || pad == 50 || pad == 51)
+            {
+                auto vec = hit->GetTrace();
+                double integral = 0.;
+                for (const auto& value : vec)
+                {
+                    integral += value;
+                }
+
+                fh2_gasquality[2]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+            }
+            
+            
 
             if (fDisplaytraces)
             {
