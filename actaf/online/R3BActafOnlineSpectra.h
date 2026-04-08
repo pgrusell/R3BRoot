@@ -211,7 +211,7 @@ class R3BActafOnlineSpectra : public FairTask
     int nEcalMin = 0;
     int nEcalMax = 500000;
 
-    int nBinsTrace = 500;
+    int nBinsTrace = 200;
     int nTraceMin = -100;
     int nTraceMax = 2000;
 

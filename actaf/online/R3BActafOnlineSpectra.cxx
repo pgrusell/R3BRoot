@@ -173,7 +173,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_MaxPos_map = R3B::root_owned<TH2F>(
         "fh2_Maxpos_vs_pad_map", "Max.-position vs Pad", fPads, 0.5, 0.5 + fPads, 300, 0, nBinsSample);
     fh2_MaxPos_map->GetXaxis()->SetTitle("Pad");
-    fh2_MaxPos_map->GetYaxis()->SetTitle("Max.-position [ADC chn]");
+    fh2_MaxPos_map->GetYaxis()->SetTitle("Max.-position [chn]");
     fh2_MaxPos_map->GetYaxis()->SetTitleOffset(1.1);
     fh2_MaxPos_map->GetXaxis()->CenterTitle(true);
     fh2_MaxPos_map->GetYaxis()->CenterTitle(true);
@@ -183,7 +183,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_Risetime_map =
         R3B::root_owned<TH2F>("fh2_Risetime_vs_pad_map", "Risetime vs Pad", fPads, 0.5, 0.5 + fPads, 100, 0, 300);
     fh2_Risetime_map->GetXaxis()->SetTitle("Pad");
-    fh2_Risetime_map->GetYaxis()->SetTitle("Risetime [ADC chn]");
+    fh2_Risetime_map->GetYaxis()->SetTitle("Risetime [chn]");
     fh2_Risetime_map->GetYaxis()->SetTitleOffset(1.1);
     fh2_Risetime_map->GetXaxis()->CenterTitle(true);
     fh2_Risetime_map->GetYaxis()->CenterTitle(true);
@@ -193,7 +193,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_RmsMapVsPad =
         R3B::root_owned<TH2F>("fh2_RmsMapVsPad", "Baseline RMS per pad", fPads, 0.5, 0.5 + fPads, 100, 0, 50);
     fh2_RmsMapVsPad->GetXaxis()->SetTitle("Pad");
-    fh2_RmsMapVsPad->GetYaxis()->SetTitle("RMS [ADC Chn]");
+    fh2_RmsMapVsPad->GetYaxis()->SetTitle("RMS [Chn]");
     fh2_RmsMapVsPad->GetYaxis()->SetTitleOffset(1.1);
     fh2_RmsMapVsPad->GetXaxis()->CenterTitle(true);
     fh2_RmsMapVsPad->GetYaxis()->CenterTitle(true);
@@ -292,7 +292,7 @@ InitStatus R3BActafOnlineSpectra::Init()
             // Filtered traces (CAL LEVEL!)
             std::string nameFiltHist = "fh2_Pad_" + std::to_string(index + 1) + "filtered_trace";
             fh2_FilteredTraces[index] = R3B::root_owned<TH2F>(
-                nameFiltHist.c_str(), titleHist.c_str(), nBinsSample, 1, nBinsSample, nBinsTrace, nTraceMin, nTraceMax);
+                nameFiltHist.c_str(), titleHist.c_str(), nBinsSample/2, 0, nBinsSample, nBinsTrace, nTraceMin, nTraceMax);
             fh2_FilteredTraces[index]->GetXaxis()->SetTitle("Time [Chn]");
             fh2_FilteredTraces[index]->GetYaxis()->SetTitle("A");
             fh2_FilteredTraces[index]->GetYaxis()->SetTitleOffset(1.1);
