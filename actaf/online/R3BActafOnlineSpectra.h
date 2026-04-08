@@ -263,7 +263,7 @@ class R3BActafOnlineSpectra : public FairTask
     TH2F* fh2_Phi1VsPhi2 = nullptr;
     TH2F* fh2_timetag_signal = nullptr;
     TCanvas* cRates = nullptr;
-    
+
     // Gas quality
     std::vector<TH2F*> fh2_gasquality;
 
@@ -277,8 +277,8 @@ class R3BActafOnlineSpectra : public FairTask
     std::array<std::array<double, fPads>, maxEventViewerBatch> eventCountsE;
     std::array<std::array<std::vector<double>, fPads>, maxEventViewerBatch> eventCountsTrace;
     bool saveHistos = true;
-    
-    int fEventCounter=0;
+
+    int fEventCounter = 0;
 
   public:
     ClassDefOverride(R3BActafOnlineSpectra, 1);

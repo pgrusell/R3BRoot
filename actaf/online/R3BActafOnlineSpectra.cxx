@@ -202,29 +202,28 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_RmsMapVsPad->Draw("colz");
 
     mapfol->Add(cSum);
-    
+
     // Canvas for gas quality
     auto* cGas = new TCanvas("Gas_quality", "Gas quality info", 10, 10, 800, 500);
     cGas->Divide(3, 1);
-    
-    std::vector<TString> alpha_source = {
-    "Alpha-1, Down, Pads 115,122",
-    "Alpha-2, Down, Pads 112,119",
-    "Alpha-3, Up, Pads 46,51,52"
-};
-    
+
+    std::vector<TString> alpha_source = { "Alpha-1, Down, Pads 115,122",
+                                          "Alpha-2, Down, Pads 112,119",
+                                          "Alpha-3, Up, Pads 46,51,52" };
+
     for (int index = 0; index < 3; index++)
     {
-     cGas->cd(index+1);
-     fh2_gasquality.push_back(R3B::root_owned<TH2F>(Form("fh2_gasquality_%d",index+1), alpha_source[index].Data(), 200, 0, 40000, 500, -50000, 250000));
-     fh2_gasquality[index]->GetXaxis()->SetTitle("Event number");
-     fh2_gasquality[index]->GetYaxis()->SetTitle("Integral [ADC chn]");
-     fh2_gasquality[index]->GetYaxis()->SetTitleOffset(1.);
-     fh2_gasquality[index]->GetXaxis()->CenterTitle(true);
-     fh2_gasquality[index]->GetYaxis()->CenterTitle(true);
-     fh2_gasquality[index]->Draw("colz");
+        cGas->cd(index + 1);
+        fh2_gasquality.push_back(R3B::root_owned<TH2F>(
+            Form("fh2_gasquality_%d", index + 1), alpha_source[index].Data(), 200, 0, 40000, 500, -50000, 250000));
+        fh2_gasquality[index]->GetXaxis()->SetTitle("Event number");
+        fh2_gasquality[index]->GetYaxis()->SetTitle("Integral [ADC chn]");
+        fh2_gasquality[index]->GetYaxis()->SetTitleOffset(1.);
+        fh2_gasquality[index]->GetXaxis()->CenterTitle(true);
+        fh2_gasquality[index]->GetYaxis()->CenterTitle(true);
+        fh2_gasquality[index]->Draw("colz");
     }
-    
+
     gasfol->Add(cGas);
 
     // Canvas for ring and side
@@ -300,8 +299,8 @@ InitStatus R3BActafOnlineSpectra::Init()
             else
                 chn++;
 
-            fh2_RawTraces[index] =
-                R3B::root_owned<TH2F>(nameHist.c_str(), titleHist.c_str(), nBinsSample/2, 1, nBinsSample, 400, 6000, 10000);
+            fh2_RawTraces[index] = R3B::root_owned<TH2F>(
+                nameHist.c_str(), titleHist.c_str(), nBinsSample / 2, 1, nBinsSample, 400, 6000, 10000);
 
             fh2_RawTraces[index]->GetXaxis()->SetTitle("Time [Chn]");
             fh2_RawTraces[index]->GetYaxis()->SetTitle("A");
@@ -317,8 +316,14 @@ InitStatus R3BActafOnlineSpectra::Init()
 
             // Filtered traces (CAL LEVEL!)
             std::string nameFiltHist = "fh2_Pad_" + std::to_string(index + 1) + "filtered_trace";
-            fh2_FilteredTraces[index] = R3B::root_owned<TH2F>(
-                nameFiltHist.c_str(), titleHist.c_str(), nBinsSample/2, 0, nBinsSample, nBinsTrace, nTraceMin, nTraceMax);
+            fh2_FilteredTraces[index] = R3B::root_owned<TH2F>(nameFiltHist.c_str(),
+                                                              titleHist.c_str(),
+                                                              nBinsSample / 2,
+                                                              0,
+                                                              nBinsSample,
+                                                              nBinsTrace,
+                                                              nTraceMin,
+                                                              nTraceMax);
             fh2_FilteredTraces[index]->GetXaxis()->SetTitle("Time [Chn]");
             fh2_FilteredTraces[index]->GetYaxis()->SetTitle("A");
             fh2_FilteredTraces[index]->GetYaxis()->SetTitleOffset(1.1);
@@ -957,7 +962,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     {
         mainfol->Add(syncfol);
     }
-    
+
     mainfol->Add(gasfol);
 
     run->AddObject(mainfol);
@@ -1349,7 +1354,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     {
                         if (value == 0)
                             continue;
-                        
+
                         fh2_timetag_signal->Fill(index++, value);
                     }
                 }
@@ -1384,7 +1389,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 int indexside = pad < 65 ? 0 : 1;
                 fh2_mawVsEMap[indexside]->Fill(hit->GetE(), hit->GetMaw());
             }
-            
+
             // pad-1 for alpha-1
             if (pad == 114 || pad == 121)
             {
@@ -1397,7 +1402,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                 fh2_gasquality[0]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
             }
-            
+
             // pad-1 for alpha-2
             if (pad == 111 || pad == 118)
             {
@@ -1410,7 +1415,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                 fh2_gasquality[1]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
             }
-            
+
             // pad-1 for alpha-3
             if (pad == 45 || pad == 50 || pad == 51)
             {
@@ -1423,8 +1428,6 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                 fh2_gasquality[2]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
             }
-            
-            
 
             if (fDisplaytraces)
             {
@@ -1640,9 +1643,9 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             auto y = hit->GetYpos();
             auto energy = hit->GetEnergy();
             auto maxAmp = hit->GetMaxAmpl();
-            
+
             if (maxAmp < 30)
-                    continue;
+                continue;
 
             auto track = hit->GetTrack();
             auto phi = track.Phi() * TMath::RadToDeg();
