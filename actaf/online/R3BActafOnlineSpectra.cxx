@@ -1319,9 +1319,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     {
                         if (value == 0)
                             continue;
-
-                        if (hit->GetBaseline() > 0)
-                            fh2_timetag_signal->Fill(index++, value + hit->GetBaseline());
+                            fh2_timetag_signal->Fill(index++, value);
                     }
                 }
             }
@@ -1463,8 +1461,6 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                 fh2_meanFiltVsPad->Fill(pad, hit->GetMean());
                 fh2_meanInitVsPad->Fill(pad, hit->GetMeanRaw());
-                
-                std::cout<< hit->GetMean()<<std::endl;
 
                 int indexside = pad < 65 ? 0 : 1;
 
