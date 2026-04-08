@@ -1464,7 +1464,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 fh2_meanFiltVsPad->Fill(pad + 1, hit->GetMean());
                 fh2_meanInitVsPad->Fill(pad + 1, hit->GetMeanRaw());
                 
-                std::cout<< hit->GetMeanRaw()<<std::endl;
+                std::cout<< hit->GetMean()<<std::endl;
 
                 int indexside = pad < 65 ? 0 : 1;
 
