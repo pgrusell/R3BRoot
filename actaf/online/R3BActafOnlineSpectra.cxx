@@ -273,7 +273,7 @@ InitStatus R3BActafOnlineSpectra::Init()
                 chn++;
 
             fh2_RawTraces[index] =
-                R3B::root_owned<TH2F>(nameHist.c_str(), titleHist.c_str(), nBinsSample, 1, nBinsSample, 1000, 0, 20000);
+                R3B::root_owned<TH2F>(nameHist.c_str(), titleHist.c_str(), nBinsSample/2, 1, nBinsSample, 500, 4000, 12000);
 
             fh2_RawTraces[index]->GetXaxis()->SetTitle("Time [Chn]");
             fh2_RawTraces[index]->GetYaxis()->SetTitle("A");
