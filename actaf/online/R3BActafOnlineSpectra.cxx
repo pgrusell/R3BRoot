@@ -181,7 +181,7 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     cSum->cd(4);
     fh2_Risetime_map =
-        R3B::root_owned<TH2F>("fh2_Risetime_vs_pad_map", "Risetime vs Pad", fPads, 0.5, 0.5 + fPads, 100, 0, 600);
+        R3B::root_owned<TH2F>("fh2_Risetime_vs_pad_map", "Risetime vs Pad", fPads, 0.5, 0.5 + fPads, 100, 0, 300);
     fh2_Risetime_map->GetXaxis()->SetTitle("Pad");
     fh2_Risetime_map->GetYaxis()->SetTitle("Risetime [ADC chn]");
     fh2_Risetime_map->GetYaxis()->SetTitleOffset(1.1);
