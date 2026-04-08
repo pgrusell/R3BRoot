@@ -1365,7 +1365,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                     if (hit->GetBaseline() > 0)
                     {
-                        fh2_RawTraces[pad]->Fill(index++, value + hit->GetBaseline());
+                        fh2_RawTraces[pad]->Fill(index++, value);
                     }
                 }
             }
