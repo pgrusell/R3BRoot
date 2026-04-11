@@ -227,7 +227,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     {
         cGas->cd(index + 1);
         fh2_gasquality.push_back(R3B::root_owned<TH2F>(
-            Form("fh2_gasquality_%d", index + 1), alpha_source[index].Data(), 200, 0, 400000, 500, -50000, 250000));
+            Form("fh2_gasquality_%d", index + 1), alpha_source[index].Data(), 200, 0, 400000, 5000, -50000, 250000));
         fh2_gasquality[index]->GetXaxis()->SetTitle("Event number");
         fh2_gasquality[index]->GetYaxis()->SetTitle("Integral [ADC chn]");
         fh2_gasquality[index]->GetYaxis()->SetTitleOffset(1.);
