@@ -104,9 +104,9 @@ InitStatus R3BActafOnlineSpectra::Init()
     auto* mgr = FairRootManager::Instance();
     R3BLOG_IF(fatal, nullptr == mgr, "FairRootManager not found");
 
-    header = dynamic_cast<R3BEventHeader*>(mgr->GetObject("EventHeader."));
-    R3BLOG_IF(error, header == nullptr, "EventHeader. not found");
-    R3BLOG_IF(info, header, "EventHeader. found");
+    fEventHeader = dynamic_cast<R3BEventHeader*>(mgr->GetObject("EventHeader."));
+    R3BLOG_IF(error, fEventHeader == nullptr, "EventHeader. not found");
+    R3BLOG_IF(info, fEventHeader, "EventHeader. found");
 
     auto* run = FairRunOnline::Instance();
     run->GetHttpServer()->Register("", this);
@@ -205,13 +205,25 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     // Canvas for gas quality
     auto* cGas = new TCanvas("Gas_quality", "Gas quality info", 10, 10, 800, 500);
-    cGas->Divide(3, 1);
 
-    std::vector<TString> alpha_source = { "Alpha-1, Down, Pads 115,122",
-                                          "Alpha-2, Down, Pads 112,119",
-                                          "Alpha-3, Up, Pads 46,51,52" };
+    std::vector<TString> alpha_source;
 
-    for (int index = 0; index < 3; index++)
+    if (fEventHeader->GetExpId() == 2025)
+    {
+        alpha_source = { "Alpha-1, Down, Pads 115,122", "Alpha-2, Down, Pads 112,119", "Alpha-3, Up, Pads 46,51,52" };
+        cGas->Divide(3, 1);
+    }
+    else if (fEventHeader->GetExpId() == 2026)
+    {
+        alpha_source = { "Alpha-1, Down, Pads 115,122",
+                         "Alpha-2, Down, Pads 102,103,110",
+                         "Alpha-3, Down, Pads 112,119",
+                         "Alpha-1, Up, Pads 46,51,52",
+                         "Alpha-2, Up, Pads 48,55" };
+        cGas->Divide(3, 2);
+    }
+
+    for (auto index = 0; index < alpha_source.size(); index++)
     {
         cGas->cd(index + 1);
         fh2_gasquality.push_back(R3B::root_owned<TH2F>(
@@ -1304,10 +1316,10 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 {
     fEventCounter = (fEventCounter + 1) % 40001;
 
-    if ((fTrigger >= 0) && (header) && (header->GetTrigger() != fTrigger))
+    if ((fTrigger >= 0) && (fEventHeader) && (fEventHeader->GetTrigger() != fTrigger))
         return;
 
-    if (fTpat1 > 0 && fTpat2 > 0 && (header))
+    if (fTpat1 > 0 && fTpat2 > 0 && (fEventHeader))
     {
         // fTpat = 1-16; fTpat_bit = 0-15
         Int_t fTpat_bit1 = fTpat1 - 1;
@@ -1315,7 +1327,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
         Int_t tpatbin = 0;
         for (int i = 0; i < 16; i++)
         {
-            tpatbin = (header->GetTpat() & (1 << i));
+            tpatbin = (fEventHeader->GetTpat() & (1 << i));
             if (tpatbin != 0 && (i < fTpat_bit1 || i > fTpat_bit2))
             {
                 return;
@@ -1390,43 +1402,105 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 fh2_mawVsEMap[indexside]->Fill(hit->GetE(), hit->GetMaw());
             }
 
-            // pad-1 for alpha-1
-            if (pad == 114 || pad == 121)
+            if (fEventHeader->GetExpId() == 2025)
             {
-                auto vec = hit->GetTrace();
-                double integral = 0.;
-                for (const auto& value : vec)
+                // (pad-1) base for alpha-1
+                if (pad == 114 || pad == 121)
                 {
-                    integral += value;
+                    auto vec = hit->GetTrace();
+                    double integral = 0.;
+                    for (const auto& value : vec)
+                    {
+                        integral += value;
+                    }
+                    fh2_gasquality[0]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
                 }
 
-                fh2_gasquality[0]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                // (pad-1) base for alpha-2
+                if (pad == 111 || pad == 118)
+                {
+                    auto vec = hit->GetTrace();
+                    double integral = 0.;
+                    for (const auto& value : vec)
+                    {
+                        integral += value;
+                    }
+                    fh2_gasquality[1]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                }
+
+                // (pad-1) base for alpha-3
+                if (pad == 45 || pad == 50 || pad == 51)
+                {
+                    auto vec = hit->GetTrace();
+                    double integral = 0.;
+                    for (const auto& value : vec)
+                    {
+                        integral += value;
+                    }
+                    fh2_gasquality[2]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                }
             }
-
-            // pad-1 for alpha-2
-            if (pad == 111 || pad == 118)
+            else if (fEventHeader->GetExpId() == 2026)
             {
-                auto vec = hit->GetTrace();
-                double integral = 0.;
-                for (const auto& value : vec)
+                // (pad-1) base for alpha-1 DOWN
+                if (pad == 114 || pad == 121)
                 {
-                    integral += value;
+                    auto vec = hit->GetTrace();
+                    double integral = 0.;
+                    for (const auto& value : vec)
+                    {
+                        integral += value;
+                    }
+                    fh2_gasquality[0]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
                 }
 
-                fh2_gasquality[1]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
-            }
-
-            // pad-1 for alpha-3
-            if (pad == 45 || pad == 50 || pad == 51)
-            {
-                auto vec = hit->GetTrace();
-                double integral = 0.;
-                for (const auto& value : vec)
+                // (pad-1) base for alpha-2 DOWN
+                if (pad == 101 || pad == 102 || pad == 109)
                 {
-                    integral += value;
+                    auto vec = hit->GetTrace();
+                    double integral = 0.;
+                    for (const auto& value : vec)
+                    {
+                        integral += value;
+                    }
+                    fh2_gasquality[1]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
                 }
 
-                fh2_gasquality[2]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                // (pad-1) base for alpha-3 DOWN
+                if (pad == 111 || pad == 118)
+                {
+                    auto vec = hit->GetTrace();
+                    double integral = 0.;
+                    for (const auto& value : vec)
+                    {
+                        integral += value;
+                    }
+                    fh2_gasquality[2]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                }
+
+                // (pad-1) base for alpha-1 UP
+                if (pad == 45 || pad == 50 || pad == 51)
+                {
+                    auto vec = hit->GetTrace();
+                    double integral = 0.;
+                    for (const auto& value : vec)
+                    {
+                        integral += value;
+                    }
+                    fh2_gasquality[3]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                }
+
+                // (pad-1) base for alpha-2 UP
+                if (pad == 47 || pad == 54)
+                {
+                    auto vec = hit->GetTrace();
+                    double integral = 0.;
+                    for (const auto& value : vec)
+                    {
+                        integral += value;
+                    }
+                    fh2_gasquality[4]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                }
             }
 
             if (fDisplaytraces)

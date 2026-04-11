@@ -165,9 +165,9 @@ class R3BActafOnlineSpectra : public FairTask
     TClonesArray* fHitItems = nullptr;
     TClonesArray* fWrItems = nullptr;
 
-    R3BEventHeader* header = nullptr;       /** Event header */
-    R3BActafMappingPar* fMap_Par = nullptr; /** Parameter container */
-    int fTrigger = -1;                      /** Trigger value */
+    R3BEventHeader* fEventHeader = nullptr; // Event header
+    R3BActafMappingPar* fMap_Par = nullptr; // Parameter container
+    int fTrigger = -1;                      // Trigger value
     int fTpat1 = 0, fTpat2 = 0;
     unsigned long fNEvents = 0;
     static constexpr int fChn = 16;
