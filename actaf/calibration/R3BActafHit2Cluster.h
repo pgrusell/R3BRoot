@@ -39,6 +39,20 @@ class R3BActafHit2Cluster : public FairTask
     /** Destructor **/
     ~R3BActafHit2Cluster() override;
 
+    struct Point
+    {
+        double x, y, z;
+        int side, ring, pad;
+        double energy;
+    };
+
+    struct HitPoint
+    {
+        double x, y, z, phi, energy;
+        int side, ring, pad;
+        bool used = false;
+    };
+
     /** Method Exec **/
     void Exec(Option_t*) override;
 
@@ -55,6 +69,17 @@ class R3BActafHit2Cluster : public FairTask
     void SetOnline(bool option = true) { fOnline = option; }
 
   private:
+    double Distance(const HitPoint& a, const HitPoint& b);
+
+    void FitTrack(const std::vector<Point>& pts,
+                  double& x0,
+                  double& y0,
+                  double& z0,
+                  double& phi,
+                  double& theta,
+                  double& Etot,
+                  double& chi2polarfit);
+
     bool fOnline = false; // Don't store data for online
 
     TClonesArray* fActafHitData = nullptr; // Array with Actaf Hit input data
