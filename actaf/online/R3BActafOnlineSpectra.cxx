@@ -1893,7 +1893,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             clustermul[side]++;
             auto theta = hit->GetTheta();
             auto phi = hit->GetPhi();
-            aut energy = hit->GetEnergy();
+            auto energy = hit->GetEnergy();
             auto padmul = hit->GetNbOfPads();
 
             fh1_Cluster_pad_mul[side]->Fill(padmul);
