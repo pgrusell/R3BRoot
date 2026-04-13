@@ -1875,7 +1875,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
             fh1_Cluster_pad_mul[side]->Fill(padmul);
             fh1_Cluster_theta[side]->Fill(theta);
-            fh1_Cluster_phi[side]->Fill(phi);
+            fh1_Cluster_phi[side]->Fill((phi >= 0. ? phi : phi + 360.));
         }
         for (size_t i = 0; i < clustermul.size(); ++i)
         {
