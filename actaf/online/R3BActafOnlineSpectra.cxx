@@ -887,7 +887,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     if (fClusterItems != nullptr)
     {
         auto* cClusterUp = new TCanvas("ClusterUp", "Summary of clusters in UP", 10, 10, 800, 500);
-        cClusterUp->Divide(2, 2);
+        cClusterUp->Divide(3, 2);
 
         cClusterUp->cd(1);
         fh1_Cluster_mul.push_back(R3B::root_owned<TH1F>("fh1_Cluster_mul_up", "", 11, -0.5, 10.5));
@@ -929,10 +929,20 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_phi[0]->SetFillColor(31);
         fh1_Cluster_phi[0]->Draw();
 
+        cClusterUp->cd(5);
+        fh1_Cluster_energy.push_back(R3B::root_owned<TH1F>("fh1_Cluster_energy_up", "", 250, 0, 300000));
+        fh1_Cluster_energy[0]->GetXaxis()->SetTitle("Energy-UP [ADC chn]");
+        fh1_Cluster_energy[0]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_energy[0]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_energy[0]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_energy[0]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_energy[0]->SetFillColor(31);
+        fh1_Cluster_energy[0]->Draw();
+
         clusterfol->Add(cClusterUp);
 
         auto* cClusterDown = new TCanvas("ClusterDown", "Summary of clusters in DOWN", 10, 10, 800, 500);
-        cClusterDown->Divide(2, 2);
+        cClusterDown->Divide(3, 2);
 
         cClusterDown->cd(1);
         fh1_Cluster_mul.push_back(R3B::root_owned<TH1F>("fh1_Cluster_mul_down", "", 11, -0.5, 10.5));
@@ -973,6 +983,16 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_phi[1]->GetYaxis()->CenterTitle(true);
         fh1_Cluster_phi[1]->SetFillColor(31);
         fh1_Cluster_phi[1]->Draw();
+
+        cClusterDown->cd(5);
+        fh1_Cluster_energy.push_back(R3B::root_owned<TH1F>("fh1_Cluster_energy_down", "", 250, 0, 300000));
+        fh1_Cluster_energy[1]->GetXaxis()->SetTitle("Energy-DOWN [ADC chn]");
+        fh1_Cluster_energy[1]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_energy[1]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_energy[1]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_energy[1]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_energy[1]->SetFillColor(31);
+        fh1_Cluster_energy[1]->Draw();
 
         clusterfol->Add(cClusterDown);
 
@@ -1419,6 +1439,8 @@ void R3BActafOnlineSpectra::Reset_Histo()
         for (auto& h : fh1_Cluster_theta)
             h->Reset();
         for (auto& h : fh1_Cluster_phi)
+            h->Reset();
+        for (auto& h : fh1_Cluster_energy)
             h->Reset();
     }
 
@@ -1871,11 +1893,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             clustermul[side]++;
             auto theta = hit->GetTheta();
             auto phi = hit->GetPhi();
+            aut energy = hit->GetEnergy();
             auto padmul = hit->GetNbOfPads();
 
             fh1_Cluster_pad_mul[side]->Fill(padmul);
             fh1_Cluster_theta[side]->Fill(theta);
             fh1_Cluster_phi[side]->Fill((phi >= 0. ? phi : phi + 360.));
+            fh1_Cluster_energy[side]->Fill(energy);
         }
         for (size_t i = 0; i < clustermul.size(); ++i)
         {
@@ -2054,6 +2078,8 @@ void R3BActafOnlineSpectra::FinishTask()
             for (auto& h : fh1_Cluster_theta)
                 h->Write();
             for (auto& h : fh1_Cluster_phi)
+                h->Write();
+            for (auto& h : fh1_Cluster_energy)
                 h->Write();
         }
     }
