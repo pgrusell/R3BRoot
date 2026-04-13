@@ -163,6 +163,7 @@ class R3BActafOnlineSpectra : public FairTask
     TClonesArray* fMappedItems = nullptr;
     TClonesArray* fCalItems = nullptr;
     TClonesArray* fHitItems = nullptr;
+    TClonesArray* fClusterItems = nullptr;
     TClonesArray* fWrItems = nullptr;
 
     R3BEventHeader* fEventHeader = nullptr; // Event header
@@ -264,6 +265,12 @@ class R3BActafOnlineSpectra : public FairTask
     TH2F* fh2_timetag_signal = nullptr;
     TCanvas* cRates = nullptr;
 
+    // Cluster histograms
+    std::vector<TH1F*> fh1_Cluster_mul;
+    std::vector<TH1F*> fh1_Cluster_pad_mul;
+    std::vector<TH1F*> fh1_Cluster_theta;
+    std::vector<TH1F*> fh1_Cluster_phi;
+
     // Gas quality
     std::vector<TH2F*> fh2_gasquality;
 
@@ -281,5 +288,5 @@ class R3BActafOnlineSpectra : public FairTask
     int fEventCounter = 0;
 
   public:
-    ClassDefOverride(R3BActafOnlineSpectra, 1);
+    ClassDefOverride(R3BActafOnlineSpectra, 2);
 };

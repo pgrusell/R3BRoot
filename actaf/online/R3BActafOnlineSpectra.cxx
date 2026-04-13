@@ -41,6 +41,7 @@
 
 // R3B headers
 #include "R3BActafCalData.h"
+#include "R3BActafClusterData.h"
 #include "R3BActafGeometry.h"
 #include "R3BActafHitData.h"
 #include "R3BActafMappedData.h"
@@ -120,6 +121,9 @@ InitStatus R3BActafOnlineSpectra::Init()
     fHitItems = dynamic_cast<TClonesArray*>(mgr->GetObject("ActafHitData"));
     R3BLOG_IF(warn, fHitItems == nullptr, "ActafHitData not found");
 
+    fClusterItems = dynamic_cast<TClonesArray*>(mgr->GetObject("ActafClusterData"));
+    R3BLOG_IF(warn, fClusterItems == nullptr, "ActafClusterData not found");
+
     fWrItems = dynamic_cast<TClonesArray*>(mgr->GetObject("WRActafData"));
     R3BLOG_IF(warn, fWrItems == nullptr, "WRActafData not found");
 
@@ -134,6 +138,8 @@ InitStatus R3BActafOnlineSpectra::Init()
     auto* calfol = new TFolder("Cal", "Cal Actaf info");
     // Folder for hit data
     auto* hitfol = new TFolder("Hit", "Hit Actaf info");
+    // Folder for cluster data
+    auto* clusterfol = new TFolder("Clusters", "Cluster Actaf info");
     // Folder for sync data
     auto* syncfol = new TFolder("Sync", "Sync Actaf info");
     // Folder for gas quality
@@ -878,6 +884,101 @@ InitStatus R3BActafOnlineSpectra::Init()
     if (fHitItems != nullptr)
         mainfol->Add(hitfol);
 
+    if (fClusterItems != nullptr)
+    {
+        auto* cClusterUp = new TCanvas("ClusterUp", "Summary of clusters in UP", 10, 10, 800, 500);
+        cClusterUp->Divide(2, 2);
+
+        cClusterUp->cd(1);
+        fh1_Cluster_mul.push_back(R3B::root_owned<TH1F>("fh1_Cluster_mul_up", "", 11, -0.5, 10.5));
+        fh1_Cluster_mul[0]->GetXaxis()->SetTitle("Cluster multiplicity-UP");
+        fh1_Cluster_mul[0]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_mul[0]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_mul[0]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_mul[0]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_mul[0]->SetFillColor(31);
+        fh1_Cluster_mul[0]->Draw();
+
+        cClusterUp->cd(2);
+        fh1_Cluster_pad_mul.push_back(R3B::root_owned<TH1F>("fh1_Cluster_pad_mul_up", "", 16, -0.5, 15.5));
+        fh1_Cluster_pad_mul[0]->GetXaxis()->SetTitle("Pad multiplicity per cluster-UP");
+        fh1_Cluster_pad_mul[0]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_pad_mul[0]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_pad_mul[0]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_pad_mul[0]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_pad_mul[0]->SetFillColor(31);
+        fh1_Cluster_pad_mul[0]->Draw();
+
+        cClusterUp->cd(3);
+        fh1_Cluster_theta.push_back(R3B::root_owned<TH1F>("fh1_Cluster_theta_up", "", 90, 0., 180.));
+        fh1_Cluster_theta[0]->GetXaxis()->SetTitle("Polar angle theta-UP [deg]");
+        fh1_Cluster_theta[0]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_theta[0]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_theta[0]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_theta[0]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_theta[0]->SetFillColor(31);
+        fh1_Cluster_theta[0]->Draw();
+
+        cClusterUp->cd(4);
+        fh1_Cluster_phi.push_back(R3B::root_owned<TH1F>("fh1_Cluster_phi_up", "", 90, 0., 360.));
+        fh1_Cluster_phi[0]->GetXaxis()->SetTitle("Phi-UP [deg]");
+        fh1_Cluster_phi[0]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_phi[0]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_phi[0]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_phi[0]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_phi[0]->SetFillColor(31);
+        fh1_Cluster_phi[0]->Draw();
+
+        clusterfol->Add(cClusterUp);
+
+        auto* cClusterDown = new TCanvas("ClusterDown", "Summary of clusters in DOWN", 10, 10, 800, 500);
+        cClusterDown->Divide(2, 2);
+
+        cClusterDown->cd(1);
+        fh1_Cluster_mul.push_back(R3B::root_owned<TH1F>("fh1_Cluster_mul_down", "", 11, -0.5, 10.5));
+        fh1_Cluster_mul[1]->GetXaxis()->SetTitle("Cluster multiplicity-DOWN");
+        fh1_Cluster_mul[1]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_mul[1]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_mul[1]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_mul[1]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_mul[1]->SetFillColor(31);
+        fh1_Cluster_mul[1]->Draw();
+
+        cClusterDown->cd(2);
+        fh1_Cluster_pad_mul.push_back(R3B::root_owned<TH1F>("fh1_Cluster_pad_mul_down", "", 16, -0.5, 15.5));
+        fh1_Cluster_pad_mul[1]->GetXaxis()->SetTitle("Pad multiplicity per cluster-DOWN");
+        fh1_Cluster_pad_mul[1]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_pad_mul[1]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_pad_mul[1]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_pad_mul[1]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_pad_mul[1]->SetFillColor(31);
+        fh1_Cluster_pad_mul[1]->Draw();
+
+        cClusterDown->cd(3);
+        fh1_Cluster_theta.push_back(R3B::root_owned<TH1F>("fh1_Cluster_theta_down", "", 90, 0., 180.));
+        fh1_Cluster_theta[1]->GetXaxis()->SetTitle("Polar angle theta-DOWN [deg]");
+        fh1_Cluster_theta[1]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_theta[1]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_theta[1]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_theta[1]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_theta[1]->SetFillColor(31);
+        fh1_Cluster_theta[1]->Draw();
+
+        cClusterDown->cd(4);
+        fh1_Cluster_phi.push_back(R3B::root_owned<TH1F>("fh1_Cluster_phi_down", "", 90, 0., 360.));
+        fh1_Cluster_phi[1]->GetXaxis()->SetTitle("Phi-DOWN [deg]");
+        fh1_Cluster_phi[1]->GetYaxis()->SetTitle("Counts");
+        fh1_Cluster_phi[1]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_phi[1]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_phi[1]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_phi[1]->SetFillColor(31);
+        fh1_Cluster_phi[1]->Draw();
+
+        clusterfol->Add(cClusterDown);
+
+        mainfol->Add(clusterfol);
+    }
+
     auto* cSync = new TCanvas("Sync", "", 10, 10, 500, 500);
     cSync->Divide(3, 3);
 
@@ -1224,7 +1325,6 @@ void R3BActafOnlineSpectra::Reset_Histo()
         fh2_Risetime_map->Reset();
         fh2_ModVsCh_map->Reset();
         fh1_sigmaInit->Reset();
-        fh1_sigmaFilt->Reset();
         fh2_sigmaInitVsPad->Reset();
         fh2_RmsMapVsPad->Reset();
         fh1_DetMask->Reset();
@@ -1274,6 +1374,7 @@ void R3BActafOnlineSpectra::Reset_Histo()
         fh2_tLeading_cal->Reset();
         fh2_maxAmp_cal->Reset();
         fh2_tSync_cal->Reset();
+        fh1_sigmaFilt->Reset();
         fh2_sigmaFiltVsPad->Reset();
         fh2_meanInitVsPad->Reset();
         fh2_meanFiltVsPad->Reset();
@@ -1307,6 +1408,18 @@ void R3BActafOnlineSpectra::Reset_Histo()
 
         fh1_CountsPerSide->Reset();
         fh2_Phi1VsPhi2->Reset();
+    }
+
+    if (fClusterItems)
+    {
+        for (auto& h : fh1_Cluster_mul)
+            h->Reset();
+        for (auto& h : fh1_Cluster_pad_mul)
+            h->Reset();
+        for (auto& h : fh1_Cluster_theta)
+            h->Reset();
+        for (auto& h : fh1_Cluster_phi)
+            h->Reset();
     }
 
     return;
@@ -1743,6 +1856,33 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
         }
     }
 
+    // Fill cluster data
+    if (fClusterItems && fClusterItems->GetEntriesFast() > 0)
+    {
+        auto nHits = fClusterItems->GetEntriesFast();
+        std::vector<int> clustermul(2, 0);
+        for (size_t ihit = 0; ihit < nHits; ihit++)
+        {
+            auto* hit = dynamic_cast<R3BActafClusterData*>(fClusterItems->At(ihit));
+            if (!hit)
+                continue;
+
+            int side = hit->GetSide() - 1;
+            clustermul[side]++;
+            auto theta = hit->GetTheta();
+            auto phi = hit->GetPhi();
+            auto padmul = hit->GetNbOfPads();
+
+            fh1_Cluster_pad_mul[side]->Fill(padmul);
+            fh1_Cluster_theta[side]->Fill(theta);
+            fh1_Cluster_phi[side]->Fill(phi);
+        }
+        for (size_t i = 0; i < clustermul.size(); ++i)
+        {
+            fh1_Cluster_mul[i]->Fill(clustermul[i]);
+        }
+    }
+
     // R3BLOG(info,"wr: "<<fWrItems->GetEntriesFast());
 
     if (fWrItems && fWrItems->GetEntriesFast() > 0)
@@ -1903,6 +2043,18 @@ void R3BActafOnlineSpectra::FinishTask()
             fh1_CountsPerSide->Write();
 
             fh2_Phi1VsPhi2->Write();
+        }
+
+        if (fClusterItems)
+        {
+            for (auto& h : fh1_Cluster_mul)
+                h->Write();
+            for (auto& h : fh1_Cluster_pad_mul)
+                h->Write();
+            for (auto& h : fh1_Cluster_theta)
+                h->Write();
+            for (auto& h : fh1_Cluster_phi)
+                h->Write();
         }
     }
 }

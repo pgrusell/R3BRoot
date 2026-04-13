@@ -19,6 +19,7 @@
 // ROOT headers
 #include <TClonesArray.h>
 #include <TMath.h>
+#include <cmath>
 #include <queue>
 
 // FAIR headers
@@ -373,7 +374,6 @@ void R3BActafHit2Cluster::Exec(Option_t*)
     }
 
     std::vector<std::vector<HitPoint>> clusters;
-
     const double dist_thr = 14.0;
 
     for (size_t i = 0; i < hits.size(); i++)
