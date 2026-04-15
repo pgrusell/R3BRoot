@@ -105,7 +105,11 @@ Bool_t R3BActafReader::Init(ext_data_struct_info* a_struct_info)
         return kFALSE;
     }
 
-    FairRootManager::Instance()->Register("ActafMappedData", "Actaf mapped data", fArray.get(), !fOnline);
+    // Looking for the R3BEventHeader
+    auto* frm = FairRootManager::Instance();
+    fEventHeader = dynamic_cast<R3BEventHeader*>(frm->GetObject("EventHeader."));
+
+    frm->Register("ActafMappedData", "Actaf mapped data", fArray.get(), !fOnline);
     Reset();
 
     mapping = std::vector<std::vector<int>>(fMapping_Par->GetNbFADCModules(), std::vector<int>(ACTAF_ECHN, 0));
@@ -262,6 +266,9 @@ bool R3BActafReader::R3BRead2025()
                                                                          maw[chn]);
         }
     }
+
+    if (fEventHeader->GetTimeStamp() == 0)
+        fEventHeader->SetTimeStamp(data->AMBERTIMETAG);
 
     if (data->DETECTORMASK > 0)
     { // Extra pad 130 for AMBER specific IDs

@@ -13,7 +13,9 @@
 
 #pragma once
 
+#include "R3BEventHeader.h"
 #include "R3BReader.h"
+
 #include <Rtypes.h>
 #include <memory>
 #include <vector>
@@ -84,6 +86,7 @@ class R3BActafReader : public R3BReader
 
     // Output array
     std::unique_ptr<TClonesArray> fArray;
+    R3BEventHeader* fEventHeader = nullptr;
 
     // Unpacker version
     UnpackerVersion fVersion = UnpackerVersion::v2023;
