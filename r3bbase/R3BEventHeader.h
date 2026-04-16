@@ -26,22 +26,22 @@ class R3BEventHeader : public FairEventHeader
 
     ~R3BEventHeader() override = default;
 
-    inline void SetExpId(const int expid) { fExpId = expid; }
-    inline void SetEventno(const uint64_t eventno) { fEventno = eventno; }
-    inline void SetTrigger(const int trigger) { fTrigger = trigger; }
-    inline void SetTimeStamp(const uint64_t timeStamp) { fTimeStamp = timeStamp; }
-    inline void SetTpat(const int tpat) { fTpat = tpat; }
-    inline void SetTStart(const double tStart) { fTStart = tStart; }
-    inline void SetTStartMaster(const double tStart) { fTStartMaster = tStart; }
-    inline void SetTStartSimple(const double tStart) { fTStartSimple = tStart; }
-    inline void SetTprev(const double tPrev) { fTprev = tPrev; }
-    inline void SetTnext(const double tNext) { fTnext = tNext; }
+    void SetExpId(const int expid) { fExpId = expid; }
+    void SetEventno(const uint64_t eventno) { fEventno = eventno; }
+    void SetTrigger(const int trigger) { fTrigger = trigger; }
+    void SetTimeStamp(const uint64_t timeStamp) { fTimeStamp = timeStamp; }
+    void SetTpat(const int tpat) { fTpat = tpat; }
+    void SetTStart(const double tStart) { fTStart = tStart; }
+    void SetTStartMaster(const double tStart) { fTStartMaster = tStart; }
+    void SetTStartSimple(const double tStart) { fTStartSimple = tStart; }
+    void SetTprev(const double tPrev) { fTprev = tPrev; }
+    void SetTnext(const double tNext) { fTnext = tNext; }
 
-    [[nodiscard]] inline int GetExpId() const { return fExpId; }
-    [[nodiscard]] inline uint64_t GetEventno() const { return fEventno; }
-    [[nodiscard]] inline int GetTrigger() const { return fTrigger; }
-    [[nodiscard]] inline uint64_t GetTimeStamp() const { return fTimeStamp; }
-    [[nodiscard]] inline int GetTpat() const { return fTpat; }
+    [[nodiscard]] int GetExpId() const { return fExpId; }
+    [[nodiscard]] uint64_t GetEventno() const { return fEventno; }
+    [[nodiscard]] int GetTrigger() const { return fTrigger; }
+    [[nodiscard]] uint64_t GetTimeStamp() const { return fTimeStamp; }
+    [[nodiscard]] int GetTpat() const { return fTpat; }
 
     static constexpr uint32_t MakeTpatBit(uint8_t trigNo)
     {
@@ -50,15 +50,15 @@ class R3BEventHeader : public FairEventHeader
 
     bool HasTpatTrig(int trigNo) const { return fTpat & MakeTpatBit(trigNo); }
 
-    [[nodiscard]] inline double GetTStart() const { return fTStart; }
+    [[nodiscard]] double GetTStart() const { return fTStart; }
 
-    [[nodiscard]] inline double GetTStartMaster() const { return fTStartMaster; }
+    [[nodiscard]] double GetTStartMaster() const { return fTStartMaster; }
 
-    [[nodiscard]] inline double GetTStartSimple() const { return fTStartSimple; }
+    [[nodiscard]] double GetTStartSimple() const { return fTStartSimple; }
 
-    [[nodiscard]] inline double GetTprev() const { return fTprev; }
+    [[nodiscard]] double GetTprev() const { return fTprev; }
 
-    [[nodiscard]] inline double GetTnext() const { return fTnext; }
+    [[nodiscard]] double GetTnext() const { return fTnext; }
 
     void Register(bool Persistance = true) override{};
 
@@ -81,6 +81,7 @@ class R3BEventHeader : public FairEventHeader
             fTimeStamp = event_header->fTimeStamp;
             fTpat = event_header->fTpat;
             fTStart = event_header->fTStart;
+            fTStartMaster = event_header->fTStartMaster;
             fTStartSimple = event_header->fTStartSimple;
             fTprev = event_header->fTprev;
             fTnext = event_header->fTnext;
@@ -107,6 +108,7 @@ class R3BEventHeader : public FairEventHeader
             event_header->fTimeStamp = fTimeStamp;
             event_header->fTpat = fTpat;
             event_header->fTStart = fTStart;
+            event_header->fTStartMaster = fTStartMaster;
             event_header->fTStartSimple = fTStartSimple;
             event_header->fTprev = fTprev;
             event_header->fTnext = fTnext;

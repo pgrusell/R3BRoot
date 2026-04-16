@@ -267,10 +267,9 @@ bool R3BActafReader::R3BRead2025()
         }
     }
 
-    if (fEventHeader->GetTimeStamp() == 0)
-        fEventHeader->SetTimeStamp(data->AMBERTIMETAG);
+    fEventHeader->SetTimeStamp(data->AMBERTIMETAG);
 
-    if (data->DETECTORMASK > 0)
+    // if (data->DETECTORMASK > 0)
     { // Extra pad 130 for AMBER specific IDs
         new ((*fArray)[fArray->GetEntriesFast()])
             R3BActafMappedData(130, data->DETECTORMASK, data->AMBERTIMETAG, data->AMBERSPILLNB);
