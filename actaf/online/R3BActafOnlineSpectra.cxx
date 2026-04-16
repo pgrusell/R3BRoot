@@ -2011,6 +2011,7 @@ void R3BActafOnlineSpectra::FinishEvent()
     r3b::util::ClearIfNotNull(fMappedItems);
     r3b::util::ClearIfNotNull(fCalItems);
     r3b::util::ClearIfNotNull(fHitItems);
+    r3b::util::ClearIfNotNull(fClusterItems);
     r3b::util::ClearIfNotNull(fWrItems);
 }
 
