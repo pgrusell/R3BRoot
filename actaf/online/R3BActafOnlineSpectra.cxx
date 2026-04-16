@@ -168,7 +168,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     cSpill->cd(1);
     fh1_spillnb->Draw();
 
-    fh1_spillrate = R3B::root_owned<TH1F>("fh1_spillrate", "Rate per Second", 3600, 0.5, 3600.5);
+    fh1_spillrate = R3B::root_owned<TH1F>("fh1_spillrate", "Rate per Second", 3601, -0.5, 3600.5);
     fh1_spillrate->GetXaxis()->SetTitle("Seconds");
     fh1_spillrate->GetYaxis()->SetTitle("Counts");
     fh1_spillrate->GetYaxis()->SetTitleOffset(1.1);
