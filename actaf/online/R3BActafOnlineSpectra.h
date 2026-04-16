@@ -241,6 +241,7 @@ class R3BActafOnlineSpectra : public FairTask
     size_t nbWrs = 9;
 
     uint64_t pre_timetag = 0;
+    uint64_t init_timetag = 0;
     uint64_t first_timestamp = 0;
     uint64_t overall_rate = 0;
     uint64_t fsec_rate = 0; // upstream section rates
