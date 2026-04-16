@@ -72,7 +72,7 @@ class R3BActafReader : public R3BReader
     auto R3BRead2025() -> bool;
 
     // Event counter
-    unsigned int fNEvent = 0;
+    uint64_t fNEvent = 0;
 
     // Reader specific data structures from ucesb
     EXT_STR_h101_ACTAF2023_onion* fData23 = nullptr;
@@ -83,6 +83,10 @@ class R3BActafReader : public R3BReader
 
     // Don't store data for online
     bool fOnline = false;
+    
+    uint64_t fPrevTimeStamp =0;
+    uint64_t fNextTimeStamp =0;
+    int fPrevSpillNb=0;
 
     // Output array
     std::unique_ptr<TClonesArray> fArray;
