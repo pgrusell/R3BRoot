@@ -1531,7 +1531,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                 fh1_spillnb->Fill(hit->GetSpillNb());
                 
-                fh1_spillrate->Fill((timetag-init_timetag)*1.e-9);
+                // fh1_spillrate->Fill((timetag-init_timetag)*1.e-9);
             }
 
             if (pad == 128)
@@ -1963,9 +1963,11 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             auto* hit = dynamic_cast<R3BWRData*>(fWrItems->At(ihit));
             if (!hit)
                 continue;
+            if (hit->GetId()==0) continue;
 
             auto id = hit->GetId() > 0 ? hit->GetId() - 1 : 0;
 
+            if (hit->GetTimeStamp()>0)
             timestamps[id] = hit->GetTimeStamp();
 
             fh1_Sync[id]->Fill(hit->GetTimeStamp() - pre_timestamp[id] - 2 * (timetag - pre_timetag));
@@ -1976,9 +1978,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
         if (first_timestamp == 0 /*|| first_timestamp > timestamps[0]*/)
             first_timestamp = timestamps[0];
+            
+        
 
         auto time_s = (timestamps[0] - first_timestamp) * 1e-9; // in seconds
         int sec = static_cast<int>(time_s);
+        
+        fh1_spillrate->Fill(time_s);
 
         if (sec > last_second)
         {
