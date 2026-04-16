@@ -1,6 +1,6 @@
 /******************************************************************************
  *   Copyright (C) 2025 GSI Helmholtzzentrum für Schwerionenforschung GmbH    *
- *   Copyright (C) 2025 Members of R3B Collaboration                          *
+ *   Copyright (C) 2025-2026 Members of R3B Collaboration                     *
  *                                                                            *
  *             This software is distributed under the terms of the            *
  *                 GNU General Public Licence (GPL) version 3,                *
@@ -67,23 +67,23 @@ class R3BActafMappedData : public TObject
      *@param timetag       AMBER timestamp
      *@param spill_nb      Spill on/off
      **/
-    explicit R3BActafMappedData(UInt_t pad, int det_mask, int timetag, int spill_nb);
+    explicit R3BActafMappedData(UInt_t pad, int det_mask, uint64_t timetag, int spill_nb);
 
     virtual ~R3BActafMappedData() = default;
 
-    [[nodiscard]]  UInt_t GetPad() const { return fPad; }
-    [[nodiscard]]  const std::array<double, ACTAF_BINS>& GetTrace() const { return fTrace; }
-    [[nodiscard]]  double GetE() const { return fE; }
-    [[nodiscard]]  double GetBaseline() const { return fBaseline; }
-    [[nodiscard]]  double GetRisetime() const { return fRisetime; }
-    [[nodiscard]]  int GetMaxpos() const { return fMaxpos; }
-    [[nodiscard]]  double GetMaxampl() const { return fMaxamplitude; }
-    [[nodiscard]]  double GetLeadingEdgeTime() const { return fLeadingEdge10; }
-    [[nodiscard]]  double GetRms() const { return fRms; }
-    [[nodiscard]]  int GetTimeTag() const { return fTimeTag; }
-    [[nodiscard]]  int GetDetMask() const { return fDetMask; }
-    [[nodiscard]]  int GetSpillNb() const { return fSpillNb; }
-    [[nodiscard]]  double GetMaw() const { return fMaw; }
+    [[nodiscard]] UInt_t GetPad() const { return fPad; }
+    [[nodiscard]] const std::array<double, ACTAF_BINS>& GetTrace() const { return fTrace; }
+    [[nodiscard]] double GetE() const { return fE; }
+    [[nodiscard]] double GetBaseline() const { return fBaseline; }
+    [[nodiscard]] double GetRisetime() const { return fRisetime; }
+    [[nodiscard]] int GetMaxpos() const { return fMaxpos; }
+    [[nodiscard]] double GetMaxampl() const { return fMaxamplitude; }
+    [[nodiscard]] double GetLeadingEdgeTime() const { return fLeadingEdge10; }
+    [[nodiscard]] double GetRms() const { return fRms; }
+    [[nodiscard]] uint64_t GetTimeTag() const { return fTimeTag; }
+    [[nodiscard]] int GetDetMask() const { return fDetMask; }
+    [[nodiscard]] int GetSpillNb() const { return fSpillNb; }
+    [[nodiscard]] double GetMaw() const { return fMaw; }
 
     [[nodiscard]] std::string toString() const;
     void Print(const Option_t*) const override;
@@ -96,7 +96,8 @@ class R3BActafMappedData : public TObject
     std::array<double, ACTAF_BINS> fTrace{};
     double fLeadingEdge10 = 0;
     double fRms = 0, fRmsFilt = 0, fBaselineFilt = 0;
-    int fDetMask = 0, fTimeTag = 0, fSpillNb = 0;
+    int fDetMask = 0, fSpillNb = 0;
+    uint64_t fTimeTag = 0;
     double fMaw = 0.;
 
   public:

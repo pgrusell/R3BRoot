@@ -1,6 +1,6 @@
 /******************************************************************************
  *   Copyright (C) 2025 GSI Helmholtzzentrum für Schwerionenforschung GmbH    *
- *   Copyright (C) 2025 Members of R3B Collaboration                          *
+ *   Copyright (C) 2025-2026 Members of R3B Collaboration                     *
  *                                                                            *
  *             This software is distributed under the terms of the            *
  *                 GNU General Public Licence (GPL) version 3,                *
@@ -41,7 +41,7 @@ R3BActafMappedData::R3BActafMappedData(UInt_t pad,
 {
 }
 
-R3BActafMappedData::R3BActafMappedData(UInt_t pad, int det_mask, int timetag, int spill_nb)
+R3BActafMappedData::R3BActafMappedData(UInt_t pad, int det_mask, uint64_t timetag, int spill_nb)
     : fPad(pad)
     , fDetMask(det_mask)
     , fTimeTag(timetag)
