@@ -177,11 +177,10 @@ class R3BActafOnlineSpectra : public FairTask
     static constexpr int fRings = 8;
     bool fDisplaytraces = true;
     int countTracesDump = 0;
-    
+
     // DAQ and Spill histograms
     TH1F* fh1_spillnb = nullptr;
     TH1F* fh1_spillrate = nullptr;
-    
 
     // Map histograms
     std::vector<TH2F*> fh2_RawTraces;

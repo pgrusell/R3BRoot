@@ -152,13 +152,13 @@ InitStatus R3BActafOnlineSpectra::Init()
     //
 
     SetParameter();
-    
+
     // ********* DAQ HISTOGRAMS ********* //
-    
+
     auto* cSpill = new TCanvas("Spill_summary", "Spill info", 10, 10, 800, 500);
     cSpill->Divide(2, 2);
-    
-    fh1_spillnb = R3B::root_owned<TH1F>("fh1_spillnb", "Spill number", 300, 0.5, 300.5);
+
+    fh1_spillnb = R3B::root_owned<TH1F>("fh1_spillnb", "Rate per Spill", 300, 0.5, 300.5);
     fh1_spillnb->GetXaxis()->SetTitle("Spill number");
     fh1_spillnb->GetYaxis()->SetTitle("Counts");
     fh1_spillnb->GetYaxis()->SetTitleOffset(1.1);
@@ -167,7 +167,17 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh1_spillnb->SetFillColor(31);
     cSpill->cd(1);
     fh1_spillnb->Draw();
-    
+
+    fh1_spillrate = R3B::root_owned<TH1F>("fh1_spillrate", "Rate per Second", 3600, 0.5, 3600.5);
+    fh1_spillrate->GetXaxis()->SetTitle("Seconds");
+    fh1_spillrate->GetYaxis()->SetTitle("Counts");
+    fh1_spillrate->GetYaxis()->SetTitleOffset(1.1);
+    fh1_spillrate->GetXaxis()->CenterTitle(true);
+    fh1_spillrate->GetYaxis()->CenterTitle(true);
+    fh1_spillrate->SetFillColor(31);
+    cSpill->cd(2);
+    fh1_spillrate->Draw();
+
     daqfol->Add(cSpill);
 
     // ********* MAP HISTOGRAMS ********* //
@@ -475,7 +485,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     }
 
     mapfol->Add(cmawMap);
-    
+
     mainfol->Add(daqfol);
 
     mainfol->Add(mapfol);
@@ -1508,8 +1518,15 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             {
                 fh1_DetMask->Fill(hit->GetDetMask());
                 timetag = hit->GetTimeTag();
-                
+
+                if (timetag < pre_timetag || pre_timetag == 0)
+                {
+                    pre_timetag = timetag;
+                }
+
                 fh1_spillnb->Fill(hit->GetSpillNb());
+
+                fh1_spillrate->Fill((timetag - pre_timetag) * 1.e-9);
             }
 
             if (pad == 128)
@@ -1934,12 +1951,6 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
     if (fWrItems && fWrItems->GetEntriesFast() > 0)
     {
-
-        if (timetag < pre_timetag)
-        {
-            pre_timetag = timetag;
-        }
-
         auto nHits = fWrItems->GetEntriesFast();
         std::vector<uint64_t> timestamps{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         for (int ihit = 0; ihit < nHits; ihit++)
@@ -2022,6 +2033,7 @@ void R3BActafOnlineSpectra::FinishTask()
         if (fMappedItems)
         {
             fh1_spillnb->Write();
+            fh1_spillrate->Write();
             fh2_ERaw_map->Write();
             fh2_Baseline_map->Write();
             fh2_MaxPos_map->Write();
