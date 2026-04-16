@@ -1984,7 +1984,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
         auto time_s = (timestamps[0] - first_timestamp) * 1.e-9; // in seconds
         int sec = static_cast<int>(time_s);
         
-        std::cout<<timestamps[0]<<" "<<first_timestamp<<" "<<time_s<<std::endl;
+        //std::cout<<timestamps[0]<<" "<<first_timestamp<<" "<<time_s<<std::endl;
         
         fh1_spillrate->Fill(time_s);
 
