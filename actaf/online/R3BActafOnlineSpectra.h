@@ -177,7 +177,13 @@ class R3BActafOnlineSpectra : public FairTask
     static constexpr int fRings = 8;
     bool fDisplaytraces = true;
     int countTracesDump = 0;
+    
+    // DAQ and Spill histograms
+    TH1F* fh1_spillnb = nullptr;
+    TH1F* fh1_spillrate = nullptr;
+    
 
+    // Map histograms
     std::vector<TH2F*> fh2_RawTraces;
     std::vector<TGraph*> g_CorrectedTraces_4pads_highestAmp_auto;
     std::vector<TGraph*> g_CorrectedTraces_4pads_highestAmp;
@@ -185,7 +191,6 @@ class R3BActafOnlineSpectra : public FairTask
     std::vector<TH1F*> fh1_Baseline;
     std::vector<TH2F*> fh2_mawVsEMap;
 
-    // Map histograms
     TH2F* fh2_ERaw_map = nullptr;
     TH2F* fh2_Baseline_map = nullptr;
     TH2F* fh2_MaxPos_map = nullptr;

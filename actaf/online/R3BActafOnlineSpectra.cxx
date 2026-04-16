@@ -132,6 +132,8 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     // MAIN FOLDER-Actaf
     auto* mainfol = new TFolder("Actaf", "Actaf info");
+    // Folder for DAQ
+    auto* daqfol = new TFolder("DAQ", "DAQ info");
     // Folder for mapped data
     auto* mapfol = new TFolder("Map", "Map Actaf info");
     // Folder for cal data
@@ -150,6 +152,23 @@ InitStatus R3BActafOnlineSpectra::Init()
     //
 
     SetParameter();
+    
+    // ********* DAQ HISTOGRAMS ********* //
+    
+    auto* cSpill = new TCanvas("Spill_summary", "Spill info", 10, 10, 800, 500);
+    cSpill->Divide(2, 2);
+    
+    fh1_spillnb = R3B::root_owned<TH1F>("fh1_spillnb", "Spill number", 300, 0.5, 300.5);
+    fh1_spillnb->GetXaxis()->SetTitle("Spill number");
+    fh1_spillnb->GetYaxis()->SetTitle("Counts");
+    fh1_spillnb->GetYaxis()->SetTitleOffset(1.1);
+    fh1_spillnb->GetXaxis()->CenterTitle(true);
+    fh1_spillnb->GetYaxis()->CenterTitle(true);
+    fh1_spillnb->SetFillColor(31);
+    cSpill->cd(1);
+    fh1_spillnb->Draw();
+    
+    daqfol->Add(cSpill);
 
     // ********* MAP HISTOGRAMS ********* //
 
@@ -409,7 +428,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_ModVsCh_map->GetXaxis()->CenterTitle(true);
     fh2_ModVsCh_map->GetYaxis()->CenterTitle(true);
     fh2_ModVsCh_map->Draw("colz");
-    mapfol->Add(cModVsCh);
+    daqfol->Add(cModVsCh);
 
     auto* cdetmask = new TCanvas("Det_mask", "Detector mask", 10, 10, 500, 500);
     fh1_DetMask = R3B::root_owned<TH1F>("fh1_detmask", "Detector mask", 513, -0.5, 512.5);
@@ -422,7 +441,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     gPad->SetLogy();
     fh1_DetMask->Draw();
 
-    mapfol->Add(cdetmask);
+    daqfol->Add(cdetmask);
 
     auto* ctimetag = new TCanvas("TimeTag_signal", "TimeTag Signal", 10, 10, 500, 500);
     fh2_timetag_signal = R3B::root_owned<TH2F>(
@@ -433,7 +452,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_timetag_signal->GetXaxis()->CenterTitle(true);
     fh2_timetag_signal->GetYaxis()->CenterTitle(true);
     fh2_timetag_signal->Draw("colz");
-    mapfol->Add(ctimetag);
+    daqfol->Add(ctimetag);
 
     // Mean value of the baseline after and before filtering
     auto* cmawMap = new TCanvas("Maw_map", "Maw (Map) Vs Integrated Energy", 10, 10, 500, 500);
@@ -456,6 +475,8 @@ InitStatus R3BActafOnlineSpectra::Init()
     }
 
     mapfol->Add(cmawMap);
+    
+    mainfol->Add(daqfol);
 
     mainfol->Add(mapfol);
 
@@ -1487,6 +1508,8 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             {
                 fh1_DetMask->Fill(hit->GetDetMask());
                 timetag = hit->GetTimeTag();
+                
+                fh1_spillnb->Fill(hit->GetSpillNb());
             }
 
             if (pad == 128)
@@ -1997,6 +2020,7 @@ void R3BActafOnlineSpectra::FinishTask()
     {
         if (fMappedItems)
         {
+            fh1_spillnb->Write();
             fh2_ERaw_map->Write();
             fh2_Baseline_map->Write();
             fh2_MaxPos_map->Write();

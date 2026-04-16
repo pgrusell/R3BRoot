@@ -276,7 +276,7 @@ bool R3BActafReader::R3BRead2025()
     }
 
     fEventHeader->SetTimeStamp(fPrevTimeStamp+data->AMBERTIMETAG);
-    fNextTimeStamp = data->AMBERTIMETAG;
+    fNextTimeStamp = fPrevTimeStamp+data->AMBERTIMETAG;
 
     // if (data->DETECTORMASK > 0)
     { // Extra pad 130 for AMBER specific IDs
