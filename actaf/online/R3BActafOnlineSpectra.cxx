@@ -1533,7 +1533,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 
                 // std::cout<<hit->GetSpillNb()<<" "<<init_timetag<<" "<<timetag<<" "<< (timetag-init_timetag) <<std::endl;
                 
-                fh1_spillrate->Fill((timetag-init_timetag)*102.88*1.e-9);
+                fh1_spillrate->Fill((timetag-init_timetag)*25.72*1.e-9);
             }
 
             if (pad == 128)
@@ -1984,7 +1984,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
         
 
         auto time_s = (timestamps[0] - first_timestamp) * 1.e-9; // in seconds
-        int sec = static_cast<int>((timetag-init_timetag)*102.88*1.e-9);
+        int sec = static_cast<int>((timetag-init_timetag)*25.72*1.e-9);
         
         //std::cout<<timestamps[0]<<" "<<first_timestamp<<" "<<time_s<<std::endl;
         
