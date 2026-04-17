@@ -1531,7 +1531,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                 fh1_spillnb->Fill(hit->GetSpillNb());
                 
-                std::cout<<hit->GetSpillNb()<<" "<<init_timetag<<" "<<timetag<<" "<< (timetag-init_timetag) <<std::endl;
+                // std::cout<<hit->GetSpillNb()<<" "<<init_timetag<<" "<<timetag<<" "<< (timetag-init_timetag) <<std::endl;
                 
                 fh1_spillrate->Fill((timetag-init_timetag)*102.88*1.e-9);
             }
