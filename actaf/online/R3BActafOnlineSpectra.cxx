@@ -883,7 +883,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     hitfol->Add(cXY_nevents_waveform_auto);
 
     // Canvas with phi angle -> 3 histograms
-    auto* cPhi = new TCanvas("Phi_correlations", "Phi angles", 10, 10, 500, 500);
+    /*auto* cPhi = new TCanvas("Phi_correlations", "Phi angles", 10, 10, 500, 500);
     cPhi->Divide(1, 3);
 
     // phi counts for side up and down
@@ -910,7 +910,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     fh2_Phi1VsPhi2->GetXaxis()->CenterTitle(true);
     fh2_Phi1VsPhi2->GetYaxis()->CenterTitle(true);
     fh2_Phi1VsPhi2->Draw("colz");
-    hitfol->Add(cPhi);
+    hitfol->Add(cPhi);*/
 
     if (fHitItems != nullptr)
         mainfol->Add(hitfol);
@@ -1454,11 +1454,11 @@ void R3BActafOnlineSpectra::Reset_Histo()
         for (auto& h : fh2_XYPos_Evts_Automatic)
             h->Reset("");
 
-        for (auto& h : fh1_PhiCounts)
-            h->Reset();
+       // for (auto& h : fh1_PhiCounts)
+       //     h->Reset();
 
         fh1_CountsPerSide->Reset();
-        fh2_Phi1VsPhi2->Reset();
+        //fh2_Phi1VsPhi2->Reset();
     }
 
     if (fClusterItems)
@@ -1920,7 +1920,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             maxAmp ? 0 : maxAmp = 0.1; // to avoid zeroing bin content for visualization
             fh2_XYPos_Evts_Automatic[side]->SetBinContent(bin, maxAmp);
 
-            fh1_PhiCounts[side]->Fill(phi);
+            //fh1_PhiCounts[side]->Fill(phi);
             fh1_CountsPerSide->Fill(side + 1);
         }
     }
@@ -2113,12 +2113,12 @@ void R3BActafOnlineSpectra::FinishTask()
             for (auto& h : fh2_XYPos_Evts_Automatic)
                 h->Write();
 
-            for (auto& h : fh1_PhiCounts)
-                h->Write();
+           // for (auto& h : fh1_PhiCounts)
+           //     h->Write();
 
             fh1_CountsPerSide->Write();
 
-            fh2_Phi1VsPhi2->Write();
+            //fh2_Phi1VsPhi2->Write();
         }
 
         if (fClusterItems)
