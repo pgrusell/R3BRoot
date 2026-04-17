@@ -1984,7 +1984,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
         
 
         auto time_s = (timestamps[0] - first_timestamp) * 1.e-9; // in seconds
-        int sec = static_cast<int>(time_s);
+        int sec = static_cast<int>((timetag-init_timetag)*102.88*1.e-9);
         
         //std::cout<<timestamps[0]<<" "<<first_timestamp<<" "<<time_s<<std::endl;
         
