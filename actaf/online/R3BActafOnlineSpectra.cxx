@@ -1531,7 +1531,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                 fh1_spillnb->Fill(hit->GetSpillNb());
                 
-                // fh1_spillrate->Fill((timetag-init_timetag)*1.e-9);
+                fh1_spillrate->Fill((timetag-init_timetag)*102.88*1.e-9);
             }
 
             if (pad == 128)
@@ -1986,7 +1986,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
         
         //std::cout<<timestamps[0]<<" "<<first_timestamp<<" "<<time_s<<std::endl;
         
-        fh1_spillrate->Fill(time_s);
+        // fh1_spillrate->Fill(time_s);
 
         if (sec > last_second)
         {
