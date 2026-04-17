@@ -1077,7 +1077,7 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     auto fh1_rates = R3B::root_owned<TH1F>("fh1_rates", "Rates [Hz]", max_second_for_rate, 0, max_second_for_rate);
     fh1_rates->GetXaxis()->SetTitle("Time [s]");
-    fh1_rates->GetYaxis()->SetTitle("Rate of good signals [Hz]");
+    fh1_rates->GetYaxis()->SetTitle("Rate of good pads [Hz]");
     fh1_rates->GetYaxis()->SetTitleOffset(1.1);
     fh1_rates->GetXaxis()->CenterTitle(true);
     fh1_rates->GetYaxis()->CenterTitle(true);
