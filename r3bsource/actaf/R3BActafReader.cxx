@@ -266,22 +266,23 @@ bool R3BActafReader::R3BRead2025()
                                                                          maw[chn]);
         }
     }
-    
-    if (fPrevSpillNb==0)
+
+    if (fPrevSpillNb == 0)
         fPrevSpillNb = data->AMBERSPILLNB;
-    
-    if (data->AMBERSPILLNB != fPrevSpillNb){
-       fPrevTimeStamp = fNextTimeStamp;
-       fPrevSpillNb = data->AMBERSPILLNB;
+
+    if (data->AMBERSPILLNB != fPrevSpillNb)
+    {
+        fPrevTimeStamp = fNextTimeStamp;
+        fPrevSpillNb = data->AMBERSPILLNB;
     }
 
-    fEventHeader->SetTimeStamp(fPrevTimeStamp+data->AMBERTIMETAG);
-    fNextTimeStamp = fPrevTimeStamp+data->AMBERTIMETAG;
+    fEventHeader->SetTimeStamp(fPrevTimeStamp + data->AMBERTIMETAG);
+    fNextTimeStamp = fPrevTimeStamp + data->AMBERTIMETAG;
 
     // if (data->DETECTORMASK > 0)
     { // Extra pad 130 for AMBER specific IDs
         new ((*fArray)[fArray->GetEntriesFast()])
-            R3BActafMappedData(130, data->DETECTORMASK, fPrevTimeStamp+data->AMBERTIMETAG, data->AMBERSPILLNB);
+            R3BActafMappedData(130, data->DETECTORMASK, fPrevTimeStamp + data->AMBERTIMETAG, data->AMBERSPILLNB);
     }
     return kTRUE;
 }

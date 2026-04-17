@@ -1454,11 +1454,11 @@ void R3BActafOnlineSpectra::Reset_Histo()
         for (auto& h : fh2_XYPos_Evts_Automatic)
             h->Reset("");
 
-       // for (auto& h : fh1_PhiCounts)
-       //     h->Reset();
+        // for (auto& h : fh1_PhiCounts)
+        //     h->Reset();
 
         fh1_CountsPerSide->Reset();
-        //fh2_Phi1VsPhi2->Reset();
+        // fh2_Phi1VsPhi2->Reset();
     }
 
     if (fClusterItems)
@@ -1523,17 +1523,18 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 {
                     pre_timetag = timetag;
                 }
-                
+
                 if (init_timetag == 0)
                 {
-                 init_timetag = timetag;
+                    init_timetag = timetag;
                 }
 
                 fh1_spillnb->Fill(hit->GetSpillNb());
-                
-                // std::cout<<hit->GetSpillNb()<<" "<<init_timetag<<" "<<timetag<<" "<< (timetag-init_timetag) <<std::endl;
-                
-                fh1_spillrate->Fill((timetag-init_timetag)*25.72*1.e-9);
+
+                // std::cout<<hit->GetSpillNb()<<" "<<init_timetag<<" "<<timetag<<" "<< (timetag-init_timetag)
+                // <<std::endl;
+
+                fh1_spillrate->Fill((timetag - init_timetag) * 25.72 * 1.e-9);
             }
 
             if (pad == 128)
@@ -1920,7 +1921,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             maxAmp ? 0 : maxAmp = 0.1; // to avoid zeroing bin content for visualization
             fh2_XYPos_Evts_Automatic[side]->SetBinContent(bin, maxAmp);
 
-            //fh1_PhiCounts[side]->Fill(phi);
+            // fh1_PhiCounts[side]->Fill(phi);
             fh1_CountsPerSide->Fill(side + 1);
         }
     }
@@ -1965,12 +1966,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             auto* hit = dynamic_cast<R3BWRData*>(fWrItems->At(ihit));
             if (!hit)
                 continue;
-            if (hit->GetId()==0) continue;
+            if (hit->GetId() == 0)
+                continue;
 
             auto id = hit->GetId() > 0 ? hit->GetId() - 1 : 0;
 
-            if (hit->GetTimeStamp()>0)
-            timestamps[id] = hit->GetTimeStamp();
+            if (hit->GetTimeStamp() > 0)
+                timestamps[id] = hit->GetTimeStamp();
 
             fh1_Sync[id]->Fill(hit->GetTimeStamp() - pre_timestamp[id] - 2 * (timetag - pre_timetag));
 
@@ -1980,14 +1982,12 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
         if (first_timestamp == 0 /*|| first_timestamp > timestamps[0]*/)
             first_timestamp = timestamps[0];
-            
-        
 
         auto time_s = (timestamps[0] - first_timestamp) * 1.e-9; // in seconds
-        int sec = static_cast<int>((timetag-init_timetag)*25.72*1.e-9);
-        
-        //std::cout<<timestamps[0]<<" "<<first_timestamp<<" "<<time_s<<std::endl;
-        
+        int sec = static_cast<int>((timetag - init_timetag) * 25.72 * 1.e-9);
+
+        // std::cout<<timestamps[0]<<" "<<first_timestamp<<" "<<time_s<<std::endl;
+
         // fh1_spillrate->Fill(time_s);
 
         if (sec > last_second)
@@ -2113,12 +2113,12 @@ void R3BActafOnlineSpectra::FinishTask()
             for (auto& h : fh2_XYPos_Evts_Automatic)
                 h->Write();
 
-           // for (auto& h : fh1_PhiCounts)
-           //     h->Write();
+            // for (auto& h : fh1_PhiCounts)
+            //     h->Write();
 
             fh1_CountsPerSide->Write();
 
-            //fh2_Phi1VsPhi2->Write();
+            // fh2_Phi1VsPhi2->Write();
         }
 
         if (fClusterItems)
