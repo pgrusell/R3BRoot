@@ -332,12 +332,12 @@ InitStatus R3BActafOnlineSpectra::Init()
         gPad->SetLogz();
         fh2_gasquality[index]->Draw("colz");
         
-            TLine* l1 = new TLine(0, (i==0 || i==4 ? 40000:100000), 400000, (i==0 || i==4 ? 40000:100000));
+            TLine* l1 = new TLine(0, (index==0 || index==4 ? 40000:100000), 400000, (index==0 || index==4 ? 40000:100000));
     l1->SetLineColor(kRed);
     l1->SetLineWidth(2);
     l1->SetLineStyle(9);
     
-    TLine* l2= new TLine(0, (i==0 || i==4 ? 100000:200000), 400000, (i==0 || i==4 ? 100000:200000));
+    TLine* l2= new TLine(0, (index==0 || index==4 ? 100000:200000), 400000, (index==0 || index==4 ? 100000:200000));
     l2->SetLineColor(kRed);
     l2->SetLineWidth(2);
     l2->SetLineStyle(9);
