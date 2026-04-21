@@ -27,6 +27,8 @@ class R3BEventHeader : public FairEventHeader
     ~R3BEventHeader() override = default;
 
     void SetExpId(const int expid) { fExpId = expid; }
+    void SetRunIdR3B(const int runid) { fRunIdR3B = runid; }
+    void SetParId(const int parid) { fParId = parid; fRunId = parid; }
     void SetEventno(const uint64_t eventno) { fEventno = eventno; }
     void SetTrigger(const int trigger) { fTrigger = trigger; }
     void SetTimeStamp(const uint64_t timeStamp) { fTimeStamp = timeStamp; }
@@ -38,6 +40,8 @@ class R3BEventHeader : public FairEventHeader
     void SetTnext(const double tNext) { fTnext = tNext; }
 
     [[nodiscard]] int GetExpId() const { return fExpId; }
+    [[nodiscard]] int GetRunIdR3B() const { return fRunIdR3B; }
+    [[nodiscard]] int GetParId() const { return (fParId>0?fParId:fRunId); }
     [[nodiscard]] uint64_t GetEventno() const { return fEventno; }
     [[nodiscard]] int GetTrigger() const { return fTrigger; }
     [[nodiscard]] uint64_t GetTimeStamp() const { return fTimeStamp; }
@@ -76,6 +80,8 @@ class R3BEventHeader : public FairEventHeader
         if (const auto* event_header = dynamic_cast<const R3BEventHeader*>(&obj); event_header != nullptr)
         {
             fExpId = event_header->fExpId;
+            fRunIdR3B = event_header->fRunIdR3B;
+            fParId = event_header->fParId;
             fEventno = event_header->fEventno;
             fTrigger = event_header->fTrigger;
             fTimeStamp = event_header->fTimeStamp;
@@ -103,6 +109,8 @@ class R3BEventHeader : public FairEventHeader
         if (auto* event_header = dynamic_cast<R3BEventHeader*>(&obj); event_header != nullptr)
         {
             event_header->fExpId = fExpId;
+            event_header->fRunIdR3B = fRunIdR3B;
+            event_header->fParId = fParId;
             event_header->fEventno = fEventno;
             event_header->fTrigger = fTrigger;
             event_header->fTimeStamp = fTimeStamp;
@@ -117,6 +125,8 @@ class R3BEventHeader : public FairEventHeader
 
   private:
     int fExpId{};
+    int fRunIdR3B{};
+    int fParId{};
     uint64_t fEventno{};
     int fTrigger{};
     uint64_t fTimeStamp{};
@@ -128,5 +138,5 @@ class R3BEventHeader : public FairEventHeader
     double fTnext{};
 
   public:
-    ClassDefOverride(R3BEventHeader, 11);
+    ClassDefOverride(R3BEventHeader, 12);
 };
