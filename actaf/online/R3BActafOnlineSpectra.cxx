@@ -311,11 +311,11 @@ InitStatus R3BActafOnlineSpectra::Init()
     }
     else if (fEventHeader->GetExpId() == 2026)
     {
-        alpha_source = { "Alpha-1, Down, Pads 115,122",
-                         "Alpha-2, Down, Pads 102,103,110",
-                         "Alpha-3, Down, Pads 112,119",
-                         "Alpha-1, Up, Pads 46,51,52",
-                         "Alpha-2, Up, Pads 48,55" };
+        alpha_source = { "Alpha-1 Cathode, Down, Pads 115,122",
+                         "Alpha-2 Grid, Down, Pads 102,103,110",
+                         "Alpha-3 Grid, Down, Pads 112,119",
+                         "Alpha-1 Grid, Up, Pads 46,51,52",
+                         "Alpha-2 Cathode, Up, Pads 48,55" };
         cGas->Divide(3, 2);
     }
     
@@ -329,14 +329,15 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh2_gasquality[index]->GetYaxis()->SetTitleOffset(1.);
         fh2_gasquality[index]->GetXaxis()->CenterTitle(true);
         fh2_gasquality[index]->GetYaxis()->CenterTitle(true);
+        gPad->SetLogz();
         fh2_gasquality[index]->Draw("colz");
         
-            TLine* l1 = new TLine(0, 40000, 400000, 40000);
+            TLine* l1 = new TLine(0, (i==0 || i==4 ? 40000:100000), 400000, (i==0 || i==4 ? 40000:100000));
     l1->SetLineColor(kRed);
     l1->SetLineWidth(2);
     l1->SetLineStyle(9);
     
-    TLine* l2= new TLine(0, 100000, 400000, 100000);
+    TLine* l2= new TLine(0, (i==0 || i==4 ? 100000:200000), 400000, (i==0 || i==4 ? 100000:200000));
     l2->SetLineColor(kRed);
     l2->SetLineWidth(2);
     l2->SetLineStyle(9);
