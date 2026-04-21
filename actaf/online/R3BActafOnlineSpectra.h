@@ -293,10 +293,10 @@ class R3BActafOnlineSpectra : public FairTask
     std::array<std::array<std::vector<double>, fPads>, maxEventViewerBatch> eventCountsTrace;
     bool saveHistos = true;
     int fSpill_number=0;
-    int fAlphaSourceGridUp=100e3;
-    int fAlphaSourceGridLow=40e3;
-    int fAlphaSourceCathodeUp=200e3;
-    int fAlphaSourceCathodeLow=100e3;
+    int fAlphaSourceGridUp=200e3;
+    int fAlphaSourceGridLow=100e3;
+    int fAlphaSourceCathodeUp=100e3;
+    int fAlphaSourceCathodeLow=40e3;
 
     int fEventCounter = 0;
 

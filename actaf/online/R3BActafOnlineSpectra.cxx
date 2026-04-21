@@ -366,6 +366,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_alpharate[index]->GetYaxis()->SetTitleOffset(1.);
         fh1_alpharate[index]->GetXaxis()->CenterTitle(true);
         fh1_alpharate[index]->GetYaxis()->CenterTitle(true);
+        fh1_alpharate[index]->SetFillColor(31);
         fh1_alpharate[index]->Draw("");
     }
     gasfol->Add(cAlphaRate);
@@ -380,11 +381,11 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_alphaenergy[index]->GetYaxis()->SetTitleOffset(1.);
         fh1_alphaenergy[index]->GetXaxis()->CenterTitle(true);
         fh1_alphaenergy[index]->GetYaxis()->CenterTitle(true);
+        fh1_alphaenergy[index]->SetFillColor(31);
         fh1_alphaenergy[index]->Draw("");
     }   
     gasfol->Add(cAlphaEnergy);
-    
-    
+
     // Canvas for ring and side
     std::vector<std::vector<std::vector<TCanvas*>>> cMap_perRing(2);
     std::vector<std::vector<int>> countsPerRing(2);
@@ -1756,8 +1757,10 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     }*/
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[0]->Fill(fEventCounter, integral);
-                    if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp)
+                    if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp){
                         fh1_alpharate[0]->Fill(fSpill_number);
+                        fh1_alphaenergy[0]->Fill(integral);
+                    }
                 }
 
                 // (pad-1) base for alpha-2 DOWN
@@ -1772,8 +1775,10 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[1]->Fill(fEventCounter, integral);
                     
-                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp)
+                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
                        fh1_alpharate[1]->Fill(fSpill_number);
+                       fh1_alphaenergy[1]->Fill(integral);
+                    }
                 }
 
                 // (pad-1) base for alpha-3 DOWN
@@ -1788,8 +1793,10 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[2]->Fill(fEventCounter, integral);
                     
-                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp)
+                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
                        fh1_alpharate[2]->Fill(fSpill_number);
+                       fh1_alphaenergy[2]->Fill(integral);
+                    }
                 }
 
                 // (pad-1) base for alpha-1 UP
@@ -1804,8 +1811,10 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[3]->Fill(fEventCounter, integral);
                     
-                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp)
+                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
                        fh1_alpharate[3]->Fill(fSpill_number);
+                       fh1_alphaenergy[3]->Fill(integral);
+                    }
                 }
 
                 // (pad-1) base for alpha-2 UP
@@ -1820,8 +1829,10 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[4]->Fill(fEventCounter, integral);
                     
-                    if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp)
+                    if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp){
                        fh1_alpharate[4]->Fill(fSpill_number);
+                       fh1_alphaenergy[4]->Fill(integral);
+                    }
                 }
             }
 
