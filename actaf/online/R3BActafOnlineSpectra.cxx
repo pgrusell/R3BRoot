@@ -52,6 +52,67 @@
 #include "R3BShared.h"
 #include "R3BWRData.h"
 
+
+double IntegrateTrace(const std::array<double, ACTAF_BINS>& signal)
+{
+    int endSignal = 1100;
+
+    int startBackground = 1500;
+    int endBackground = ACTAF_BINS;
+
+    // ==============================
+    // 1. Baseline
+    // ==============================
+    double sumBaseline = 0.0;
+    double sumBaselineSquared = 0.0;
+    int nBaselineBins = 0;
+
+    double baselineIntegrated120Bins = 0.0;
+
+    for (int i = startBackground;
+         i <= endBackground && i < ACTAF_BINS;
+         ++i)
+    {
+        double value = signal[i];
+
+        sumBaseline += value;
+        sumBaselineSquared += value * value;
+
+        if (nBaselineBins < 120)
+        {
+            baselineIntegrated120Bins += value;
+        }
+
+        nBaselineBins++;
+    }
+
+    double baselineMean = 0.0;
+    double baselineRMS = 0.0;
+
+    if (nBaselineBins > 0)
+    {
+        baselineMean = sumBaseline / nBaselineBins;
+
+        double meanSquared = baselineMean * baselineMean;
+        baselineRMS = sqrt((sumBaselineSquared / nBaselineBins) - meanSquared);
+    }
+
+    baselineIntegrated120Bins -= 120.0 * baselineMean;
+
+
+    double integral = 0.0;
+
+    for (int i = 0;
+         i <= endSignal && i < ACTAF_BINS;
+         ++i)
+    {
+        integral += (signal[i] - baselineMean);
+    }
+
+    return integral;
+}
+
+
 // R3BActafOnlineSpectra::Default Constructor --------------------------
 R3BActafOnlineSpectra::R3BActafOnlineSpectra()
     : R3BActafOnlineSpectra("ActafOnlineSpectra", 1)
@@ -1640,61 +1701,67 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-1 DOWN
                 if (pad == 114 || pad == 121)
                 {
-                    auto vec = hit->GetTrace();
+                    /*auto vec = hit->GetTrace();
                     double integral = 0.;
                     for (const auto& value : vec)
                     {
                         integral += value;
-                    }
-                    fh2_gasquality[0]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                    }*/
+                    auto integral = IntegrateTrace(hit->GetTrace());
+                    fh2_gasquality[0]->Fill(fEventCounter, integral);
                 }
 
                 // (pad-1) base for alpha-2 DOWN
                 if (pad == 101 || pad == 102 || pad == 109)
                 {
-                    auto vec = hit->GetTrace();
+                    /*auto vec = hit->GetTrace();
                     double integral = 0.;
                     for (const auto& value : vec)
                     {
                         integral += value;
-                    }
-                    fh2_gasquality[1]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                    }*/
+                    auto integral = IntegrateTrace(hit->GetTrace());
+                    fh2_gasquality[1]->Fill(fEventCounter, integral);
                 }
 
                 // (pad-1) base for alpha-3 DOWN
                 if (pad == 111 || pad == 118)
                 {
-                    auto vec = hit->GetTrace();
+                    /*auto vec = hit->GetTrace();
                     double integral = 0.;
                     for (const auto& value : vec)
                     {
                         integral += value;
-                    }
-                    fh2_gasquality[2]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                    }*/
+                    auto integral = IntegrateTrace(hit->GetTrace());
+                    fh2_gasquality[2]->Fill(fEventCounter, integral);
                 }
 
                 // (pad-1) base for alpha-1 UP
                 if (pad == 45 || pad == 50 || pad == 51)
                 {
-                    auto vec = hit->GetTrace();
+                    /*auto vec = hit->GetTrace();
                     double integral = 0.;
                     for (const auto& value : vec)
                     {
                         integral += value;
-                    }
-                    fh2_gasquality[3]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                    }*/
+                    auto integral = IntegrateTrace(hit->GetTrace());
+                    fh2_gasquality[3]->Fill(fEventCounter, integral);
                 }
 
                 // (pad-1) base for alpha-2 UP
                 if (pad == 47 || pad == 54)
                 {
-                    auto vec = hit->GetTrace();
+                    /*auto vec = hit->GetTrace();
                     double integral = 0.;
                     for (const auto& value : vec)
                     {
                         integral += value;
-                    }
-                    fh2_gasquality[4]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                    }*/
+                    auto integral = IntegrateTrace(hit->GetTrace());
+                    
+                    fh2_gasquality[4]->Fill(fEventCounter, integral);
                 }
             }
 
