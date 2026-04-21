@@ -67,7 +67,7 @@ class R3BActafMappedData : public TObject
      *@param timetag       AMBER timestamp
      *@param spill_nb      Spill on/off
      **/
-    explicit R3BActafMappedData(UInt_t pad, int det_mask, uint64_t timetag, int spill_nb);
+    explicit R3BActafMappedData(UInt_t pad, int det_mask, uint64_t timetag, int spill_nb, uint64_t rawtimetag);
 
     virtual ~R3BActafMappedData() = default;
 
@@ -81,6 +81,7 @@ class R3BActafMappedData : public TObject
     [[nodiscard]] double GetLeadingEdgeTime() const { return fLeadingEdge10; }
     [[nodiscard]] double GetRms() const { return fRms; }
     [[nodiscard]] uint64_t GetTimeTag() const { return fTimeTag; }
+    [[nodiscard]] uint64_t GetRawTimeTag() const { return fRawTimeTag; }
     [[nodiscard]] int GetDetMask() const { return fDetMask; }
     [[nodiscard]] int GetSpillNb() const { return fSpillNb; }
     [[nodiscard]] double GetMaw() const { return fMaw; }
@@ -98,10 +99,11 @@ class R3BActafMappedData : public TObject
     double fRms = 0, fRmsFilt = 0, fBaselineFilt = 0;
     int fDetMask = 0, fSpillNb = 0;
     uint64_t fTimeTag = 0;
+    uint64_t fRawTimeTag = 0;
     double fMaw = 0.;
 
   public:
-    ClassDefOverride(R3BActafMappedData, 6);
+    ClassDefOverride(R3BActafMappedData, 7);
 };
 
 std::ostream& operator<<(std::ostream& os, const R3BActafMappedData& data);

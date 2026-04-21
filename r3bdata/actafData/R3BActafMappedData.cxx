@@ -41,11 +41,12 @@ R3BActafMappedData::R3BActafMappedData(UInt_t pad,
 {
 }
 
-R3BActafMappedData::R3BActafMappedData(UInt_t pad, int det_mask, uint64_t timetag, int spill_nb)
+R3BActafMappedData::R3BActafMappedData(UInt_t pad, int det_mask, uint64_t timetag, int spill_nb, uint64_t rawtimetag)
     : fPad(pad)
     , fDetMask(det_mask)
     , fTimeTag(timetag)
     , fSpillNb(spill_nb)
+    , fRawTimeTag(rawtimetag)
 {
 }
 
