@@ -158,7 +158,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     auto* cSpill = new TCanvas("Spill_summary", "Spill info", 10, 10, 800, 500);
     cSpill->Divide(2, 1);
 
-    fh1_spillnb = R3B::root_owned<TH1F>("fh1_spillnb", "Rate per Spill", 300, 0.5, 300.5);
+    fh1_spillnb = R3B::root_owned<TH1F>("fh1_spillnb", "Rate per Spill", 500, 0.5, 500.5);
     fh1_spillnb->GetXaxis()->SetTitle("Spill number");
     fh1_spillnb->GetYaxis()->SetTitle("Counts");
     fh1_spillnb->GetYaxis()->SetTitleOffset(1.1);
@@ -168,7 +168,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     cSpill->cd(1);
     fh1_spillnb->Draw();
 
-    fh1_spillrate = R3B::root_owned<TH1F>("fh1_spillrate", "Rate per Second", 3601, -0.5, 3600.5);
+    fh1_spillrate = R3B::root_owned<TH1F>("fh1_spillrate", "Rate per Second", 7201, -0.5, 7200.5);
     fh1_spillrate->GetXaxis()->SetTitle("Seconds");
     fh1_spillrate->GetYaxis()->SetTitle("Counts");
     fh1_spillrate->GetYaxis()->SetTitleOffset(1.1);
