@@ -258,17 +258,6 @@ InitStatus R3BActafOnlineSpectra::Init()
         cGas->Divide(3, 2);
     }
     
-    TLine l1(0, 40000, 400000, 40000);
-    l1.SetLineColor(kRed);
-    l1.SetLineWidth(2);
-    l1.SetLineStyle(9);
-    
-    TLine l2(0, 100000, 400000, 100000);
-    l2.SetLineColor(kRed);
-    l2.SetLineWidth(2);
-    l2.SetLineStyle(9);
-    
-
     for (auto index = 0; index < alpha_source.size(); index++)
     {
         cGas->cd(index + 1);
@@ -280,8 +269,18 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh2_gasquality[index]->GetXaxis()->CenterTitle(true);
         fh2_gasquality[index]->GetYaxis()->CenterTitle(true);
         fh2_gasquality[index]->Draw("colz");
-        l1.Draw("lsame");
-        l2.Draw("lsame");
+        
+            TLine l1(0, 40000, 400000, 40000);
+    l1.SetLineColor(kRed);
+    l1.SetLineWidth(2);
+    l1.SetLineStyle(9);
+    
+    TLine l2(0, 100000, 400000, 100000);
+    l2.SetLineColor(kRed);
+    l2.SetLineWidth(2);
+    l2.SetLineStyle(9);
+        l1.Draw("same");
+        l2.Draw("same");
     }
 
     gasfol->Add(cGas);
