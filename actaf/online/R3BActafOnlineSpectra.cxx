@@ -257,18 +257,29 @@ InitStatus R3BActafOnlineSpectra::Init()
                          "Alpha-2, Up, Pads 48,55" };
         cGas->Divide(3, 2);
     }
+    
+    TLine l1(0, 40000, 400000, 40000);
+    l1.SetLineColor(kRed);
+    l1.SetLineStyle(9);
+    
+    TLine l2(0, 100000, 400000, 100000);
+    l1.SetLineColor(kRed);
+    l1.SetLineStyle(9);
+    
 
     for (auto index = 0; index < alpha_source.size(); index++)
     {
         cGas->cd(index + 1);
         fh2_gasquality.push_back(R3B::root_owned<TH2F>(
-            Form("fh2_gasquality_%d", index + 1), alpha_source[index].Data(), 200, 0, 400000, 5000, -50000, 250000));
+            Form("fh2_gasquality_%d", index + 1), alpha_source[index].Data(), 100, 0, 400000, 10000, -50000, 250000));
         fh2_gasquality[index]->GetXaxis()->SetTitle("Event number");
         fh2_gasquality[index]->GetYaxis()->SetTitle("Integral [ADC chn]");
         fh2_gasquality[index]->GetYaxis()->SetTitleOffset(1.);
         fh2_gasquality[index]->GetXaxis()->CenterTitle(true);
         fh2_gasquality[index]->GetYaxis()->CenterTitle(true);
         fh2_gasquality[index]->Draw("colz");
+        l1.Draw("same");
+        l2.Draw("same");
     }
 
     gasfol->Add(cGas);
