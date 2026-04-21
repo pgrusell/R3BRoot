@@ -156,7 +156,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     // ********* DAQ HISTOGRAMS ********* //
 
     auto* cSpill = new TCanvas("Spill_summary", "Spill info", 10, 10, 800, 500);
-    cSpill->Divide(2, 2);
+    cSpill->Divide(2, 1);
 
     fh1_spillnb = R3B::root_owned<TH1F>("fh1_spillnb", "Rate per Spill", 300, 0.5, 300.5);
     fh1_spillnb->GetXaxis()->SetTitle("Spill number");
@@ -1534,7 +1534,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // std::cout<<hit->GetSpillNb()<<" "<<init_timetag<<" "<<timetag<<" "<< (timetag-init_timetag)
                 // <<std::endl;
 
-                fh1_spillrate->Fill((timetag - init_timetag) * 25.72 * 1.e-9);
+                fh1_spillrate->Fill((timetag - init_timetag) * 25.72 * 2. * 1.e-9);
             }
 
             if (pad == 128)
