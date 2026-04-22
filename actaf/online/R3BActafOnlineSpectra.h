@@ -281,6 +281,7 @@ class R3BActafOnlineSpectra : public FairTask
     std::vector<TH2F*> fh2_gasquality;
     std::vector<TH1F*> fh1_alpharate;
     std::vector<TH1F*> fh1_alphaenergy;
+    std::vector<TH2F*> fh2_RawAlphaTraces;
 
     // Params for the event viewer
     int eventViewerNb = 0;

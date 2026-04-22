@@ -307,15 +307,19 @@ InitStatus R3BActafOnlineSpectra::Init()
     
     // Canvas for alpha energy
     auto* cAlphaEnergy = new TCanvas("Alpha_energy", "Alpha energy info", 10, 10, 800, 500);
+    
+    // Canvas for alpha waveforms
+    auto* cAlphaTraces = new TCanvas("Alpha_traces", "Alpha traces info", 10, 10, 800, 500);
 
     std::vector<TString> alpha_source;
 
     if (fEventHeader->GetExpId() == 2025)
     {
-        alpha_source = { "Alpha-1, Down, Pads 115,122", "Alpha-2, Down, Pads 112,119", "Alpha-3, Up, Pads 46,51,52" };
+        alpha_source = { "Alpha-1 Cathode, Down, Pads 115,122", "Alpha-2 Grid, Down, Pads 112,119", "Alpha-3 Grid, Up, Pads 46,51,52" };
         cGas->Divide(3, 1);
         cAlphaRate->Divide(3, 1);
         cAlphaEnergy->Divide(3, 1);
+        cAlphaTraces->Divide(3, 1);
     }
     else if (fEventHeader->GetExpId() == 2026)
     {
@@ -327,6 +331,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         cGas->Divide(3, 2);
         cAlphaRate->Divide(3, 2);
         cAlphaEnergy->Divide(3, 2);
+        cAlphaTraces->Divide(3, 2);
     }
     
     for (auto index = 0; index < alpha_source.size(); index++)
@@ -385,6 +390,22 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_alphaenergy[index]->Draw("");
     }   
     gasfol->Add(cAlphaEnergy);
+    
+    for (auto index = 0; index < alpha_source.size(); index++)
+    {
+        cAlphaTraces->cd(index + 1);
+        fh2_RawAlphaTraces.push_back(R3B::root_owned<TH2F>(
+            Form("fh2_RawAlphaTraces_%d", index + 1), alpha_source[index].Data(), nBinsSample / 2, 1, nBinsSample, 400, 6000, 10000));
+        fh2_RawAlphaTraces[index]->GetXaxis()->SetTitle("Time [Chn]");
+        fh2_RawAlphaTraces[index]->GetYaxis()->SetTitle("Ampl. [ADC Chn]");
+        fh2_RawAlphaTraces[index]->GetYaxis()->SetTitleOffset(1.);
+        fh2_RawAlphaTraces[index]->GetXaxis()->CenterTitle(true);
+        fh2_RawAlphaTraces[index]->GetYaxis()->CenterTitle(true);
+        fh2_RawAlphaTraces[index]->Draw("colz");
+    }
+    gasfol->Add(cAlphaTraces);
+    
+    
 
     // Canvas for ring and side
     std::vector<std::vector<std::vector<TCanvas*>>> cMap_perRing(2);
@@ -1711,37 +1732,58 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-1
                 if (pad == 114 || pad == 121)
                 {
-                    auto vec = hit->GetTrace();
-                    double integral = 0.;
-                    for (const auto& value : vec)
-                    {
-                        integral += value;
+                    std::size_t index = 0;
+                    for (const auto& value : hit->GetTrace())
+                    {                        
+                        if (hit->GetBaseline() > 0)
+                        fh2_RawAlphaTraces[0]->Fill(index++, value);  
                     }
-                    fh2_gasquality[0]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                    
+                    auto integral = IntegrateTrace(hit->GetTrace());
+                    fh2_gasquality[0]->Fill(fEventCounter, integral);
+                    
+                    if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp){
+                       fh1_alpharate[0]->Fill(fSpill_number);
+                       fh1_alphaenergy[0]->Fill(integral);
+                    }
                 }
 
                 // (pad-1) base for alpha-2
                 if (pad == 111 || pad == 118)
                 {
-                    auto vec = hit->GetTrace();
-                    double integral = 0.;
-                    for (const auto& value : vec)
-                    {
-                        integral += value;
+                    std::size_t index = 0;
+                    for (const auto& value : hit->GetTrace())
+                    {                        
+                        if (hit->GetBaseline() > 0)
+                        fh2_RawAlphaTraces[1]->Fill(index++, value);  
                     }
-                    fh2_gasquality[1]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                    
+                    auto integral = IntegrateTrace(hit->GetTrace());
+                    fh2_gasquality[1]->Fill(fEventCounter, integral);
+                    
+                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
+                       fh1_alpharate[1]->Fill(fSpill_number);
+                       fh1_alphaenergy[1]->Fill(integral);
+                    }
                 }
 
                 // (pad-1) base for alpha-3
                 if (pad == 45 || pad == 50 || pad == 51)
                 {
-                    auto vec = hit->GetTrace();
-                    double integral = 0.;
-                    for (const auto& value : vec)
-                    {
-                        integral += value;
+                    std::size_t index = 0;
+                    for (const auto& value : hit->GetTrace())
+                    {                        
+                        if (hit->GetBaseline() > 0)
+                        fh2_RawAlphaTraces[2]->Fill(index++, value);  
                     }
-                    fh2_gasquality[2]->Fill(fEventCounter, integral - hit->GetBaseline() * nBinsSample);
+                    
+                    auto integral = IntegrateTrace(hit->GetTrace());
+                    fh2_gasquality[2]->Fill(fEventCounter, integral);
+                    
+                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
+                       fh1_alpharate[2]->Fill(fSpill_number);
+                       fh1_alphaenergy[2]->Fill(integral);
+                    }
                 }
             }
             else if (fEventHeader->GetExpId() == 2026)
@@ -1749,12 +1791,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-1 DOWN
                 if (pad == 114 || pad == 121)
                 {
-                    /*auto vec = hit->GetTrace();
-                    double integral = 0.;
-                    for (const auto& value : vec)
-                    {
-                        integral += value;
-                    }*/
+                    std::size_t index = 0;
+                    for (const auto& value : hit->GetTrace())
+                    {                        
+                        if (hit->GetBaseline() > 0)
+                        fh2_RawAlphaTraces[0]->Fill(index++, value);  
+                    }
+                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[0]->Fill(fEventCounter, integral);
                     if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp){
@@ -1766,12 +1809,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-2 DOWN
                 if (pad == 101 || pad == 102 || pad == 109)
                 {
-                    /*auto vec = hit->GetTrace();
-                    double integral = 0.;
-                    for (const auto& value : vec)
-                    {
-                        integral += value;
-                    }*/
+                    std::size_t index = 0;
+                    for (const auto& value : hit->GetTrace())
+                    {                        
+                        if (hit->GetBaseline() > 0)
+                        fh2_RawAlphaTraces[1]->Fill(index++, value);  
+                    }
+                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[1]->Fill(fEventCounter, integral);
                     
@@ -1784,12 +1828,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-3 DOWN
                 if (pad == 111 || pad == 118)
                 {
-                    /*auto vec = hit->GetTrace();
-                    double integral = 0.;
-                    for (const auto& value : vec)
-                    {
-                        integral += value;
-                    }*/
+                    std::size_t index = 0;
+                    for (const auto& value : hit->GetTrace())
+                    {                        
+                        if (hit->GetBaseline() > 0)
+                        fh2_RawAlphaTraces[2]->Fill(index++, value);  
+                    }
+                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[2]->Fill(fEventCounter, integral);
                     
@@ -1802,12 +1847,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-1 UP
                 if (pad == 45 || pad == 50 || pad == 51)
                 {
-                    /*auto vec = hit->GetTrace();
-                    double integral = 0.;
-                    for (const auto& value : vec)
-                    {
-                        integral += value;
-                    }*/
+                    std::size_t index = 0;
+                    for (const auto& value : hit->GetTrace())
+                    {                        
+                        if (hit->GetBaseline() > 0)
+                        fh2_RawAlphaTraces[3]->Fill(index++, value);  
+                    }
+                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[3]->Fill(fEventCounter, integral);
                     
@@ -1820,12 +1866,12 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-2 UP
                 if (pad == 47 || pad == 54)
                 {
-                    /*auto vec = hit->GetTrace();
-                    double integral = 0.;
-                    for (const auto& value : vec)
-                    {
-                        integral += value;
-                    }*/
+                    std::size_t index = 0;
+                    for (const auto& value : hit->GetTrace())
+                    {                        
+                        if (hit->GetBaseline() > 0)
+                        fh2_RawAlphaTraces[4]->Fill(index++, value);  
+                    }
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[4]->Fill(fEventCounter, integral);
                     
@@ -2237,11 +2283,15 @@ void R3BActafOnlineSpectra::FinishTask()
             {
                 hist->Write();
             }
-                    for (const auto& hist : fh1_alpharate)
+            for (const auto& hist : fh1_alpharate)
         {
             hist->Write();
         }
         for (const auto& hist : fh1_alphaenergy)
+        {
+            hist->Write();
+        }
+        for (const auto& hist : fh2_RawAlphaTraces)
         {
             hist->Write();
         }
