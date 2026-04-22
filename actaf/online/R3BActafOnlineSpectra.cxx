@@ -52,7 +52,6 @@
 #include "R3BShared.h"
 #include "R3BWRData.h"
 
-
 double IntegrateTrace(const std::array<double, ACTAF_BINS>& signal)
 {
     int endSignal = 1100;
@@ -69,9 +68,7 @@ double IntegrateTrace(const std::array<double, ACTAF_BINS>& signal)
 
     double baselineIntegrated120Bins = 0.0;
 
-    for (int i = startBackground;
-         i <= endBackground && i < ACTAF_BINS;
-         ++i)
+    for (int i = startBackground; i <= endBackground && i < ACTAF_BINS; ++i)
     {
         double value = signal[i];
 
@@ -99,19 +96,15 @@ double IntegrateTrace(const std::array<double, ACTAF_BINS>& signal)
 
     baselineIntegrated120Bins -= 120.0 * baselineMean;
 
-
     double integral = 0.0;
 
-    for (int i = 0;
-         i <= endSignal && i < ACTAF_BINS;
-         ++i)
+    for (int i = 0; i <= endSignal && i < ACTAF_BINS; ++i)
     {
         integral += (signal[i] - baselineMean);
     }
 
     return integral;
 }
-
 
 // R3BActafOnlineSpectra::Default Constructor --------------------------
 R3BActafOnlineSpectra::R3BActafOnlineSpectra()
@@ -301,13 +294,13 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     // Canvas for gas quality
     auto* cGas = new TCanvas("Gas_quality", "Gas quality info", 10, 10, 800, 500);
-    
+
     // Canvas for alpha rates
     auto* cAlphaRate = new TCanvas("Alpha_rates", "Alpha rate info", 10, 10, 800, 500);
-    
+
     // Canvas for alpha energy
     auto* cAlphaEnergy = new TCanvas("Alpha_energy", "Alpha energy info", 10, 10, 800, 500);
-    
+
     // Canvas for alpha waveforms
     auto* cAlphaTraces = new TCanvas("Alpha_traces", "Alpha traces info", 10, 10, 800, 500);
 
@@ -315,7 +308,9 @@ InitStatus R3BActafOnlineSpectra::Init()
 
     if (fEventHeader->GetExpId() == 2025)
     {
-        alpha_source = { "Alpha-1 Cathode, Down, Pads 115,122", "Alpha-2 Grid, Down, Pads 112,119", "Alpha-3 Grid, Up, Pads 46,51,52" };
+        alpha_source = { "Alpha-1 Cathode, Down, Pads 115,122",
+                         "Alpha-2 Grid, Down, Pads 112,119",
+                         "Alpha-3 Grid, Up, Pads 46,51,52" };
         cGas->Divide(3, 1);
         cAlphaRate->Divide(3, 1);
         cAlphaEnergy->Divide(3, 1);
@@ -333,12 +328,18 @@ InitStatus R3BActafOnlineSpectra::Init()
         cAlphaEnergy->Divide(3, 2);
         cAlphaTraces->Divide(3, 2);
     }
-    
+
     for (auto index = 0; index < alpha_source.size(); index++)
     {
         cGas->cd(index + 1);
-        fh2_gasquality.push_back(R3B::root_owned<TH2F>(
-            Form("fh2_gasquality_%d", index + 1), alpha_source[index].Data(), 100, 0, 400000, 300, -50e3 - (300e3/600.), 250e3- (300e3/600.)));
+        fh2_gasquality.push_back(R3B::root_owned<TH2F>(Form("fh2_gasquality_%d", index + 1),
+                                                       alpha_source[index].Data(),
+                                                       100,
+                                                       0,
+                                                       400000,
+                                                       300,
+                                                       -50e3 - (300e3 / 600.),
+                                                       250e3 - (300e3 / 600.)));
         fh2_gasquality[index]->GetXaxis()->SetTitle("Event number");
         fh2_gasquality[index]->GetYaxis()->SetTitle("Integral [ADC chn]");
         fh2_gasquality[index]->GetYaxis()->SetTitleOffset(1.);
@@ -346,26 +347,32 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh2_gasquality[index]->GetYaxis()->CenterTitle(true);
         gPad->SetLogz();
         fh2_gasquality[index]->Draw("colz");
-        
-            TLine* l1 = new TLine(0, (index==0 || index==4 ? fAlphaSourceCathodeLow:fAlphaSourceGridLow), 400000, (index==0 || index==4 ? fAlphaSourceCathodeLow:fAlphaSourceGridLow));
-    l1->SetLineColor(kRed);
-    l1->SetLineWidth(2);
-    l1->SetLineStyle(9);
-    
-    TLine* l2= new TLine(0, (index==0 || index==4 ? fAlphaSourceCathodeUp:fAlphaSourceGridUp), 400000, (index==0 || index==4 ? fAlphaSourceCathodeUp:fAlphaSourceGridUp));
-    l2->SetLineColor(kRed);
-    l2->SetLineWidth(2);
-    l2->SetLineStyle(9);
+
+        TLine* l1 = new TLine(0,
+                              (index == 0 || index == 4 ? fAlphaSourceCathodeLow : fAlphaSourceGridLow),
+                              400000,
+                              (index == 0 || index == 4 ? fAlphaSourceCathodeLow : fAlphaSourceGridLow));
+        l1->SetLineColor(kRed);
+        l1->SetLineWidth(2);
+        l1->SetLineStyle(9);
+
+        TLine* l2 = new TLine(0,
+                              (index == 0 || index == 4 ? fAlphaSourceCathodeUp : fAlphaSourceGridUp),
+                              400000,
+                              (index == 0 || index == 4 ? fAlphaSourceCathodeUp : fAlphaSourceGridUp));
+        l2->SetLineColor(kRed);
+        l2->SetLineWidth(2);
+        l2->SetLineStyle(9);
         l1->Draw("same");
         l2->Draw("same");
     }
     gasfol->Add(cGas);
-    
+
     for (auto index = 0; index < alpha_source.size(); index++)
     {
         cAlphaRate->cd(index + 1);
-        fh1_alpharate.push_back(R3B::root_owned<TH1F>(
-            Form("fh1_alpharate_%d", index + 1), alpha_source[index].Data(), 500, 0.5, 500.5));
+        fh1_alpharate.push_back(
+            R3B::root_owned<TH1F>(Form("fh1_alpharate_%d", index + 1), alpha_source[index].Data(), 500, 0.5, 500.5));
         fh1_alpharate[index]->GetXaxis()->SetTitle("Spill number");
         fh1_alpharate[index]->GetYaxis()->SetTitle("Counts");
         fh1_alpharate[index]->GetYaxis()->SetTitleOffset(1.);
@@ -375,12 +382,12 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_alpharate[index]->Draw("");
     }
     gasfol->Add(cAlphaRate);
-    
+
     for (auto index = 0; index < alpha_source.size(); index++)
     {
         cAlphaEnergy->cd(index + 1);
-        fh1_alphaenergy.push_back(R3B::root_owned<TH1F>(
-            Form("fh1_alphaenergy_%d", index + 1), alpha_source[index].Data(), 250, 0., 250e3));
+        fh1_alphaenergy.push_back(
+            R3B::root_owned<TH1F>(Form("fh1_alphaenergy_%d", index + 1), alpha_source[index].Data(), 250, 0., 250e3));
         fh1_alphaenergy[index]->GetXaxis()->SetTitle("Integral [ADC chn]");
         fh1_alphaenergy[index]->GetYaxis()->SetTitle("Counts");
         fh1_alphaenergy[index]->GetYaxis()->SetTitleOffset(1.);
@@ -388,14 +395,20 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_alphaenergy[index]->GetYaxis()->CenterTitle(true);
         fh1_alphaenergy[index]->SetFillColor(31);
         fh1_alphaenergy[index]->Draw("");
-    }   
+    }
     gasfol->Add(cAlphaEnergy);
-    
+
     for (auto index = 0; index < alpha_source.size(); index++)
     {
         cAlphaTraces->cd(index + 1);
-        fh2_RawAlphaTraces.push_back(R3B::root_owned<TH2F>(
-            Form("fh2_RawAlphaTraces_%d", index + 1), alpha_source[index].Data(), nBinsSample / 2, 1, nBinsSample, 400, 6000, 10000));
+        fh2_RawAlphaTraces.push_back(R3B::root_owned<TH2F>(Form("fh2_RawAlphaTraces_%d", index + 1),
+                                                           alpha_source[index].Data(),
+                                                           nBinsSample / 2,
+                                                           1,
+                                                           nBinsSample,
+                                                           400,
+                                                           6000,
+                                                           10000));
         fh2_RawAlphaTraces[index]->GetXaxis()->SetTitle("Time [Chn]");
         fh2_RawAlphaTraces[index]->GetYaxis()->SetTitle("Ampl. [ADC Chn]");
         fh2_RawAlphaTraces[index]->GetYaxis()->SetTitleOffset(1.);
@@ -404,8 +417,6 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh2_RawAlphaTraces[index]->Draw("colz");
     }
     gasfol->Add(cAlphaTraces);
-    
-    
 
     // Canvas for ring and side
     std::vector<std::vector<std::vector<TCanvas*>>> cMap_perRing(2);
@@ -1732,57 +1743,57 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-1
                 if (pad == 114 || pad == 121)
                 {
-                    std::size_t index = 0;
-                    for (const auto& value : hit->GetTrace())
-                    {                        
-                        if (hit->GetBaseline() > 0)
-                        fh2_RawAlphaTraces[0]->Fill(index++, value);  
-                    }
-                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[0]->Fill(fEventCounter, integral);
-                    
-                    if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp){
-                       fh1_alpharate[0]->Fill(fSpill_number);
-                       fh1_alphaenergy[0]->Fill(integral);
+
+                    if (integral > fAlphaSourceCathodeLow && integral < fAlphaSourceCathodeUp)
+                    {
+                        fh1_alpharate[0]->Fill(fSpill_number);
+                        fh1_alphaenergy[0]->Fill(integral);
+                        std::size_t index = 0;
+                        for (const auto& value : hit->GetTrace())
+                        {
+                            if (hit->GetBaseline() > 0)
+                                fh2_RawAlphaTraces[0]->Fill(index++, value);
+                        }
                     }
                 }
 
                 // (pad-1) base for alpha-2
                 if (pad == 111 || pad == 118)
                 {
-                    std::size_t index = 0;
-                    for (const auto& value : hit->GetTrace())
-                    {                        
-                        if (hit->GetBaseline() > 0)
-                        fh2_RawAlphaTraces[1]->Fill(index++, value);  
-                    }
-                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[1]->Fill(fEventCounter, integral);
-                    
-                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
-                       fh1_alpharate[1]->Fill(fSpill_number);
-                       fh1_alphaenergy[1]->Fill(integral);
+
+                    if (integral > fAlphaSourceGridLow && integral < fAlphaSourceGridUp)
+                    {
+                        fh1_alpharate[1]->Fill(fSpill_number);
+                        fh1_alphaenergy[1]->Fill(integral);
+                        std::size_t index = 0;
+                        for (const auto& value : hit->GetTrace())
+                        {
+                            if (hit->GetBaseline() > 0)
+                                fh2_RawAlphaTraces[1]->Fill(index++, value);
+                        }
                     }
                 }
 
                 // (pad-1) base for alpha-3
                 if (pad == 45 || pad == 50 || pad == 51)
                 {
-                    std::size_t index = 0;
-                    for (const auto& value : hit->GetTrace())
-                    {                        
-                        if (hit->GetBaseline() > 0)
-                        fh2_RawAlphaTraces[2]->Fill(index++, value);  
-                    }
-                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[2]->Fill(fEventCounter, integral);
-                    
-                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
-                       fh1_alpharate[2]->Fill(fSpill_number);
-                       fh1_alphaenergy[2]->Fill(integral);
+
+                    if (integral > fAlphaSourceGridLow && integral < fAlphaSourceGridUp)
+                    {
+                        fh1_alpharate[2]->Fill(fSpill_number);
+                        fh1_alphaenergy[2]->Fill(integral);
+                        std::size_t index = 0;
+                        for (const auto& value : hit->GetTrace())
+                        {
+                            if (hit->GetBaseline() > 0)
+                                fh2_RawAlphaTraces[2]->Fill(index++, value);
+                        }
                     }
                 }
             }
@@ -1791,93 +1802,94 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // (pad-1) base for alpha-1 DOWN
                 if (pad == 114 || pad == 121)
                 {
-                    std::size_t index = 0;
-                    for (const auto& value : hit->GetTrace())
-                    {                        
-                        if (hit->GetBaseline() > 0)
-                        fh2_RawAlphaTraces[0]->Fill(index++, value);  
-                    }
-                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[0]->Fill(fEventCounter, integral);
-                    if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp){
+                    if (integral > fAlphaSourceCathodeLow && integral < fAlphaSourceCathodeUp)
+                    {
                         fh1_alpharate[0]->Fill(fSpill_number);
                         fh1_alphaenergy[0]->Fill(integral);
+                        std::size_t index = 0;
+                        for (const auto& value : hit->GetTrace())
+                        {
+                            if (hit->GetBaseline() > 0)
+                                fh2_RawAlphaTraces[0]->Fill(index++, value);
+                        }
                     }
                 }
 
                 // (pad-1) base for alpha-2 DOWN
                 if (pad == 101 || pad == 102 || pad == 109)
                 {
-                    std::size_t index = 0;
-                    for (const auto& value : hit->GetTrace())
-                    {                        
-                        if (hit->GetBaseline() > 0)
-                        fh2_RawAlphaTraces[1]->Fill(index++, value);  
-                    }
-                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[1]->Fill(fEventCounter, integral);
-                    
-                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
-                       fh1_alpharate[1]->Fill(fSpill_number);
-                       fh1_alphaenergy[1]->Fill(integral);
+
+                    if (integral > fAlphaSourceGridLow && integral < fAlphaSourceGridUp)
+                    {
+                        fh1_alpharate[1]->Fill(fSpill_number);
+                        fh1_alphaenergy[1]->Fill(integral);
+                        std::size_t index = 0;
+                        for (const auto& value : hit->GetTrace())
+                        {
+                            if (hit->GetBaseline() > 0)
+                                fh2_RawAlphaTraces[1]->Fill(index++, value);
+                        }
                     }
                 }
 
                 // (pad-1) base for alpha-3 DOWN
                 if (pad == 111 || pad == 118)
                 {
-                    std::size_t index = 0;
-                    for (const auto& value : hit->GetTrace())
-                    {                        
-                        if (hit->GetBaseline() > 0)
-                        fh2_RawAlphaTraces[2]->Fill(index++, value);  
-                    }
-                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[2]->Fill(fEventCounter, integral);
-                    
-                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
-                       fh1_alpharate[2]->Fill(fSpill_number);
-                       fh1_alphaenergy[2]->Fill(integral);
+
+                    if (integral > fAlphaSourceGridLow && integral < fAlphaSourceGridUp)
+                    {
+                        fh1_alpharate[2]->Fill(fSpill_number);
+                        fh1_alphaenergy[2]->Fill(integral);
+                        std::size_t index = 0;
+                        for (const auto& value : hit->GetTrace())
+                        {
+                            if (hit->GetBaseline() > 0)
+                                fh2_RawAlphaTraces[2]->Fill(index++, value);
+                        }
                     }
                 }
 
                 // (pad-1) base for alpha-1 UP
                 if (pad == 45 || pad == 50 || pad == 51)
                 {
-                    std::size_t index = 0;
-                    for (const auto& value : hit->GetTrace())
-                    {                        
-                        if (hit->GetBaseline() > 0)
-                        fh2_RawAlphaTraces[3]->Fill(index++, value);  
-                    }
-                    
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[3]->Fill(fEventCounter, integral);
-                    
-                    if (integral>fAlphaSourceGridLow && integral<fAlphaSourceGridUp){
-                       fh1_alpharate[3]->Fill(fSpill_number);
-                       fh1_alphaenergy[3]->Fill(integral);
+
+                    if (integral > fAlphaSourceGridLow && integral < fAlphaSourceGridUp)
+                    {
+                        fh1_alpharate[3]->Fill(fSpill_number);
+                        fh1_alphaenergy[3]->Fill(integral);
+                        std::size_t index = 0;
+                        for (const auto& value : hit->GetTrace())
+                        {
+                            if (hit->GetBaseline() > 0)
+                                fh2_RawAlphaTraces[3]->Fill(index++, value);
+                        }
                     }
                 }
 
                 // (pad-1) base for alpha-2 UP
                 if (pad == 47 || pad == 54)
                 {
-                    std::size_t index = 0;
-                    for (const auto& value : hit->GetTrace())
-                    {                        
-                        if (hit->GetBaseline() > 0)
-                        fh2_RawAlphaTraces[4]->Fill(index++, value);  
-                    }
                     auto integral = IntegrateTrace(hit->GetTrace());
                     fh2_gasquality[4]->Fill(fEventCounter, integral);
-                    
-                    if (integral>fAlphaSourceCathodeLow && integral<fAlphaSourceCathodeUp){
-                       fh1_alpharate[4]->Fill(fSpill_number);
-                       fh1_alphaenergy[4]->Fill(integral);
+
+                    if (integral > fAlphaSourceCathodeLow && integral < fAlphaSourceCathodeUp)
+                    {
+                        fh1_alpharate[4]->Fill(fSpill_number);
+                        fh1_alphaenergy[4]->Fill(integral);
+                        std::size_t index = 0;
+                        for (const auto& value : hit->GetTrace())
+                        {
+                            if (hit->GetBaseline() > 0)
+                                fh2_RawAlphaTraces[4]->Fill(index++, value);
+                        }
                     }
                 }
             }
@@ -2284,17 +2296,17 @@ void R3BActafOnlineSpectra::FinishTask()
                 hist->Write();
             }
             for (const auto& hist : fh1_alpharate)
-        {
-            hist->Write();
-        }
-        for (const auto& hist : fh1_alphaenergy)
-        {
-            hist->Write();
-        }
-        for (const auto& hist : fh2_RawAlphaTraces)
-        {
-            hist->Write();
-        }
+            {
+                hist->Write();
+            }
+            for (const auto& hist : fh1_alphaenergy)
+            {
+                hist->Write();
+            }
+            for (const auto& hist : fh2_RawAlphaTraces)
+            {
+                hist->Write();
+            }
         }
 
         if (fCalItems)
