@@ -407,8 +407,8 @@ InitStatus R3BActafOnlineSpectra::Init()
                                                            1,
                                                            nBinsSample,
                                                            400,
-                                                           6000,
-                                                           10000));
+                                                           6500,
+                                                           10500));
         fh2_RawAlphaTraces[index]->GetXaxis()->SetTitle("Time [Chn]");
         fh2_RawAlphaTraces[index]->GetYaxis()->SetTitle("Ampl. [ADC Chn]");
         fh2_RawAlphaTraces[index]->GetYaxis()->SetTitleOffset(1.);
