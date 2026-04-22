@@ -319,7 +319,7 @@ InitStatus R3BActafOnlineSpectra::Init()
     else if (fEventHeader->GetExpId() == 2026)
     {
         alpha_source = { "Alpha-1 Cathode, Down, Pads 115,122",
-                         "Alpha-2 Grid, Down, Pads 102,103,110",
+                         "Alpha-2 Middle, Down, Pads 102,103,110",
                          "Alpha-3 Grid, Down, Pads 112,119",
                          "Alpha-1 Grid, Up, Pads 46,51,52",
                          "Alpha-2 Cathode, Up, Pads 48,55" };
