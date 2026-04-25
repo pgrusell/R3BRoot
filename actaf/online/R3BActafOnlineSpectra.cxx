@@ -1113,6 +1113,16 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_energy[0]->GetYaxis()->CenterTitle(true);
         fh1_Cluster_energy[0]->SetFillColor(31);
         fh1_Cluster_energy[0]->Draw();
+        
+        cClusterUp->cd(6);
+        fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_up", "", 500, 0.5, 500.5));
+        fh1_Cluster_eff[0]->GetXaxis()->SetTitle("Spill number");
+        fh1_Cluster_eff[0]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
+        fh1_Cluster_eff[0]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_eff[0]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_eff[0]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_eff[0]->SetFillColor(31);
+        fh1_Cluster_eff[0]->Draw();
 
         clusterfol->Add(cClusterUp);
 
@@ -1168,6 +1178,16 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_energy[1]->GetYaxis()->CenterTitle(true);
         fh1_Cluster_energy[1]->SetFillColor(31);
         fh1_Cluster_energy[1]->Draw();
+        
+        cClusterDown->cd(6);
+        fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_down", "", 500, 0.5, 500.5));
+        fh1_Cluster_eff[1]->GetXaxis()->SetTitle("Spill number");
+        fh1_Cluster_eff[1]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
+        fh1_Cluster_eff[1]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_eff[1]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_eff[1]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_eff[1]->SetFillColor(31);
+        fh1_Cluster_eff[1]->Draw();
 
         clusterfol->Add(cClusterDown);
 
@@ -1297,7 +1317,6 @@ void R3BActafOnlineSpectra::plotSingleEventCanvas()
 {
     if (eventViewerNb >= maxEventViewerBatch)
     {
-
         fh2_XYPos_Evts[0]->Reset("");
         fh2_XYPos_Evts[1]->Reset("");
         for (auto& graph : g_CorrectedTraces_4pads_highestAmp)
@@ -1625,6 +1644,8 @@ void R3BActafOnlineSpectra::Reset_Histo()
             h->Reset();
         for (auto& h : fh1_Cluster_energy)
             h->Reset();
+        for (auto& h : fh1_Cluster_eff)
+            h->Reset();
     }
 
     return;
@@ -1683,9 +1704,20 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
                 fSpill_number = hit->GetSpillNb();
                 fh1_spillnb->Fill(fSpill_number);
+                
+                if (fPrevSpillNb == 0)
+                {
+                  fPrevSpillNb = fSpill_number;
+                }
+                else if (fSpill_number!=fPrevSpillNb)
+                {
+                  fEventSpillCounter = 0;
+                  fClusterCounter[0] = 0.;
+                  fClusterCounter[1] = 0.;
+                  fPrevSpillNb = fSpill_number;
+                }
 
-                // std::cout<<hit->GetSpillNb()<<" "<<init_timetag<<" "<<timetag<<" "<< (timetag-init_timetag)
-                // <<std::endl;
+                // std::cout<<hit->GetSpillNb()<<" "<<init_timetag<<" "<<timetag<<" "<< (timetag-init_timetag) <<std::endl;
 
                 fh1_spillrate->Fill((timetag - init_timetag) * 25.72 * 2. * 1.e-9);
             }
@@ -1911,6 +1943,8 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             }
         }
     }
+    
+    fEventSpillCounter++;
 
     // For overall rates
     overall_rate += fCalItems->GetEntriesFast();
@@ -2155,12 +2189,18 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             fh1_Cluster_pad_mul[side]->Fill(padmul);
             fh1_Cluster_theta[side]->Fill(theta);
             fh1_Cluster_phi[side]->Fill((phi >= 0. ? phi : phi + 360.));
-            fh1_Cluster_energy[side]->Fill(energy);
+            fh1_Cluster_energy[side]->Fill(energy);     
         }
         for (size_t i = 0; i < clustermul.size(); ++i)
         {
             fh1_Cluster_mul[i]->Fill(clustermul[i]);
+            
+            if (clustermul[i]>0)fClusterCounter[i]++;
         }
+        
+        
+        fh1_Cluster_eff[0]->SetBinContent(fSpill_number, fClusterCounter[0]/fEventSpillCounter);
+        fh1_Cluster_eff[1]->SetBinContent(fSpill_number, fClusterCounter[1]/fEventSpillCounter);
     }
 
     // R3BLOG(info,"wr: "<<fWrItems->GetEntriesFast());
@@ -2326,18 +2366,13 @@ void R3BActafOnlineSpectra::FinishTask()
         {
             for (auto& h : fh1_RingCounts)
                 h->Write();
-
             for (auto& h : fh2_XYPos)
                 h->Write();
-
             for (auto& h : fh2_XYPos_Evts_Automatic)
                 h->Write();
-
             // for (auto& h : fh1_PhiCounts)
             //     h->Write();
-
             fh1_CountsPerSide->Write();
-
             // fh2_Phi1VsPhi2->Write();
         }
 
@@ -2352,6 +2387,8 @@ void R3BActafOnlineSpectra::FinishTask()
             for (auto& h : fh1_Cluster_phi)
                 h->Write();
             for (auto& h : fh1_Cluster_energy)
+                h->Write();
+            for (auto& h : fh1_Cluster_eff)
                 h->Write();
         }
     }

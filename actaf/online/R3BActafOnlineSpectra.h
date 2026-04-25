@@ -276,6 +276,7 @@ class R3BActafOnlineSpectra : public FairTask
     std::vector<TH1F*> fh1_Cluster_theta;
     std::vector<TH1F*> fh1_Cluster_phi;
     std::vector<TH1F*> fh1_Cluster_energy;
+    std::vector<TH1F*> fh1_Cluster_eff;
 
     // Gas quality
     std::vector<TH2F*> fh2_gasquality;
@@ -300,6 +301,9 @@ class R3BActafOnlineSpectra : public FairTask
     int fAlphaSourceCathodeLow = 40e3;
 
     int fEventCounter = 0;
+    std::vector<double> fClusterCounter(2,0.);
+    double fEventSpillCounter=0;
+    int fPrevSpillNb = 0;
 
   public:
     ClassDefOverride(R3BActafOnlineSpectra, 2);
