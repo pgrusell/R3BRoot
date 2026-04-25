@@ -439,8 +439,9 @@ void R3BActafHit2Cluster::Exec(Option_t*)
         this->FitTrack(clpts, x0, y0, z0, phi, theta, energy, chi2polarfit);
 
         track.SetMagThetaPhi(energy, theta, phi);
-
-        AddClusterData(side, x0, y0, z0, energy, track, padlist, chi2polarfit);
+        
+        if (energy>0 && theta>0)
+           AddClusterData(side, x0, y0, z0, energy, track, padlist, chi2polarfit);
     }
 
     return;
