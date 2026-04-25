@@ -1115,14 +1115,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_energy[0]->Draw();
         
         cClusterUp->cd(6);
-        fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_up", "", 500, 0.5, 500.5));
-        fh1_Cluster_eff[0]->GetXaxis()->SetTitle("Spill number");
-        fh1_Cluster_eff[0]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
-        fh1_Cluster_eff[0]->GetYaxis()->SetTitleOffset(1.1);
-        fh1_Cluster_eff[0]->GetXaxis()->CenterTitle(true);
-        fh1_Cluster_eff[0]->GetYaxis()->CenterTitle(true);
-        fh1_Cluster_eff[0]->SetFillColor(31);
-        fh1_Cluster_eff[0]->Draw();
+
 
         clusterfol->Add(cClusterUp);
 
@@ -1180,6 +1173,23 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_energy[1]->Draw();
         
         cClusterDown->cd(6);
+
+        clusterfol->Add(cClusterDown);
+
+        auto* cClusterEff = new TCanvas("Cluster_efficiency", "Summary of clusters efficiency", 10, 10, 800, 500);
+        cClusterEff->Divide(2, 1);
+        
+        cClusterEff->cd(1);
+        fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_up", "", 500, 0.5, 500.5));
+        fh1_Cluster_eff[0]->GetXaxis()->SetTitle("Spill number");
+        fh1_Cluster_eff[0]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
+        fh1_Cluster_eff[0]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_eff[0]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_eff[0]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_eff[0]->SetFillColor(31);
+        fh1_Cluster_eff[0]->Draw();
+        
+        cClusterEff->cd(2);
         fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_down", "", 500, 0.5, 500.5));
         fh1_Cluster_eff[1]->GetXaxis()->SetTitle("Spill number");
         fh1_Cluster_eff[1]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
@@ -1188,8 +1198,8 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_eff[1]->GetYaxis()->CenterTitle(true);
         fh1_Cluster_eff[1]->SetFillColor(31);
         fh1_Cluster_eff[1]->Draw();
-
-        clusterfol->Add(cClusterDown);
+        
+        clusterfol->Add(cClusterEff);
 
         mainfol->Add(clusterfol);
     }
