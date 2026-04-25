@@ -2223,6 +2223,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
              TVector3 padPos = fActafGeo->GetPosition(padID);
              padPos.SetZ(0);
              fh2_XYPos_clusters[side]->Fill(padPos.X(),padPos.Y());
+             std::cout<< padID<<std::endl;
             }
 
             fh1_Cluster_pad_mul[side]->Fill(padmul);
