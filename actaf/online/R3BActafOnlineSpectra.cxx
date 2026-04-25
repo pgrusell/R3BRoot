@@ -1119,7 +1119,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh2_XYPos_clusters[0]->SetTitle(fh2_XYPos[0]->GetTitle() + TString(" per event"));
         fh2_XYPos_clusters[0]->SetLineColor(kBlack);
         fh2_XYPos_clusters[0]->SetLineWidth(1);
-        fh2_XYPos_clusters[0]->SetMaximum(1);
+        fh2_XYPos_clusters[0]->SetMaximum(11);
         fh2_XYPos_clusters[0]->Draw("colz ]");
         fh2_XYPos_clusters[0]->Draw("same L");
 
@@ -1185,7 +1185,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh2_XYPos_clusters[1]->SetTitle(fh2_XYPos[1]->GetTitle() + TString(" per event"));
         fh2_XYPos_clusters[1]->SetLineColor(kBlack);
         fh2_XYPos_clusters[1]->SetLineWidth(1);
-        fh2_XYPos_clusters[1]->SetMaximum(1);
+        fh2_XYPos_clusters[1]->SetMaximum(11);
         fh2_XYPos_clusters[1]->Draw("colz ]");
         fh2_XYPos_clusters[1]->Draw("same L");
  
@@ -1699,12 +1699,6 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             }
         }
     }
-    
-    if (fClusterItems)
-    {
-        for (auto& h : fh2_XYPos_clusters)
-            h->Reset("");     
-    }
 
     uint64_t timetag = 0;
 
@@ -2203,6 +2197,9 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
     // Fill cluster data
     if (fClusterItems && fClusterItems->GetEntriesFast() > 0)
     {
+        for (auto& h : fh2_XYPos_clusters)
+            h->Reset(""); 
+    
         auto nHits = fClusterItems->GetEntriesFast();
         std::vector<int> clustermul(2, 0);
         for (size_t ihit = 0; ihit < nHits; ihit++)
@@ -2221,9 +2218,9 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             for (auto padID : hit->GetPadList())
             {
              TVector3 padPos = fActafGeo->GetPosition(padID);
-             padPos.SetZ(0);
+             for (int iev=0;iev<10;iev++)
              fh2_XYPos_clusters[side]->Fill(padPos.X(),padPos.Y());
-             std::cout<< padID<<std::endl;
+             //std::cout<< padID<<std::endl;
             }
 
             fh1_Cluster_pad_mul[side]->Fill(padmul);
