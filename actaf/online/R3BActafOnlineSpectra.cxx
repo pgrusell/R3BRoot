@@ -1119,6 +1119,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh2_XYPos_clusters[0]->SetTitle(fh2_XYPos[0]->GetTitle() + TString(" per event"));
         fh2_XYPos_clusters[0]->SetLineColor(kBlack);
         fh2_XYPos_clusters[0]->SetLineWidth(1);
+        fh2_XYPos_clusters[0]->SetMaximum(1);
         fh2_XYPos_clusters[0]->Draw("colz ]");
         fh2_XYPos_clusters[0]->Draw("same L");
 
@@ -1184,6 +1185,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh2_XYPos_clusters[1]->SetTitle(fh2_XYPos[1]->GetTitle() + TString(" per event"));
         fh2_XYPos_clusters[1]->SetLineColor(kBlack);
         fh2_XYPos_clusters[1]->SetLineWidth(1);
+        fh2_XYPos_clusters[1]->SetMaximum(1);
         fh2_XYPos_clusters[1]->Draw("colz ]");
         fh2_XYPos_clusters[1]->Draw("same L");
  
