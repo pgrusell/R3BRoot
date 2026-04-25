@@ -114,8 +114,9 @@ void R3BActafHit2Cluster::FitTrack(const std::vector<Point>& pts,
         energyPerRing[ring] += p.energy;
     }
 
-    if (energyPerRing[0] = 0 || energyPerRing[1] == 0)
-        return;
+    if (energyPerRing.count(0) == 0 || energyPerRing[0] == 0 ||
+    energyPerRing.count(1) == 0 || energyPerRing[1] == 0)
+    return;
 
     double sumW = 0.0;
     x0 = 0.0;
