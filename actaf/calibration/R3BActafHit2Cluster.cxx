@@ -98,7 +98,7 @@ void R3BActafHit2Cluster::FitTrack(const std::vector<Point>& pts,
                                    double& chi2polarfit)
 {
     int N = pts.size();
-    if (N < 2)
+    if (N < 2 || N > 16)
         return;
 
     // Total energy for the cluster
@@ -113,6 +113,9 @@ void R3BActafHit2Cluster::FitTrack(const std::vector<Point>& pts,
         int ring = p.ring - 1;
         energyPerRing[ring] += p.energy;
     }
+
+    if (energyPerRing[0] = 0 || energyPerRing[1] == 0)
+        return;
 
     double sumW = 0.0;
     x0 = 0.0;

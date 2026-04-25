@@ -28,7 +28,11 @@ class R3BEventHeader : public FairEventHeader
 
     void SetExpId(const int expid) { fExpId = expid; }
     void SetRunIdR3B(const int runid) { fRunIdR3B = runid; }
-    void SetParId(const int parid) { fParId = parid; fRunId = parid; }
+    void SetParId(const int parid)
+    {
+        fParId = parid;
+        fRunId = parid;
+    }
     void SetEventno(const uint64_t eventno) { fEventno = eventno; }
     void SetTrigger(const int trigger) { fTrigger = trigger; }
     void SetTimeStamp(const uint64_t timeStamp) { fTimeStamp = timeStamp; }
@@ -41,7 +45,7 @@ class R3BEventHeader : public FairEventHeader
 
     [[nodiscard]] int GetExpId() const { return fExpId; }
     [[nodiscard]] int GetRunIdR3B() const { return fRunIdR3B; }
-    [[nodiscard]] int GetParId() const { return (fParId>0?fParId:fRunId); }
+    [[nodiscard]] int GetParId() const { return (fParId > 0 ? fParId : fRunId); }
     [[nodiscard]] uint64_t GetEventno() const { return fEventno; }
     [[nodiscard]] int GetTrigger() const { return fTrigger; }
     [[nodiscard]] uint64_t GetTimeStamp() const { return fTimeStamp; }

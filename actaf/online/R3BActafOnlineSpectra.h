@@ -302,8 +302,8 @@ class R3BActafOnlineSpectra : public FairTask
     int fAlphaSourceCathodeLow = 40e3;
 
     int fEventCounter = 0;
-    std::vector<double> fClusterCounter{0.0, 0.0};
-    double fEventSpillCounter=0;
+    std::vector<double> fClusterCounter{ 0.0, 0.0 };
+    double fEventSpillCounter = 0;
     int fPrevSpillNb = 0;
 
   public:
