@@ -1671,9 +1671,7 @@ void R3BActafOnlineSpectra::Reset_Histo()
         for (auto& h : fh1_Cluster_energy)
             h->Reset();
         for (auto& h : fh1_Cluster_eff)
-            h->Reset();
-        for (auto& h : fh2_XYPos_clusters)
-            h->Reset("");     
+            h->Reset();   
     }
 
     return;
@@ -1700,6 +1698,12 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 return;
             }
         }
+    }
+    
+    if (fClusterItems)
+    {
+        for (auto& h : fh2_XYPos_clusters)
+            h->Reset("");     
     }
 
     uint64_t timetag = 0;
@@ -2213,6 +2217,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
             auto phi = hit->GetPhi();
             auto energy = hit->GetEnergy();
             auto padmul = hit->GetNbOfPads();
+
+            for (auto padID : hit->GetPadList())
+            {
+             TVector3 padPos = fActafGeo->GetPosition(padID);
+             padPos.SetZ(0);
+             fh2_XYPos_clusters[side]->Fill(padPos.X(),padPos.Y());
+            }
 
             fh1_Cluster_pad_mul[side]->Fill(padmul);
             fh1_Cluster_theta[side]->Fill(theta);
