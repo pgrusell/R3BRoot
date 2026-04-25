@@ -1115,7 +1115,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_energy[0]->Draw();
         
         cClusterUp->cd(6);
-        fh2_XYPos_clusters.push_back(static_cast<TH2Poly*>(fh2_XYPos[0]->Clone((fh2_XYPos[0]->GetTitle() + TString("_clusters)")).Data()));
+        fh2_XYPos_clusters.push_back(static_cast<TH2Poly*>(fh2_XYPos[0]->Clone((fh2_XYPos[0]->GetTitle() + TString("_clusters)")).Data())));
         fh2_XYPos_clusters[0]->SetTitle(fh2_XYPos[0]->GetTitle() + TString(" per event"));
         fh2_XYPos_clusters[0]->SetLineColor(kBlack);
         fh2_XYPos_clusters[0]->SetLineWidth(1);
@@ -1180,7 +1180,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         
         cClusterDown->cd(6);
  
-        fh2_XYPos_clusters.push_back(static_cast<TH2Poly*>(fh2_XYPos[1]->Clone((fh2_XYPos[1]->GetTitle() + TString("_clusters)")).Data()));
+        fh2_XYPos_clusters.push_back(static_cast<TH2Poly*>(fh2_XYPos[1]->Clone((fh2_XYPos[1]->GetTitle() + TString("_clusters)")).Data())));
         fh2_XYPos_clusters[1]->SetTitle(fh2_XYPos[1]->GetTitle() + TString(" per event"));
         fh2_XYPos_clusters[1]->SetLineColor(kBlack);
         fh2_XYPos_clusters[1]->SetLineWidth(1);
