@@ -2205,12 +2205,13 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
         {
             fh1_Cluster_mul[i]->Fill(clustermul[i]);
             
-            if (clustermul[i]>0)fClusterCounter[i]++;
+            //if (clustermul[i]>0)fClusterCounter[i]++;
+            if (clustermul[i]>0)fh1_Cluster_eff[i]->Fill(fSpill_number);
         }
         
         
-        fh1_Cluster_eff[0]->SetBinContent(fSpill_number, fClusterCounter[0]/fEventSpillCounter);
-        fh1_Cluster_eff[1]->SetBinContent(fSpill_number, fClusterCounter[1]/fEventSpillCounter);
+       // fh1_Cluster_eff[0]->SetBinContent(fSpill_number, fClusterCounter[0]/fEventSpillCounter);
+       // fh1_Cluster_eff[1]->SetBinContent(fSpill_number, fClusterCounter[1]/fEventSpillCounter);
     }
 
     // R3BLOG(info,"wr: "<<fWrItems->GetEntriesFast());
