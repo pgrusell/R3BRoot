@@ -2430,6 +2430,15 @@ void R3BActafOnlineSpectra::FinishTask()
             for (auto& h : fh1_Cluster_eff)
                 h->Write();
         }
+
+        for (auto& h : fh2_gasquality)
+            h->Write();
+        for (auto& h : fh1_alpharate)
+            h->Write();
+        for (auto& h : fh1_alphaenergy)
+            h->Write();
+        for (auto& h : fh2_RawAlphaTraces)
+            h->Write();
     }
 }
 ClassImp(R3BActafOnlineSpectra)
