@@ -202,6 +202,8 @@ class R3BActafOnlineSpectra : public FairTask
     TH2F* fh2_meanInitVsPad = nullptr;
     TH2F* fh2_meanFiltVsPad = nullptr;
     TH2F* fh2_RmsMapVsPad = nullptr;
+    TH2F* fh2_RmsMapVsModChn = nullptr;
+    TH2F* fh2_BaselineMapVsModChn = nullptr;
 
     // Cal histograms
     TH2F* fh2_Ecal_cal = nullptr;
@@ -277,6 +279,8 @@ class R3BActafOnlineSpectra : public FairTask
     std::vector<TH1F*> fh1_Cluster_phi;
     std::vector<TH1F*> fh1_Cluster_energy;
     std::vector<TH1F*> fh1_Cluster_eff;
+    TH1F* fh1_Cluster_eff_summary_up = nullptr;
+    TH1F* fh1_Cluster_eff_summary_down = nullptr;
     std::vector<TH2Poly*> fh2_XYPos_clusters;
 
     // Gas quality
@@ -296,8 +300,8 @@ class R3BActafOnlineSpectra : public FairTask
     std::array<std::array<std::vector<double>, fPads>, maxEventViewerBatch> eventCountsTrace;
     bool saveHistos = true;
     int fSpill_number = 0;
-    int fAlphaSourceGridUp = 200e3;
-    int fAlphaSourceGridLow = 100e3;
+    int fAlphaSourceGridUp = 100e3; // 200e3
+    int fAlphaSourceGridLow = 40e3; // 100e3
     int fAlphaSourceCathodeUp = 100e3;
     int fAlphaSourceCathodeLow = 40e3;
 
