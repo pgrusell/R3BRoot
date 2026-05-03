@@ -1276,11 +1276,11 @@ InitStatus R3BActafOnlineSpectra::Init()
         clusterfol->Add(cClusterDown);
         shifterfol->Add(cClusterDown);
 
-        auto* cClusterEff = new TCanvas("Cluster_efficiency", "Summary of clusters efficiency", 10, 10, 900, 600);
-        cClusterEff->Divide(2, 2);
+        auto* cClusterEff = new TCanvas("Cluster_efficiency", "Summary of clusters efficiency", 10, 10, 1350, 600);
+        cClusterEff->Divide(3, 2);
 
         cClusterEff->cd(1);
-        fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_up", "", 500, 0.5, 500.5));
+        fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_up", "Size > 4 - UP", 500, 0.5, 500.5));
         fh1_Cluster_eff[0]->GetXaxis()->SetTitle("Spill number");
         fh1_Cluster_eff[0]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
         fh1_Cluster_eff[0]->GetYaxis()->SetTitleOffset(1.1);
@@ -1290,7 +1290,7 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_eff[0]->Draw();
 
         cClusterEff->cd(2);
-        fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_down", "", 500, 0.5, 500.5));
+        fh1_Cluster_eff.push_back(R3B::root_owned<TH1F>("fh1_Cluster_efficiency_down", "Size > 4 - DOWN", 500, 0.5, 500.5));
         fh1_Cluster_eff[1]->GetXaxis()->SetTitle("Spill number");
         fh1_Cluster_eff[1]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
         fh1_Cluster_eff[1]->GetYaxis()->SetTitleOffset(1.1);
@@ -1300,30 +1300,62 @@ InitStatus R3BActafOnlineSpectra::Init()
         fh1_Cluster_eff[1]->Draw();
 
         cClusterEff->cd(3);
+        fh1_Cluster_eff_small.push_back(
+            R3B::root_owned<TH1F>("fh1_Cluster_efficiency_small_up", "2 < Size < 4 - UP", 500, 0.5, 500.5));
+        fh1_Cluster_eff_small[0]->GetXaxis()->SetTitle("Spill number");
+        fh1_Cluster_eff_small[0]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
+        fh1_Cluster_eff_small[0]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_eff_small[0]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_eff_small[0]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_eff_small[0]->SetFillColor(kOrange);
+        fh1_Cluster_eff_small[0]->Draw();
+
+        cClusterEff->cd(4);
+        fh1_Cluster_eff_small.push_back(
+            R3B::root_owned<TH1F>("fh1_Cluster_efficiency_small_down", "2 < Size < 4 - DOWN", 500, 0.5, 500.5));
+        fh1_Cluster_eff_small[1]->GetXaxis()->SetTitle("Spill number");
+        fh1_Cluster_eff_small[1]->GetYaxis()->SetTitle("Cluster reconstruction eff.");
+        fh1_Cluster_eff_small[1]->GetYaxis()->SetTitleOffset(1.1);
+        fh1_Cluster_eff_small[1]->GetXaxis()->CenterTitle(true);
+        fh1_Cluster_eff_small[1]->GetYaxis()->CenterTitle(true);
+        fh1_Cluster_eff_small[1]->SetFillColor(kOrange);
+        fh1_Cluster_eff_small[1]->Draw();
+
+        cClusterEff->cd(5);
         fh1_Cluster_eff_summary_up =
-            R3B::root_owned<TH1F>("fh1_Cluster_eff_summary_up", "Cluster summary UP", 2, 0.5, 2.5);
+            R3B::root_owned<TH1F>("fh1_Cluster_eff_summary_up", "Cluster summary UP", 3, 0.5, 3.5);
         fh1_Cluster_eff_summary_up->GetXaxis()->SetBinLabel(1, "Total events");
-        fh1_Cluster_eff_summary_up->GetXaxis()->SetBinLabel(2, "Reco clusters");
+        fh1_Cluster_eff_summary_up->GetXaxis()->SetBinLabel(2, "Size > 4");
+        fh1_Cluster_eff_summary_up->GetXaxis()->SetBinLabel(3, "2 < Size < 4");
         fh1_Cluster_eff_summary_up->GetYaxis()->SetTitle("Counts");
         fh1_Cluster_eff_summary_up->GetYaxis()->SetTitleOffset(1.1);
         fh1_Cluster_eff_summary_up->GetXaxis()->CenterTitle(true);
         fh1_Cluster_eff_summary_up->GetYaxis()->CenterTitle(true);
         fh1_Cluster_eff_summary_up->SetFillColor(38);
+        fh1_Cluster_eff_summary_small_up =
+            R3B::root_owned<TH1F>("fh1_Cluster_eff_summary_small_up", "Cluster summary UP", 3, 0.5, 3.5);
+        fh1_Cluster_eff_summary_small_up->SetFillColor(kOrange);
         gPad->SetLogy();
         fh1_Cluster_eff_summary_up->Draw();
+        fh1_Cluster_eff_summary_small_up->Draw("same");
 
-        cClusterEff->cd(4);
+        cClusterEff->cd(6);
         fh1_Cluster_eff_summary_down =
-            R3B::root_owned<TH1F>("fh1_Cluster_eff_summary_down", "Cluster summary DOWN", 2, 0.5, 2.5);
+            R3B::root_owned<TH1F>("fh1_Cluster_eff_summary_down", "Cluster summary DOWN", 3, 0.5, 3.5);
         fh1_Cluster_eff_summary_down->GetXaxis()->SetBinLabel(1, "Total events");
-        fh1_Cluster_eff_summary_down->GetXaxis()->SetBinLabel(2, "Reco clusters");
+        fh1_Cluster_eff_summary_down->GetXaxis()->SetBinLabel(2, "Size > 4");
+        fh1_Cluster_eff_summary_down->GetXaxis()->SetBinLabel(3, "2 < Size < 4");
         fh1_Cluster_eff_summary_down->GetYaxis()->SetTitle("Counts");
         fh1_Cluster_eff_summary_down->GetYaxis()->SetTitleOffset(1.1);
         fh1_Cluster_eff_summary_down->GetXaxis()->CenterTitle(true);
         fh1_Cluster_eff_summary_down->GetYaxis()->CenterTitle(true);
         fh1_Cluster_eff_summary_down->SetFillColor(46);
+        fh1_Cluster_eff_summary_small_down =
+            R3B::root_owned<TH1F>("fh1_Cluster_eff_summary_small_down", "Cluster summary DOWN", 3, 0.5, 3.5);
+        fh1_Cluster_eff_summary_small_down->SetFillColor(kOrange);
         gPad->SetLogy();
         fh1_Cluster_eff_summary_down->Draw();
+        fh1_Cluster_eff_summary_small_down->Draw("same");
 
         addRunLabel(static_cast<TPad*>(cClusterEff->cd(1)));
 
@@ -1788,10 +1820,16 @@ void R3BActafOnlineSpectra::Reset_Histo()
             h->Reset();
         for (auto& h : fh1_Cluster_eff)
             h->Reset();
+        for (auto& h : fh1_Cluster_eff_small)
+            h->Reset();
         if (fh1_Cluster_eff_summary_up)
             fh1_Cluster_eff_summary_up->Reset();
         if (fh1_Cluster_eff_summary_down)
             fh1_Cluster_eff_summary_down->Reset();
+        if (fh1_Cluster_eff_summary_small_up)
+            fh1_Cluster_eff_summary_small_up->Reset();
+        if (fh1_Cluster_eff_summary_small_down)
+            fh1_Cluster_eff_summary_small_down->Reset();
     }
 
     return;
@@ -2336,6 +2374,7 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
 
             auto nHits = fClusterItems->GetEntriesFast();
             std::vector<int> clustermul(2, 0);
+            std::vector<int> clustermul_small(2, 0);
             for (size_t ihit = 0; ihit < nHits; ihit++)
             {
                 auto* hit = dynamic_cast<R3BActafClusterData*>(fClusterItems->At(ihit));
@@ -2343,23 +2382,31 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                     continue;
 
                 int side = hit->GetSide() - 1;
-                clustermul[side]++;
                 auto theta = hit->GetTheta();
                 auto phi = hit->GetPhi();
                 auto energy = hit->GetEnergy();
                 auto padmul = hit->GetNbOfPads();
 
-                for (auto padID : hit->GetPadList())
+                if (padmul > 4)
                 {
-                    TVector3 padPos = fActafGeo->GetPosition(padID);
-                    for (int iev = 0; iev < 10; iev++)
-                        fh2_XYPos_clusters[side]->Fill(padPos.X(), padPos.Y());
-                }
+                    clustermul[side]++;
 
-                fh1_Cluster_pad_mul[side]->Fill(padmul);
-                fh1_Cluster_theta[side]->Fill(theta);
-                fh1_Cluster_phi[side]->Fill((phi >= 0. ? phi : phi + 360.));
-                fh1_Cluster_energy[side]->Fill(energy);
+                    for (auto padID : hit->GetPadList())
+                    {
+                        TVector3 padPos = fActafGeo->GetPosition(padID);
+                        for (int iev = 0; iev < 10; iev++)
+                            fh2_XYPos_clusters[side]->Fill(padPos.X(), padPos.Y());
+                    }
+
+                    fh1_Cluster_pad_mul[side]->Fill(padmul);
+                    fh1_Cluster_theta[side]->Fill(theta);
+                    fh1_Cluster_phi[side]->Fill((phi >= 0. ? phi : phi + 360.));
+                    fh1_Cluster_energy[side]->Fill(energy);
+                }
+                else if (padmul > 2 && padmul < 4)
+                {
+                    clustermul_small[side]++;
+                }
             }
             for (size_t i = 0; i < clustermul.size(); ++i)
             {
@@ -2368,12 +2415,19 @@ void R3BActafOnlineSpectra::Exec(Option_t* /*option*/)
                 // if (clustermul[i]>0)fClusterCounter[i]++;
                 if (clustermul[i] > 0)
                     fh1_Cluster_eff[i]->Fill(fSpill_number);
+
+                if (clustermul_small[i] > 0)
+                    fh1_Cluster_eff_small[i]->Fill(fSpill_number);
             }
 
             if (fh1_Cluster_eff_summary_up)
                 fh1_Cluster_eff_summary_up->AddBinContent(2, clustermul[0]);
             if (fh1_Cluster_eff_summary_down)
                 fh1_Cluster_eff_summary_down->AddBinContent(2, clustermul[1]);
+            if (fh1_Cluster_eff_summary_small_up)
+                fh1_Cluster_eff_summary_small_up->AddBinContent(3, clustermul_small[0]);
+            if (fh1_Cluster_eff_summary_small_down)
+                fh1_Cluster_eff_summary_small_down->AddBinContent(3, clustermul_small[1]);
         }
 
         // fh1_Cluster_eff[0]->SetBinContent(fSpill_number, fClusterCounter[0]/fEventSpillCounter);
@@ -2569,10 +2623,16 @@ void R3BActafOnlineSpectra::FinishTask()
                 h->Write();
             for (auto& h : fh1_Cluster_eff)
                 h->Write();
+            for (auto& h : fh1_Cluster_eff_small)
+                h->Write();
             if (fh1_Cluster_eff_summary_up)
                 fh1_Cluster_eff_summary_up->Write();
             if (fh1_Cluster_eff_summary_down)
                 fh1_Cluster_eff_summary_down->Write();
+            if (fh1_Cluster_eff_summary_small_up)
+                fh1_Cluster_eff_summary_small_up->Write();
+            if (fh1_Cluster_eff_summary_small_down)
+                fh1_Cluster_eff_summary_small_down->Write();
         }
 
         for (auto& h : fh2_gasquality)

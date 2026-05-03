@@ -279,8 +279,11 @@ class R3BActafOnlineSpectra : public FairTask
     std::vector<TH1F*> fh1_Cluster_phi;
     std::vector<TH1F*> fh1_Cluster_energy;
     std::vector<TH1F*> fh1_Cluster_eff;
+    std::vector<TH1F*> fh1_Cluster_eff_small;
     TH1F* fh1_Cluster_eff_summary_up = nullptr;
     TH1F* fh1_Cluster_eff_summary_down = nullptr;
+    TH1F* fh1_Cluster_eff_summary_small_up = nullptr;
+    TH1F* fh1_Cluster_eff_summary_small_down = nullptr;
     std::vector<TH2Poly*> fh2_XYPos_clusters;
 
     // Gas quality

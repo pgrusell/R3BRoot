@@ -412,7 +412,7 @@ void R3BActafHit2Cluster::Exec(Option_t*)
             }
         }
 
-        if (cluster.size() > 4)
+        if (cluster.size() > 0)
             clusters.push_back(cluster);
     }
 
